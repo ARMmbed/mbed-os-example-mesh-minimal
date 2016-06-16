@@ -1,0 +1,9 @@
+{
+    "target_overrides": {
+        "*": {
+            "target.features_add": ["IPV6", "CLIENT"],
+            "mbed-mesh-api.6lowpan-nd-channel": 15,
+            "mbed-mesh-api.6lowpan-nd-channel-mask": "(1<<15)"
+        }
+    }
+}
