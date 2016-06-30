@@ -1,23 +1,29 @@
 # Example Mesh application for mbed OS
 
-This applications tries to be the simplest one that utilizes our Mesh networking stack.
+This applications is the simplest one to utilizes our Mesh networking stack. All it does is join the unsecure *6LoWPAN-ND* network.
 
-Basically only thing it does, is to join unsecure *6LoWPAN-ND* network.
-
-See file `mbed_app.json` for example how to define IEEE 802.15.4 channel to use.
+See the file `mbed_app.json` for an example of defining an IEEE 802.15.4 channel to use.
 
 ## Changing the radio driver
 
-In order to run 6LoWPAN-ND network, you need working RF driver for Nanostack.
+In order to run a 6LoWPAN-ND network, you need a working RF driver for Nanostack. This example uses the Atmel AT86RF233. 
 
-Provided example uses Atmel AT86RF233. To replace that do
+To change drivers:
+
+__1__
+
 ```
 mbed remove atmel-rf-driver
 ```
 
-and then
+__2__
+
 ```
 mbed add <your RF driver address>
 ```
 
-And then just `mbed compile`
+__3__
+
+```
+`mbed compile`
+```
