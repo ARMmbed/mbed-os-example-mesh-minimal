@@ -13,26 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#include "mbed.h"
-#include "rtos.h"
-#include "NanostackInterface.h"
-#include "socket_example.h"
+#ifndef SOCKET_EXAMPLE_H
+#define SOCKET_EXAMPLE_H
 
-LoWPANNDInterface mesh;
-Serial output(USBTX, USBRX);
+#include "NetworkInterface.h"
 
-int main()
-{
-    output.baud(115200);
-    output.printf("\r\n\r\nConnecting...\r\n");
+void start_socket_example(NetworkInterface * interface);
 
-    if (mesh.connect()) {
-        output.printf("Connection failed!\r\n");
-        return -1;
-    }
-
-    output.printf("connected. IP = %s\r\n", mesh.get_ip_address());
-
-    // Start socket example
-    start_socket_example((NetworkInterface *)&mesh);
-}
+#endif
