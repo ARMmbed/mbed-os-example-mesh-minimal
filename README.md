@@ -54,17 +54,20 @@ In order to run a 6LoWPAN-ND network, you need a working RF driver for Nanostack
 
 To change the RF driver:
 
-1. Uninstall the default driver:
+1. Uninstall the Atmel RF driver:
 ```
 mbed remove atmel-rf-driver
 ```
 
 2. Install the new driver:
+
+For example, for the FRDM-CR20A radio shield based on the MCR20A device:
+
 ```
-mbed add <your RF driver address>
+mbed add mcr20a-rf-driver
 ```
 
 3. Recompile your application:
 ```
-`mbed compile`
+mbed compile -m K64F -t GCC_ARM
 ```
