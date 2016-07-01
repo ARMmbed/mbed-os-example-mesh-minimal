@@ -40,7 +40,9 @@ Please do not forget to connect the Ethernet cable between the Border Router and
 
 ## Testing
 
-Once both the Border Router and the target is up and running, then you can verify its correct behaviour. Open a serial console and see the IP address obtained by the device. For example:
+Once both the Border Router and the target is up and running, then you can verify its correct behaviour. Open a serial console and see the IP address obtained by the device.
+
+**Note:** This application uses a baud rate of 115200
 
 ```
 connected. IP = 2001:db8:a0b:12f0::1
