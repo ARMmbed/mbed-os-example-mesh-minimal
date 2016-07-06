@@ -1,6 +1,6 @@
 # Example mesh application for mbed OS
 
-This application is the simplest one to utilize our mesh networking stack. It just joins the unsecure *6LoWPAN-ND* network.
+This application is the simplest one to utilize our mesh networking stack. It just joins your device to the unsecure *6LoWPAN-ND* network.
 
 ## Setup
 
