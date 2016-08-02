@@ -1,4 +1,7 @@
 {
+    "config": {
+        "trace": false
+        },
     "target_overrides": {
         "*": {
             "target.features_add": ["IPV6", "COMMON_PAL"],
@@ -6,7 +9,8 @@
             "mbed-mesh-api.6lowpan-nd-channel": 12,
             "mbed-mesh-api.6lowpan-nd-channel-mask": "(1<<12)",
             "mbed-mesh-api.thread-config-panid": "0xDEFA",
-            "mbed-mesh-api.thread-config-channel": 12
+            "mbed-mesh-api.thread-config-channel": 12,
+            "mbed-trace.enable": true
         }
     }
 }
