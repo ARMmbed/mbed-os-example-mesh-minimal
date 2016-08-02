@@ -67,3 +67,16 @@ To change the RF driver:
 
         mbed compile -m K64F -t GCC_ARM
 
+
+## Known Issues
+
+If you are using Thread as the network interface, once your device joins the Thread Border Router, i.e., you can see the IP address assigned to your device, and you hard reset the client device using reset button, the client device will not be able to join the network again and you will see a warning:
+
+```
+[WARN][mleS]: dropping packet because mle frame counter is not higher
+```
+
+Border router will start dropping packets because of MLE frame counter mismatch.  For more information about MLE frame counter feature see the [MLE-05 RFC](https://tools.ietf.org/id/draft-kelsey-intarea-mesh-link-establishment-05.html#rfc.section.7.6). 
+After 240 seconds, the default link timeout triggers the Border router to unregister the lost end device and the BR drops all the counters for that particular device. 
+Now your should should be able to join the network again. 
+
