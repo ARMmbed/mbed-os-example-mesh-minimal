@@ -88,16 +88,3 @@ Desired work flow in such situations (if it may arise) should be:
 1.  Checking the platform pinmap from [mbed Platforms](https://developer.mbed.org/platforms/).
 2. Making sure that the desired GPIO pin is free by looking at the data sheet of the particular MCU. Most of the data sheets are available on  [mbed Platforms](https://developer.mbed.org/platforms/). 
 3. If necessary, change the pin or pins by using the mbed -OS config mechanism. You can get more informations about the configuration system in the [documentation](https://github.com/ARMmbed/mbed-os/blob/master/docs/config_system.md)
-
-## Known Issues
-
-If you are using Thread as the network interface, once your device joins the Thread Border Router, i.e., you can see the IP address assigned to your device, and you hard reset the client device using reset button, the client device will not be able to join the network again and you will see a warning:
-
-```
-[WARN][mleS]: dropping packet because mle frame counter is not higher
-```
-
-Border router will start dropping packets because of MLE frame counter mismatch.  For more information about MLE frame counter feature see the [MLE-05 RFC](https://tools.ietf.org/id/draft-kelsey-intarea-mesh-link-establishment-05.html#rfc.section.7.6). 
-After 240 seconds, the default link timeout triggers the Border router to unregister the lost end device and the BR drops all the counters for that particular device. 
-Now your should should be able to join the network again. 
-
