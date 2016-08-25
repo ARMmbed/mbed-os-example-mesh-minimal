@@ -41,7 +41,7 @@ Please do not forget to connect the Ethernet cable between the border router and
 
 As soon as both the border router and the target are up and running you can verify the correct behaviour. Open a serial console and see the IP address obtained by the device.
 
-<span class="notes">**Note:** This application uses a baud rate of 115200.</span>
+<span class="notes">**Note:** This application uses the baud rate of 115200.</span>
 
 ```
 connected. IP = 2001:db8:a0b:12f0::1
@@ -67,9 +67,9 @@ To change the RF driver:
 
         mbed compile -m K64F -t GCC_ARM
 
-## Important Note (Multi-platform support)
+## Important note (Multi-platform support)
 
-mbed-OS provides the developer with total control of the device. However some defaults are always loaded if the user does not provide proper information regarding them. This becomes evident when a user switches among platforms. On some platforms a particular pin might be reserved for a particular functionality (depending upon the MCU) which thus cannot be used generally. If the ardurino form factor is not available, or the required peripherial is on a different pin, the pins values can be set manually. For example, the user can add *"atmel-rf.spi-rst": "D4"* to his/her mbed_app.json file. This will set the SPI_RST pin to D4 of the GPIO.
+mbed OS provides you with total control of the device. However, some defaults are always loaded if you do not provide proper information regarding them. This becomes evident when you switch among platforms. On some platforms, a particular pin might be reserved for a particular functionality (depending upon the MCU) which thus cannot be used generally. If the Ardurino form factor is not available, or the required peripherial is on a different pin, the pins values can be set manually. For example, you can add *"atmel-rf.spi-rst": "D4"* to your `mbed_app.json` file. This will set the SPI_RST pin to D4 of the GPIO.
 
 ```json
 {
@@ -82,8 +82,8 @@ mbed-OS provides the developer with total control of the device. However some de
 }
 ```
 
-Desired work flow in such situations (if it may arise) should be:
+Desired work flow for switching the platform:
 
-1.  Checking the platform pinmap from [mbed Platforms](https://developer.mbed.org/platforms/).
-2. Making sure that the desired GPIO pin is free by looking at the data sheet of the particular MCU. Most of the data sheets are available on  [mbed Platforms](https://developer.mbed.org/platforms/). 
-3. If necessary, change the pin or pins by using the mbed -OS config mechanism. You can get more informations about the configuration system in the [documentation](https://github.com/ARMmbed/mbed-os/blob/master/docs/config_system.md)
+1. Check the platform pin map from [mbed Platforms](https://developer.mbed.org/platforms/).
+2. Make sure that the desired GPIO pin is free by looking at the data sheet of the particular MCU. Most of the data sheets are available on [mbed Platforms](https://developer.mbed.org/platforms/). 
+3. If necessary, change the pin or pins by using the mbed OS config mechanism. To get more information about the configuration system see the [documentation](https://github.com/ARMmbed/mbed-os/blob/master/docs/config_system.md).
