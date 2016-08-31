@@ -1,6 +1,8 @@
 #include "mbed.h"
 #include "rtos.h"
 #include "NanostackInterface.h"
+#include "NanostackRfPhyMcr20a.h"
+#include "NanostackRfPhyAtmel.h"
 
 #if MBED_CONF_APP_TRACE
 #include "mbed-trace/mbed_trace.h"
@@ -10,7 +12,16 @@ void trace_printer(const char* str) {
 }
 #endif // MBED_CONF_APP_TRACE
 
-LoWPANNDInterface mesh;
+#if defined(MCR20)
+NanostackRfPhyMcr20a phy(MCR20A_SPI_MOSI, MCR20A_SPI_MISO, MCR20A_SPI_SCLK,
+                         MCR20A_SPI_CS, MCR20A_SPI_RST, MCR20A_SPI_IRQ);
+#else
+NanostackRfPhyAtmel phy(ATMEL_SPI_MOSI, ATMEL_SPI_MISO, ATMEL_SPI_SCLK,
+                        ATMEL_SPI_CS, ATMEL_SPI_RST, ATMEL_SPI_SLP,
+                        ATMEL_SPI_IRQ, ATMEL_I2C_SDA, ATMEL_I2C_SCL);
+#endif
+
+LoWPANNDInterface mesh(&phy);
 //ThreadInterface mesh;
 Serial output(USBTX, USBRX);
 
