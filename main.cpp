@@ -52,5 +52,8 @@ int main()
         return -1;
     }
 
+    while (NULL == mesh.get_ip_address())
+        Thread::wait(500);
+
     printf("connected. IP = %s\r\n", mesh.get_ip_address());
 }
