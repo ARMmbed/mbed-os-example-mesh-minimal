@@ -1,7 +1,18 @@
 {
     "config": {
-        "trace": false
+        "trace": {
+        	"help": "options are true, false",
+        	"value": true
         },
+        "radio-type":{
+            "help": "options are ATMEL, MCR20",
+            "value": "MCR20"
+        },
+        "mesh-type":{
+            "help": "options are MESH_LOWPAN, MESH_THREAD",
+            "value": "MESH_LOWPAN"
+        }
+    },
     "target_overrides": {
         "*": {
             "target.features_add": ["IPV6", "COMMON_PAL"],
