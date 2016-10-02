@@ -67,6 +67,14 @@ To change the RF driver:
 
         mbed compile -m K64F -t GCC_ARM
 
+**NOTE:** Please make sure that the _mbed_app.json_ is also updated to reflect the usage of a particular RF driver. For example,
+
+```json
+      "radio-type":{
+            "help": "options are ATMEL, MCR20",
+            "value": "ATMEL"
+        },
+```
 ## Important note (Multi-platform support)
 
 mbed OS provides you with total control of the device. However, some defaults are always loaded if you do not provide proper information regarding them. This becomes evident when you switch among platforms. On some platforms, a particular pin might be reserved for a particular functionality (depending upon the MCU) which thus cannot be used generally. If the Ardurino form factor is not available, or the required peripherial is on a different pin, the pins values can be set manually. For example, you can add *"atmel-rf.spi-rst": "D4"* to your `mbed_app.json` file. This will set the SPI_RST pin to D4 of the GPIO.
@@ -75,7 +83,7 @@ mbed OS provides you with total control of the device. However, some defaults ar
 {
     "target_overrides": {
         "*": {
-            "target.features_add": ["IPV6", "COMMON_PAL"],
+            "target.features_add": ["NANOSTACK", "LOWPAN_ROUTER", "COMMON_PAL"],
             "atmel-rf.spi-rst": "D4"
         }
     }
