@@ -5,7 +5,7 @@
         	"value": true
         },
         "radio-type":{
-            "help": "options are ATMEL, MCR20",
+            "help": "options are ATMEL, MCR20, NCS36510",
             "value": "ATMEL"
         },
         "mesh-type":{
@@ -22,7 +22,7 @@
             "mbed-mesh-api.thread-config-panid": "0xDEFA",
             "mbed-mesh-api.thread-master-key": "{0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0x99, 0xaa, 0xbb, 0xcc, 0xdd, 0xee, 0xff}",
             "mbed-mesh-api.thread-config-channel": 12,
-            "mbed-mesh-api.heap-size": 32000,
+            "mbed-mesh-api.heap-size": 10000,
             "mbed-trace.enable": false
         }
     }

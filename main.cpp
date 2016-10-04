@@ -4,6 +4,7 @@
 
 #define ATMEL   1
 #define MCR20   2
+#define NCS36510 3
 
 #define MESH_LOWPAN     3
 #define MESH_THREAD     4
@@ -25,8 +26,11 @@ NanostackRfPhyAtmel rf_phy(ATMEL_SPI_MOSI, ATMEL_SPI_MISO, ATMEL_SPI_SCLK, ATMEL
 #elif MBED_CONF_APP_RADIO_TYPE == MCR20
 #include "NanostackRfPhyMcr20a.h"
 NanostackRfPhyMcr20a rf_phy(MCR20A_SPI_MOSI, MCR20A_SPI_MISO, MCR20A_SPI_SCLK, MCR20A_SPI_CS, MCR20A_SPI_RST, MCR20A_SPI_IRQ);
-#endif //MBED_CONF_APP_RADIO_TYPE
 
+#elif MBED_CONF_APP_RADIO_TYPE == NCS36510
+#include "NanostackRfPhyNcs36510.h"
+NanostackRfPhyNcs36510 rf_phy;
+#endif //MBED_CONF_APP_RADIO_TYPE
 
 #if MBED_CONF_APP_MESH_TYPE == MESH_LOWPAN
 LoWPANNDInterface mesh;
