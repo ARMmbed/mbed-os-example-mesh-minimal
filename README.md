@@ -15,6 +15,65 @@ cd mbed-os-example-mesh-minimal
 
 See the file `mbed_app.json` for an example of defining an IEEE 802.15.4 channel to use.
 
+### Selecting optimal Nanostack configuration
+
+If you want to optimize the flash usage, you need to select a proper configuration for Nanostack. The configuration depends mostly on the preferred use case.
+
+See [6LoWPAN overview](https://docs.mbed.com/docs/arm-ipv66lowpan-stack/en/latest/quick_start_intro/index.html) for definition of star and mesh networks. These same principles applies also to Thread protocol.
+
+First choose which protocol the network is based on:
+
+1. 6LoWPAN-ND
+2. Thread
+
+Then choose the device role from two options:
+
+1. Mesh network. A router. (default)
+2. Star network. Non routing device. Also known as a host, or sleepy host.
+
+Then modify your `mbed_app.json` file to tell which Nanostack build to choose and which configrations to use on [mbed Mesh api](https://github.com/ARMmbed/mbed-os/blob/master/features/nanostack/FEATURE_NANOSTACK/mbed-mesh-api/README.md)
+
+Example from `mbed_app.json` file looks like this:
+```
+...
+        "mesh-type":{
+            "help": "options are MESH_LOWPAN, MESH_THREAD",
+            "value": "MESH_LOWPAN"
+        }
+    },
+    "target_overrides": {
+        "*": {
+            "target.features_add": ["NANOSTACK", "LOWPAN_ROUTER", "COMMON_PAL"],
+            "mbed-mesh-api.6lowpan-nd-device-type": "NET_6LOWPAN_ROUTER",
+            "mbed-mesh-api.thread-device-type": "MESH_DEVICE_TYPE_THREAD_ROUTER",
+            "mbed-mesh-api.heap-size": 32000,
+            "mbed-trace.enable": false
+        }
+    }
+```
+
+Use following table for replacing the `LOWPAN_ROUTER` from line `"target.features_add"` and to select values `mbed-mesh-api.6lowpan-nd-device-type` and `mbed-mesh-api.thread-device-type`
+
+For 6LoWPAN-ND based network use `mesh-type: MESH_LOWPAN` and for Thread based network use `mesh-type: MESH_THREAD`
+
+**NOTE:** You need to recompile your application after modifying the configurations by issuing the command `mbed compile -c`
+
+**mesh-type: MESH_LOWPAN**
+
+|Device role|target.features_add value|mbed-mesh-api.6lowpan-nd-device-type|
+|-----------|-------------------------|------------------------------------|
+|Mesh Router. (default) | LOWPAN_ROUTER | NET_6LOWPAN_ROUTER |
+|Non routing device | LOWPAN_HOST | NET_6LOWPAN_HOST |
+
+
+**mesh-type: MESH_THREAD**
+
+|Device role|target.features_add value|mbed-mesh-api.thread-device-type|
+|-----------|-------------------------|------------------------------------|
+|Mesh Router. (default) | THREAD_ROUTER | MESH_DEVICE_TYPE_THREAD_ROUTER |
+|Non routing device | THREAD_END_DEVICE | MESH_DEVICE_TYPE_THREAD_SLEEPY_END_DEVICE |
+
+
 ### Compile the application
 
 ```
