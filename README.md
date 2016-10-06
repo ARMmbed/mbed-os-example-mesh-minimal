@@ -73,6 +73,14 @@ For 6LoWPAN-ND based network use `mesh-type: MESH_LOWPAN` and for Thread based n
 |Mesh Router. (default) | THREAD_ROUTER | MESH_DEVICE_TYPE_THREAD_ROUTER |
 |Non routing device | THREAD_END_DEVICE | MESH_DEVICE_TYPE_THREAD_SLEEPY_END_DEVICE |
 
+### Requirements for boards without entropy
+To run this example application there must be a source of entropy. If the platform you are using does not have
+and entropy source then you need Edit the `mbed_app.json` file to add `NULL_ENTROPY`  feature for mbedTLS:
+
+```
+"macros": ["MBEDTLS_NO_DEFAULT_ENTROPY_SOURCES",
+           "MBEDTLS_TEST_NULL_ENTROPY"],
+```
 
 ### Compile the application
 
