@@ -75,7 +75,6 @@ def buildStep(target, compilerLabel, toolchain, radioShield, configName) {
           // Checkout latest mbed-os master
           dir("mbed-os") {
             sh "git checkout master"
-            sh "git pull"
           }
           execute ("mbed compile --build .build/${target}_${compilerLabel}_${radioShield}_${configName}/ -m ${target} -t ${toolchain} -c")
           archive '**/mbed-os-example-client.bin'
