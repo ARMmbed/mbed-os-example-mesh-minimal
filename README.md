@@ -100,7 +100,14 @@ Drag and drop the binary to the target to program the application.
 
 ### Update the firmware of the border router
 
-You can read the instructions on updating the firmware of your K64F working as 6LoWPAN border router [here](https://github.com/ARMmbed/mbed-os-example-client#mbed-gateway).
+There are two border routers supported with this example:
+
+ - [k64f-border-router](https://github.com/ARMmbed/k64f-border-router): only supports 6LOWPAN.
+ - [mbed gateway](https://firefly-iot.com/product/firefly-6lowpan-gateway-2-4ghz/)
+ 
+   You can read the instructions on updating the firmware of your mbed gateway working as 6LoWPAN [here](https://github.com/ARMmbed/mbed-os-example-client#mbed-gateway).
+
+Both border routers support both static and dynamic backhaul configuration. Static configuration is good for testing but dynamic works if your network infrastructure is supplying IPv6 address. Make sure you use the appropiate mode.
 
 Please do not forget to connect the Ethernet cable between the border router and your home/office router. Then power up the board.
 
