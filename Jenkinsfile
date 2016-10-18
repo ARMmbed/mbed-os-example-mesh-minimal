@@ -1,10 +1,10 @@
-// List of targets to compile
+// List of targets with supported RF shields to compile
 def targets = [
-  "K64F",
-  "NUCLEO_F401RE",
-  "NUCLEO_F429ZI",
-  "NCS36510",
-  "UBLOX_EVK_ODIN_W2"
+  "K64F": ["ATMEL", "MCR20"],
+  "NUCLEO_F401RE": ["ATMEL", "MCR20"],
+  "NUCLEO_F429ZI": ["ATMEL", "MCR20"],
+  "NCS36510": ["NCS36510"],
+  "UBLOX_EVK_ODIN_W2": ["ATMEL", "MCR20"]
   ]
   
 // Map toolchains to compilers
@@ -16,12 +16,13 @@ def toolchains = [
 
 // Supported RF shields
 def radioshields = [
-  "atmel",
-  "mcr20"
+  "ATMEL",
+  "MCR20",
+  "NCS36510"
   ]
 
 // Mesh interfaces
-def configurations = [
+def interfaces = [
   "6lowpan",
   "thread"
   ]
@@ -32,15 +33,17 @@ def stepsForParallel = [:]
 for (int i = 0; i < targets.size(); i++) {
   for(int j = 0; j < toolchains.size(); j++) {
     for(int k = 0; k < radioshields.size(); k++) {
-      for(int l = 0; l < configurations.size(); l++) {
-        def target = targets.get(i)
+      for(int l = 0; l < interfaces.size(); l++) {
+        def target = targets.keySet().asList().get(i)
+        def allowed_shields = targets.get(target)
         def toolchain = toolchains.keySet().asList().get(j)
         def compilerLabel = toolchains.get(toolchain)
         def radioshield = radioshields.get(k)
-        def config = configurations.get(l)
-
-        def stepName = "${target} ${toolchain} ${radioshield} ${config}"
-        stepsForParallel[stepName] = buildStep(target, compilerLabel, toolchain, radioshield, config)
+        def interface = interfaces.get(l)
+        def stepName = "${target} ${toolchain} ${radioshield} ${interface}"
+        if(allowed_shields.contains(radioshield)) {
+          stepsForParallel[stepName] = buildStep(target, compilerLabel, toolchain, radioshield, interface)
+        }
       }
     }
   }
@@ -50,20 +53,25 @@ timestamps {
   parallel stepsForParallel
 }
 
-def buildStep(target, compilerLabel, toolchain, radioShield, configName) {
+def buildStep(target, compilerLabel, toolchain, radioShield, interface) {
   return {
-    stage ("${target}_${compilerLabel}_${radioShield}_${configName}") {
+    stage ("${target}_${compilerLabel}_${radioShield}_${interface}") {
       node ("${compilerLabel}") {
         deleteDir()
         dir("mbed-os-example-mesh-minimal") {
           checkout scm
 
-          if ("${radioShield}" == "mcr20") {
+          if ("${radioShield}" == "MCR20") {
             // Replace default rf shield
             execute("sed -i 's/\"value\": \"ATMEL\"/\"value\": \"MCR20\"/' mbed_app.json")
           }
-          
-          if ("${configName}" == "thread") {
+
+          if ("${radioShield}" == "NCS36510") {
+            // Replace default rf shield
+            execute("sed -i 's/\"value\": \"ATMEL\"/\"value\": \"NCS36510\"/' mbed_app.json")
+          }
+
+          if ("${interface}" == "thread") {
             // Change interface to thread
             execute("sed -i 's/\"value\": \"MESH_LOWPAN\"/\"value\": \"MESH_THREAD\"/' mbed_app.json")
 
@@ -76,7 +84,7 @@ def buildStep(target, compilerLabel, toolchain, radioShield, configName) {
           dir("mbed-os") {
             sh "git checkout master"
           }
-          execute ("mbed compile --build .build/${target}_${compilerLabel}_${radioShield}_${configName}/ -m ${target} -t ${toolchain} -c")
+          execute ("mbed compile --build .build/${target}_${compilerLabel}_${radioShield}_${interface}/ -m ${target} -t ${toolchain} -c")
           archive '**/mbed-os-example-client.bin'
         }
       }
