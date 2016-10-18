@@ -22,7 +22,7 @@ def radioshields = [
   ]
 
 // Mesh interfaces
-def interfaces = [
+def meshinterfaces = [
   "6lowpan",
   "thread"
   ]
@@ -33,16 +33,16 @@ def stepsForParallel = [:]
 for (int i = 0; i < targets.size(); i++) {
   for(int j = 0; j < toolchains.size(); j++) {
     for(int k = 0; k < radioshields.size(); k++) {
-      for(int l = 0; l < interfaces.size(); l++) {
+      for(int l = 0; l < meshinterfaces.size(); l++) {
         def target = targets.keySet().asList().get(i)
         def allowed_shields = targets.get(target)
         def toolchain = toolchains.keySet().asList().get(j)
         def compilerLabel = toolchains.get(toolchain)
         def radioshield = radioshields.get(k)
-        def interface = interfaces.get(l)
-        def stepName = "${target} ${toolchain} ${radioshield} ${interface}"
+        def meshInterface = meshinterfaces.get(l)
+        def stepName = "${target} ${toolchain} ${radioshield} ${meshInterface}"
         if(allowed_shields.contains(radioshield)) {
-          stepsForParallel[stepName] = buildStep(target, compilerLabel, toolchain, radioshield, interface)
+          stepsForParallel[stepName] = buildStep(target, compilerLabel, toolchain, radioshield, meshInterface)
         }
       }
     }
@@ -53,9 +53,9 @@ timestamps {
   parallel stepsForParallel
 }
 
-def buildStep(target, compilerLabel, toolchain, radioShield, interface) {
+def buildStep(target, compilerLabel, toolchain, radioShield, meshInterface) {
   return {
-    stage ("${target}_${compilerLabel}_${radioShield}_${interface}") {
+    stage ("${target}_${compilerLabel}_${radioShield}_${meshInterface}") {
       node ("${compilerLabel}") {
         deleteDir()
         dir("mbed-os-example-mesh-minimal") {
@@ -71,8 +71,8 @@ def buildStep(target, compilerLabel, toolchain, radioShield, interface) {
             execute("sed -i 's/\"value\": \"ATMEL\"/\"value\": \"NCS36510\"/' mbed_app.json")
           }
 
-          if ("${interface}" == "thread") {
-            // Change interface to thread
+          if ("${meshInterface}" == "thread") {
+            // Change mesh interface to thread
             execute("sed -i 's/\"value\": \"MESH_LOWPAN\"/\"value\": \"MESH_THREAD\"/' mbed_app.json")
 
             //Change operation mode to Thread router
@@ -84,7 +84,7 @@ def buildStep(target, compilerLabel, toolchain, radioShield, interface) {
           dir("mbed-os") {
             sh "git checkout master"
           }
-          execute ("mbed compile --build .build/${target}_${compilerLabel}_${radioShield}_${interface}/ -m ${target} -t ${toolchain} -c")
+          execute ("mbed compile --build .build/${target}_${compilerLabel}_${radioShield}_${meshInterface}/ -m ${target} -t ${toolchain} -c")
           archive '**/mbed-os-example-client.bin'
         }
       }
