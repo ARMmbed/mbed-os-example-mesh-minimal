@@ -82,7 +82,8 @@ def buildStep(target, compilerLabel, toolchain, radioShield, meshInterface) {
           execute ("mbed deploy --protocol ssh")
           // Checkout latest mbed-os master
           dir("mbed-os") {
-            sh "git checkout master"
+            execute ("git fetch origin master")
+            execute ("git checkout FETCH_HEAD")
           }
           execute ("mbed compile --build .build/${target}_${compilerLabel}_${radioShield}_${meshInterface}/ -m ${target} -t ${toolchain} -c")
           archive '**/mbed-os-example-client.bin'
