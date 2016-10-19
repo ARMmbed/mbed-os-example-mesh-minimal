@@ -153,7 +153,7 @@ To change the RF driver:
 ```
 ## Important note (Multi-platform support)
 
-mbed OS provides you with total control of the device. However, some defaults are always loaded if you do not provide proper information regarding them. This becomes evident when you switch among platforms. On some platforms, a particular pin might be reserved for a particular functionality (depending upon the MCU) which thus cannot be used generally. If the Ardurino form factor is not available, or the required peripherial is on a different pin, the pins values can be set manually. For example, you can add `"atmel-rf.spi-rst": "D4"` to your `mbed_app.json` file. This will set the SPI_RST pin to D4 of the GPIO.
+mbed OS provides you with total control of the device. However, some defaults are always loaded if you do not provide proper information regarding them. This becomes evident when you switch among platforms. On some platforms, a particular pin might be reserved for a particular functionality (depending upon the MCU) which thus cannot be used generally. If the Arduino form factor is not available, or the required peripheral is on a different pin, the pins values can be set manually. For example, you can add `"atmel-rf.spi-rst": "D4"` to your `mbed_app.json` file. This will set the SPI_RST pin to D4 of the GPIO.
 
 ```json
 {
