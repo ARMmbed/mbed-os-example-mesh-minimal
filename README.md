@@ -151,23 +151,3 @@ To change the RF driver:
             "value": "ATMEL"
         },
 ```
-## Important note (Multi-platform support)
-
-mbed OS provides you with total control of the device. However, some defaults are always loaded if you do not provide proper information regarding them. This becomes evident when you switch among platforms. On some platforms, a particular pin might be reserved for a particular functionality (depending upon the MCU) which thus cannot be used generally. If the Arduino form factor is not available, or the required peripheral is on a different pin, the pins values can be set manually. For example, you can add `"atmel-rf.spi-rst": "D4"` to your `mbed_app.json` file. This will set the SPI_RST pin to D4 of the GPIO.
-
-```json
-{
-    "target_overrides": {
-        "*": {
-            "target.features_add": ["NANOSTACK", "LOWPAN_ROUTER", "COMMON_PAL"],
-            "atmel-rf.spi-rst": "D4"
-        }
-    }
-}
-```
-
-Desired work flow for switching the platform:
-
-1. Check the platform pin map from [mbed Platforms](https://developer.mbed.org/platforms/).
-2. Make sure that the desired GPIO pin is free by looking at the data sheet of the particular MCU. Most of the data sheets are available on [mbed Platforms](https://developer.mbed.org/platforms/). 
-3. If necessary, change the pin or pins by using the mbed OS config mechanism. To get more information about the configuration system, see the [documentation](https://github.com/ARMmbed/mbed-os/blob/master/docs/config_system.md).
