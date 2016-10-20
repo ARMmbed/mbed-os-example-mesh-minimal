@@ -78,6 +78,11 @@ def buildStep(target, compilerLabel, toolchain, radioShield, meshInterface) {
             //Change operation mode to Thread router
             execute("sed -i 's/\"NANOSTACK\", \"LOWPAN_ROUTER\", \"COMMON_PAL\"/\"NANOSTACK\", \"THREAD_ROUTER\", \"COMMON_PAL\"/' mbed_app.json")
           }
+
+          if ("${meshInterface}" == "6lowpan") {
+          // Use systest border router for testing
+            execute("sed -i 's/\"mbed-mesh-api.6lowpan-nd-channel\": 12/\"mbed-mesh-api.6lowpan-nd-channel\": 18/' mbed_app.json")
+          }
   
           execute ("mbed deploy --protocol ssh")
           // Checkout latest mbed-os master
@@ -86,8 +91,8 @@ def buildStep(target, compilerLabel, toolchain, radioShield, meshInterface) {
             execute ("git checkout FETCH_HEAD")
           }
           execute ("mbed compile --build .build/${target}_${compilerLabel}_${radioShield}_${meshInterface}/ -m ${target} -t ${toolchain} -c")
-          archive '**/mbed-os-example-mesh-minimal.bin'
         }
+        archive '**/mbed-os-example-mesh-minimal.bin'
       }
     }
   }
