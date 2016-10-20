@@ -74,15 +74,12 @@ The following tables show the values you should use in the `mbed_app.json` file 
 
 **Note:** You need to recompile your application after modifying the configurations by issuing the command `mbed compile -c`.
 
-### Requirements for boards without entropy
+### Requirements for hardware
 
-To run this example application there must be a source of entropy. If the platform you are using does not have
-an entropy source you need edit the `mbed_app.json` file to add `NULL_ENTROPY` feature for mbedTLS:
+The networking stack used in this example requires TLS functionality to be enabled on mbed TLS.
+On devices where hardware entropy is not present, TLS is disabled by default. This would result in compile time failures or linking failures.
 
-```
-"macros": ["MBEDTLS_NO_DEFAULT_ENTROPY_SOURCES",
-           "MBEDTLS_TEST_NULL_ENTROPY"],
-```
+To learn why entropy is required, read the [TLS Porting guide](https://docs.mbed.com/docs/mbed-os-handbook/en/5.2/advanced/tls_porting/).
 
 ### Compile the application
 
