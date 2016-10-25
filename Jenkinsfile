@@ -1,9 +1,9 @@
 // List of targets with supported RF shields to compile
 def targets = [
   "K64F": ["ATMEL", "MCR20"],
-  "NUCLEO_F401RE": ["ATMEL", "MCR20"],
+  //"NUCLEO_F401RE": ["ATMEL", "MCR20"],
   "NUCLEO_F429ZI": ["ATMEL", "MCR20"],
-  "NCS36510": ["NCS36510"],
+  //"NCS36510": ["NCS36510"],
   "UBLOX_EVK_ODIN_W2": ["ATMEL", "MCR20"]
   ]
   
