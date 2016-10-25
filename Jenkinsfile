@@ -21,10 +21,10 @@ def radioshields = [
   "NCS36510"
   ]
 
-// Mesh interfaces
+// Mesh interfaces: 6LoWPAN and Thread
 def meshinterfaces = [
-  "6lowpan",
-  "thread"
+  "6lp",
+  "thd"
   ]
   
 def stepsForParallel = [:]
@@ -71,7 +71,7 @@ def buildStep(target, compilerLabel, toolchain, radioShield, meshInterface) {
             execute("sed -i 's/\"value\": \"ATMEL\"/\"value\": \"NCS36510\"/' mbed_app.json")
           }
 
-          if ("${meshInterface}" == "thread") {
+          if ("${meshInterface}" == "thd") {
             // Change mesh interface to thread
             execute("sed -i 's/\"value\": \"MESH_LOWPAN\"/\"value\": \"MESH_THREAD\"/' mbed_app.json")
 
@@ -79,7 +79,7 @@ def buildStep(target, compilerLabel, toolchain, radioShield, meshInterface) {
             execute("sed -i 's/\"NANOSTACK\", \"LOWPAN_ROUTER\", \"COMMON_PAL\"/\"NANOSTACK\", \"THREAD_ROUTER\", \"COMMON_PAL\"/' mbed_app.json")
           }
 
-          if ("${meshInterface}" == "6lowpan") {
+          if ("${meshInterface}" == "6lp") {
           // Use systest border router for testing
             execute("sed -i 's/\"mbed-mesh-api.6lowpan-nd-channel\": 12/\"mbed-mesh-api.6lowpan-nd-channel\": 18/' mbed_app.json")
           }
@@ -90,7 +90,7 @@ def buildStep(target, compilerLabel, toolchain, radioShield, meshInterface) {
             execute ("git fetch origin master")
             execute ("git checkout FETCH_HEAD")
           }
-          execute ("mbed compile --build .build/${target}_${compilerLabel}_${radioShield}_${meshInterface}/ -m ${target} -t ${toolchain} -c")
+          execute ("mbed compile --build .build/${target}_${toolchain}_${radioShield}_${meshInterface}/ -m ${target} -t ${toolchain} -c")
         }
         archive '**/mbed-os-example-mesh-minimal.bin'
       }
