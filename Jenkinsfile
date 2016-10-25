@@ -90,7 +90,7 @@ def buildStep(target, compilerLabel, toolchain, radioShield, meshInterface) {
             execute ("git fetch origin master")
             execute ("git checkout FETCH_HEAD")
           }
-          execute ("mbed compile --build .build/${target}_${toolchain}_${radioShield}_${meshInterface}/ -m ${target} -t ${toolchain} -c")
+          execute ("mbed compile --build out/${target}_${toolchain}_${radioShield}_${meshInterface}/ -m ${target} -t ${toolchain} -c")
         }
         archive '**/mbed-os-example-mesh-minimal.bin'
       }
