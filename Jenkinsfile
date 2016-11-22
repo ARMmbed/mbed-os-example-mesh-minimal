@@ -150,6 +150,13 @@ def run_smoke(targets, toolchains, radioshields, meshinterfaces, raas, raasPort)
           execute("git checkout ${env.LATEST_CLITEST_REL}")
           execute("git submodule update --init --recursive testcases")
 
+          dir("testcases") {
+            execute("git checkout master")
+            dir("6lowpan") {
+              execute("git checkout master")
+            }
+          }
+
           for (int i = 0; i < targets.size(); i++) {
             for(int j = 0; j < toolchains.size(); j++) {
               for(int k = 0; k < radioshields.size(); k++) {
