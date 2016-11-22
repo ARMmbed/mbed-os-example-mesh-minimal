@@ -145,7 +145,6 @@ def run_smoke(targets, toolchains, radioshields, meshinterfaces, raas, raasPort)
     stage ("smoke_tests_${raasPort}") {
       node ("linux_test") {
         deleteDir()
-        }
         dir("mbed-clitest") {
           git "git@github.com:ARMmbed/mbed-clitest.git"
           execute("git checkout ${env.LATEST_CLITEST_REL}")
