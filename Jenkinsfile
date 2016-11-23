@@ -121,14 +121,11 @@ def buildStep(target, compilerLabel, toolchain, radioShield, meshInterface) {
           }
 
           // Set mbed-os to revision received as parameter
-          writeFile file: 'mbed-os.lib', text: "https://github.com/ARMmbed/mbed-os/"
           execute ("mbed deploy --protocol ssh")
-          if("${env.MBED_OS_REVISION}" != "master") {
-            dir ("mbed-os") {
-              execute ("git fetch origin ${env.MBED_OS_REVISION}")
-              execute ("git checkout FETCH_HEAD")
-            }
+          dir ("mbed-os") {
+            execute ("git checkout ${env.MBED_OS_REVISION}")
           }
+
           execute ("mbed compile --build out/${target}_${toolchain}_${radioShield}_${meshInterface}/ -m ${target} -t ${toolchain} -c")
         }
         stash name: "${target}_${toolchain}_${radioShield}_${meshInterface}", includes: '**/mbed-os-example-mesh-minimal.bin'
