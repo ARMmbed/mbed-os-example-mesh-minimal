@@ -8,7 +8,6 @@ properties ([[
     ]]
   ]])
 
-// There seems to be a bug in Jenkins, the first build of every branch fails due to missing parameters.
 try {
   echo "Verifying build with mbed-os version ${mbed_os_revision}"
   env.MBED_OS_REVISION = "${mbed_os_revision}"
@@ -25,7 +24,7 @@ def raas = [
   //"8030": "lowpan_mesh_minimal_smoke_429zi_atmel.json",
   //"8033": "lowpan_mesh_minimal_smoke_429zi_mcr20.json",
   //"8031": "lowpan_mesh_minimal_smoke_ublox_atmel.json"
-    ]
+  ]
 
 // List of targets with supported RF shields to compile
 def targets = [
@@ -124,7 +123,6 @@ def buildStep(target, compilerLabel, toolchain, radioShield, meshInterface) {
           // Set mbed-os to revision received as parameter
           writeFile file: 'mbed-os.lib', text: "https://github.com/ARMmbed/mbed-os/"
           execute ("mbed deploy --protocol ssh")
-
           if("${env.MBED_OS_REVISION}" != "master") {
             dir ("mbed-os") {
               execute ("git fetch origin ${env.MBED_OS_REVISION}")
@@ -164,7 +162,6 @@ def run_smoke(targets, toolchains, radioshields, meshinterfaces, raas, raasPort)
                   def target = targets.keySet().asList().get(i)
                   def allowed_shields = targets.get(target)
                   def toolchain = toolchains.keySet().asList().get(j)
-                  //def compilerLabel = toolchains.get(toolchain)
                   def radioshield = radioshields.get(k)
                   def meshInterface = meshinterfaces.get(l)
                   if(allowed_shields.contains(radioshield)) {
@@ -174,7 +171,6 @@ def run_smoke(targets, toolchains, radioshields, meshinterfaces, raas, raasPort)
               }
             }
           }
-
           env.RAAS_USERNAME = "user"
           env.RAAS_PASSWORD = "user"
           def suite_to_run = raas.get(raasPort)
