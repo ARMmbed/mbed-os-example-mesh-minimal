@@ -16,16 +16,16 @@ try {
 
 // Map RaaS instances to corresponding test suites
 def raas = [
-  "8001": "lowpan_mesh_minimal_smoke_k64f_atmel.json",
-  "8034": "lowpan_mesh_minimal_smoke_k64f_mcr20.json",
-  "8030": "lowpan_mesh_minimal_smoke_429zi_atmel.json",
-  "8033": "lowpan_mesh_minimal_smoke_429zi_mcr20.json",
-  "8031": "lowpan_mesh_minimal_smoke_ublox_atmel.json",
-  "8007": "thread_mesh_minimal_smoke_k64f_atmel.json",
-  "8034": "thread_mesh_minimal_smoke_k64f_mcr20.json",
-  "8030": "thread_mesh_minimal_smoke_429zi_atmel.json",
-  "8033": "thread_mesh_minimal_smoke_429zi_mcr20.json",
-  "8031": "thread_mesh_minimal_smoke_ublox_atmel.json"
+  "lowpan_mesh_minimal_smoke_k64f_atmel.json": "8001",
+  "lowpan_mesh_minimal_smoke_k64f_mcr20.json": "8034",
+  "lowpan_mesh_minimal_smoke_429zi_atmel.json": "8030",
+  "lowpan_mesh_minimal_smoke_429zi_mcr20.json": "8033",
+  "lowpan_mesh_minimal_smoke_ublox_atmel.json": "8031",
+  "thread_mesh_minimal_smoke_k64f_atmel.json": "8007",
+  "thread_mesh_minimal_smoke_k64f_mcr20.json": "8034",
+  "thread_mesh_minimal_smoke_429zi_atmel.json": "8030",
+  "thread_mesh_minimal_smoke_429zi_mcr20.json": "8033",
+  "thread_mesh_minimal_smoke_ublox_atmel.json": "8031"
   ]
 
 // List of targets with supported RF shields to compile
@@ -83,13 +83,11 @@ def parallelRunSmoke = [:]
 
 // Need to compare boolean against string value
 if ( smoke_test == "true" ) {
+  // Generate smoke tests based on suite amount
   for(int i = 0; i < raas.size(); i++) {
-    for(int j = 0; j < meshinterfaces.size(); j++) {
-      def raasPort = raas.keySet().asList().get(i)
-      def meshMode = meshinterfaces.get(j)
-      def smokeStep = "${raasPort} ${meshMode}"
-      parallelRunSmoke[smokeStep] = run_smoke(targets, toolchains, radioshields, meshMode, raas, raasPort)
-    }
+    def suite_to_run = raas.keySet().asList().get(i)
+    def raasPort = raas.get(suite_to_run)
+    parallelRunSmoke[raasPort] = run_smoke(targets, toolchains, radioshields, meshinterfaces, raasPort, suite_to_run)
   }
 }
 
@@ -145,9 +143,9 @@ def buildStep(target, compilerLabel, toolchain, radioShield, meshInterface) {
   }
 }
 
-def run_smoke(targets, toolchains, radioshields, meshMode, raas, raasPort){
+def run_smoke(targets, toolchains, radioshields, meshinterfaces, raasPort, suite_to_run) {
   return {
-    stage ("smoke_tests_${meshMode}_${raasPort}") {
+    stage ("smoke_${raasPort}_${suite_to_run}") {
       node ("linux_test") {
         deleteDir()
         dir("mbed-clitest") {
@@ -165,21 +163,23 @@ def run_smoke(targets, toolchains, radioshields, meshMode, raas, raasPort){
           for (int i = 0; i < targets.size(); i++) {
             for(int j = 0; j < toolchains.size(); j++) {
               for(int k = 0; k < radioshields.size(); k++) {
-                def target = targets.keySet().asList().get(i)
-                def allowed_shields = targets.get(target)
-                def toolchain = toolchains.keySet().asList().get(j)
-                def radioshield = radioshields.get(k)
-                if(allowed_shields.contains(radioshield)) {
-                  unstash "${target}_${toolchain}_${radioshield}_${meshMode}"
+                for(int l = 0; l < meshinterfaces.size(); l++) {
+                  def target = targets.keySet().asList().get(i)
+                  def allowed_shields = targets.get(target)
+                  def toolchain = toolchains.keySet().asList().get(j)
+                  def radioshield = radioshields.get(k)
+                  def meshInterface = meshinterfaces.get(l)
+                  if(allowed_shields.contains(radioshield)) {
+                    unstash "${target}_${toolchain}_${radioshield}_${meshInterface}"
+                  }
                 }
               }
             }
           }
           env.RAAS_USERNAME = "user"
           env.RAAS_PASSWORD = "user"
-          def suite_to_run = raas.get(raasPort)
-          execute("python clitest.py --suitedir testcases/suites/ --suite ${suite_to_run} --type hardware --reset --raas 193.208.80.31:${raasPort} --failure_return_value -vvv -w --log log_${meshMode}_${raasPort}")
-          archive "log_${meshMode}_${raasPort}/**/*"
+          execute("python clitest.py --suitedir testcases/suites/ --suite ${suite_to_run} --type hardware --reset --raas 193.208.80.31:${raasPort} --failure_return_value -vvv -w --log log_${raasPort}_${suite_to_run}")
+          archive "log_${raasPort}_${suite_to_run}/**/*"
         }
       }
     }
