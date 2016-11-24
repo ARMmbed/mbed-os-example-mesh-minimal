@@ -84,8 +84,11 @@ def parallelRunSmoke = [:]
 // Need to compare boolean against string value
 if ( smoke_test == "true" ) {
   for(int i = 0; i < raas.size(); i++) {
-    def raasPort = raas.keySet().asList().get(i)
-    parallelRunSmoke[raasPort] = run_smoke(targets, toolchains, radioshields, meshinterfaces, raas, raasPort)
+    for(int j = 0; j < meshinterfaces.size(); j++) {
+      def raasPort = raas.keySet().asList().get(i)
+      def meshMode = meshinterfaces.get(j)
+      parallelRunSmoke[raasPort] = run_smoke(targets, toolchains, radioshields, meshMode, raas, raasPort)
+    }
   }
 }
 
@@ -141,9 +144,9 @@ def buildStep(target, compilerLabel, toolchain, radioShield, meshInterface) {
   }
 }
 
-def run_smoke(targets, toolchains, radioshields, meshinterfaces, raas, raasPort){
+def run_smoke(targets, toolchains, radioshields, meshMode, raas, raasPort){
   return {
-    stage ("smoke_tests_${raasPort}") {
+    stage ("smoke_tests_${meshMode}_${raasPort}") {
       node ("linux_test") {
         deleteDir()
         dir("mbed-clitest") {
@@ -161,15 +164,12 @@ def run_smoke(targets, toolchains, radioshields, meshinterfaces, raas, raasPort)
           for (int i = 0; i < targets.size(); i++) {
             for(int j = 0; j < toolchains.size(); j++) {
               for(int k = 0; k < radioshields.size(); k++) {
-                for(int l = 0; l < meshinterfaces.size(); l++) {
-                  def target = targets.keySet().asList().get(i)
-                  def allowed_shields = targets.get(target)
-                  def toolchain = toolchains.keySet().asList().get(j)
-                  def radioshield = radioshields.get(k)
-                  def meshInterface = meshinterfaces.get(l)
-                  if(allowed_shields.contains(radioshield)) {
-                    unstash "${target}_${toolchain}_${radioshield}_${meshInterface}"
-                  }
+                def target = targets.keySet().asList().get(i)
+                def allowed_shields = targets.get(target)
+                def toolchain = toolchains.keySet().asList().get(j)
+                def radioshield = radioshields.get(k)
+                if(allowed_shields.contains(radioshield)) {
+                  unstash "${target}_${toolchain}_${radioshield}_${meshMode}"
                 }
               }
             }
@@ -177,8 +177,8 @@ def run_smoke(targets, toolchains, radioshields, meshinterfaces, raas, raasPort)
           env.RAAS_USERNAME = "user"
           env.RAAS_PASSWORD = "user"
           def suite_to_run = raas.get(raasPort)
-          execute("python clitest.py --suitedir testcases/suites/ --suite ${suite_to_run} --type hardware --reset --raas 193.208.80.31:${raasPort} --failure_return_value -vvv -w --log log_${raasPort}")
-          archive "log_${raasPort}/**/*"
+          execute("python clitest.py --suitedir testcases/suites/ --suite ${suite_to_run} --type hardware --reset --raas 193.208.80.31:${raasPort} --failure_return_value -vvv -w --log log_${meshMode}_${raasPort}")
+          archive "log_${meshMode}_${raasPort}/**/*"
         }
       }
     }
