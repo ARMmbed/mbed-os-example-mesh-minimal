@@ -87,7 +87,7 @@ if ( smoke_test == "true" ) {
   for(int i = 0; i < raas.size(); i++) {
     def suite_to_run = raas.keySet().asList().get(i)
     def raasPort = raas.get(suite_to_run)
-    parallelRunSmoke[raasPort] = run_smoke(targets, toolchains, radioshields, meshinterfaces, raasPort, suite_to_run)
+    parallelRunSmoke[suite_to_run] = run_smoke(targets, toolchains, radioshields, meshinterfaces, raasPort, suite_to_run)
   }
 }
 
