@@ -1,6 +1,6 @@
 properties ([[$class: 'ParametersDefinitionProperty', parameterDefinitions: [
   [$class: 'StringParameterDefinition', name: 'mbed_os_revision', defaultValue: 'master', description: 'Revision of mbed-os to build'],
-  [$class: 'BooleanParameterDefinition', name: 'smoke_test', defaultValue: false, description: 'Enable to run HW smoke test after building']
+  [$class: 'BooleanParameterDefinition', name: 'smoke_test', defaultValue: true, description: 'Enable to run HW smoke test after building']
   ]]])
 
 echo "Run smoke tests: ${smoke_test}"
@@ -87,7 +87,8 @@ if ( smoke_test == "true" ) {
     for(int j = 0; j < meshinterfaces.size(); j++) {
       def raasPort = raas.keySet().asList().get(i)
       def meshMode = meshinterfaces.get(j)
-      parallelRunSmoke[raasPort] = run_smoke(targets, toolchains, radioshields, meshMode, raas, raasPort)
+      def smokeStep = "${raasPort} ${meshMode}"
+      parallelRunSmoke[smokeStep] = run_smoke(targets, toolchains, radioshields, meshMode, raas, raasPort)
     }
   }
 }
