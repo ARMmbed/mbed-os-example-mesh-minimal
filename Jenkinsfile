@@ -20,7 +20,12 @@ def raas = [
   "8034": "lowpan_mesh_minimal_smoke_k64f_mcr20.json",
   "8030": "lowpan_mesh_minimal_smoke_429zi_atmel.json",
   "8033": "lowpan_mesh_minimal_smoke_429zi_mcr20.json",
-  "8031": "lowpan_mesh_minimal_smoke_ublox_atmel.json"
+  "8031": "lowpan_mesh_minimal_smoke_ublox_atmel.json",
+  "8007": "thread_mesh_minimal_smoke_k64f_atmel.json",
+  "8034": "thread_mesh_minimal_smoke_k64f_mcr20.json",
+  "8030": "thread_mesh_minimal_smoke_429zi_atmel.json",
+  "8033": "thread_mesh_minimal_smoke_429zi_mcr20.json",
+  "8031": "thread_mesh_minimal_smoke_ublox_atmel.json"
   ]
 
 // List of targets with supported RF shields to compile
