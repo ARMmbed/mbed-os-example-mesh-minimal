@@ -1,12 +1,9 @@
-properties ([[
-  $class: 'ParametersDefinitionProperty',
-  parameterDefinitions: [[
-    $class: 'StringParameterDefinition',
-    name: 'mbed_os_revision',
-    defaultValue: 'master',
-    description: 'Revision of mbed-os to build'
-    ]]
-  ]])
+properties ([[$class: 'ParametersDefinitionProperty', parameterDefinitions: [
+  [$class: 'StringParameterDefinition', name: 'mbed_os_revision', defaultValue: 'master', description: 'Revision of mbed-os to build'],
+  [$class: 'BooleanParameterDefinition', name: 'smoke_test', defaultValue: false, description: 'Enable to run HW smoke test after building']
+  ]]])
+
+echo "Run smoke tests: ${smoke_test}"
 
 try {
   echo "Verifying build with mbed-os version ${mbed_os_revision}"
@@ -19,11 +16,11 @@ try {
 
 // Map RaaS instances to corresponding test suites
 def raas = [
-  "8001": "lowpan_mesh_minimal_smoke_k64f_atmel.json"
-  //"8034": "lowpan_mesh_minimal_smoke_k64f_mcr20.json",
-  //"8030": "lowpan_mesh_minimal_smoke_429zi_atmel.json",
-  //"8033": "lowpan_mesh_minimal_smoke_429zi_mcr20.json",
-  //"8031": "lowpan_mesh_minimal_smoke_ublox_atmel.json"
+  "8001": "lowpan_mesh_minimal_smoke_k64f_atmel.json",
+  "8034": "lowpan_mesh_minimal_smoke_k64f_mcr20.json",
+  "8030": "lowpan_mesh_minimal_smoke_429zi_atmel.json",
+  "8033": "lowpan_mesh_minimal_smoke_429zi_mcr20.json",
+  "8031": "lowpan_mesh_minimal_smoke_ublox_atmel.json"
   ]
 
 // List of targets with supported RF shields to compile
@@ -79,9 +76,12 @@ for (int i = 0; i < targets.size(); i++) {
 
 def parallelRunSmoke = [:]
 
-for(int i = 0; i < raas.size(); i++){
-  def raasPort = raas.keySet().asList().get(i)
-  parallelRunSmoke[raasPort] = run_smoke(targets, toolchains, radioshields, meshinterfaces, raas, raasPort)
+// Need to compare boolean against string value
+if ( smoke_test == "true" ) {
+  for(int i = 0; i < raas.size(); i++) {
+    def raasPort = raas.keySet().asList().get(i)
+    parallelRunSmoke[raasPort] = run_smoke(targets, toolchains, radioshields, meshinterfaces, raas, raasPort)
+  }
 }
 
 timestamps {
@@ -130,6 +130,7 @@ def buildStep(target, compilerLabel, toolchain, radioShield, meshInterface) {
         }
         stash name: "${target}_${toolchain}_${radioShield}_${meshInterface}", includes: '**/mbed-os-example-mesh-minimal.bin'
         archive '**/mbed-os-example-mesh-minimal.bin'
+        step([$class: 'WsCleanup'])
       }
     }
   }
