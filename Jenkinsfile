@@ -1,6 +1,6 @@
 properties ([[$class: 'ParametersDefinitionProperty', parameterDefinitions: [
   [$class: 'StringParameterDefinition', name: 'mbed_os_revision', defaultValue: 'master', description: 'Revision of mbed-os to build'],
-  [$class: 'BooleanParameterDefinition', name: 'smoke_test', defaultValue: true, description: 'Enable to run HW smoke test after building']
+  [$class: 'BooleanParameterDefinition', name: 'smoke_test', defaultValue: false, description: 'Enable to run HW smoke test after building']
   ]]])
 
 echo "Run smoke tests: ${smoke_test}"
@@ -87,7 +87,9 @@ if ( smoke_test == "true" ) {
   for(int i = 0; i < raas.size(); i++) {
     def suite_to_run = raas.keySet().asList().get(i)
     def raasPort = raas.get(suite_to_run)
-    parallelRunSmoke[suite_to_run] = run_smoke(targets, toolchains, radioshields, meshinterfaces, raasPort, suite_to_run)
+    // Parallel execution needs unique step names. Remove .json file ending.
+    def smokeStep = "${raasPort} ${suite_to_run.substring(0, suite_to_run.indexOf('.'))}"
+    parallelRunSmoke[smokeStep] = run_smoke(targets, toolchains, radioshields, meshinterfaces, raasPort, suite_to_run)
   }
 }
 
@@ -145,7 +147,9 @@ def buildStep(target, compilerLabel, toolchain, radioShield, meshInterface) {
 
 def run_smoke(targets, toolchains, radioshields, meshinterfaces, raasPort, suite_to_run) {
   return {
-    stage ("smoke_${raasPort}_${suite_to_run}") {
+    // Remove .json from suite name
+    def suiteName = suite_to_run.substring(0, suite_to_run.indexOf('.'))
+    stage ("smoke_${raasPort}_${suiteName}") {
       node ("linux_test") {
         deleteDir()
         dir("mbed-clitest") {
@@ -178,8 +182,8 @@ def run_smoke(targets, toolchains, radioshields, meshinterfaces, raasPort, suite
           }
           env.RAAS_USERNAME = "user"
           env.RAAS_PASSWORD = "user"
-          execute("python clitest.py --suitedir testcases/suites/ --suite ${suite_to_run} --type hardware --reset --raas 193.208.80.31:${raasPort} --failure_return_value -vvv -w --log log_${raasPort}_${suite_to_run}")
-          archive "log_${raasPort}_${suite_to_run}/**/*"
+          execute("python clitest.py --suitedir testcases/suites/ --suite ${suite_to_run} --type hardware --reset --raas 193.208.80.31:${raasPort} --failure_return_value -vvv -w --log log_${raasPort}_${suiteName}")
+          archive "log_${raasPort}_${suiteName}/**/*"
         }
       }
     }
