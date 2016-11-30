@@ -31,7 +31,7 @@ def raas = [
 // List of targets with supported RF shields to compile
 def targets = [
   "K64F": ["ATMEL", "MCR20"],
-  //"NUCLEO_F401RE": ["ATMEL", "MCR20"],
+  "NUCLEO_F401RE": ["ATMEL", "MCR20"],
   "NUCLEO_F429ZI": ["ATMEL", "MCR20"],
   //"NCS36510": ["NCS36510"],
   "UBLOX_EVK_ODIN_W2": ["ATMEL"]
@@ -70,6 +70,12 @@ for (int i = 0; i < targets.size(); i++) {
         def compilerLabel = toolchains.get(toolchain)
         def radioshield = radioshields.get(k)
         def meshInterface = meshinterfaces.get(l)
+
+        // Skip unwanted combination
+        if (target == "NUCLEO_F401RE" && toolchain == "IAR") {
+          continue
+        }
+
         def stepName = "${target} ${toolchain} ${radioshield} ${meshInterface}"
         if(allowed_shields.contains(radioshield)) {
           stepsForParallel[stepName] = buildStep(target, compilerLabel, toolchain, radioshield, meshInterface)
