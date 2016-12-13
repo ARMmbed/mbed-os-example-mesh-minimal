@@ -188,6 +188,10 @@ def run_smoke(targets, toolchains, radioshields, meshinterfaces, raasPort, suite
                   def toolchain = toolchains.keySet().asList().get(j)
                   def radioshield = radioshields.get(k)
                   def meshInterface = meshinterfaces.get(l)
+                  // Skip unwanted combination
+                  if (target == "NUCLEO_F401RE" && toolchain == "IAR") {
+                    continue
+                  }
                   if(allowed_shields.contains(radioshield)) {
                     unstash "${target}_${toolchain}_${radioshield}_${meshInterface}"
                   }
