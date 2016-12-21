@@ -165,7 +165,7 @@ def run_smoke(targets, toolchains, radioshields, meshinterfaces, raasPort, suite
     // Remove .json from suite name
     def suiteName = suite_to_run.substring(0, suite_to_run.indexOf('.'))
     stage ("smoke_${raasPort}_${suiteName}") {
-      node ("linux_test") {
+      node ("mesh-test") {
         deleteDir()
         dir("mbed-clitest") {
           git "git@github.com:ARMmbed/mbed-clitest.git"
