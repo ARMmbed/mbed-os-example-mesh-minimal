@@ -127,7 +127,7 @@ def buildStep(target, compilerLabel, toolchain, radioShield, meshInterface) {
             execute("sed -i 's/\"value\": \"MESH_LOWPAN\"/\"value\": \"MESH_THREAD\"/' mbed_app.json")
 
             // Change operation mode to Thread router
-            execute("sed -i 's/\"NANOSTACK\", \"LOWPAN_ROUTER\", \"COMMON_PAL\"/\"NANOSTACK\", \"THREAD_ROUTER\", \"COMMON_PAL\"/' mbed_app.json")
+            execute("sed -i 's/\"NANOSTACK\", \"LOWPAN_ROUTER\", \"COMMON_PAL\"/\"NANOSTACK\", \"THREAD_END_DEVICE\", \"COMMON_PAL\"/' mbed_app.json")
 
             // Increase HEAP size
             execute("sed -i 's/\"mbed-mesh-api.heap-size\": 10000/\"mbed-mesh-api.heap-size\": 32000/' mbed_app.json")
