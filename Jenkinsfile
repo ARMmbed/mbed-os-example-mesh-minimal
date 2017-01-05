@@ -3,7 +3,7 @@ properties ([[$class: 'ParametersDefinitionProperty', parameterDefinitions: [
   [$class: 'BooleanParameterDefinition', name: 'smoke_test', defaultValue: false, description: 'Enable to run HW smoke test after building']
   ]]])
 
-echo "Run smoke tests: ${smoke_test}"
+echo "Run smoke tests: ${params.smoke_test}"
 
 try {
   echo "Verifying build with mbed-os version ${mbed_os_revision}"
@@ -88,7 +88,7 @@ for (int i = 0; i < targets.size(); i++) {
 def parallelRunSmoke = [:]
 
 // Need to compare boolean against string value
-if ( smoke_test == "true" ) {
+if ( params.smoke_test == "true" ) {
   // Generate smoke tests based on suite amount
   for(int i = 0; i < raas.size(); i++) {
     def suite_to_run = raas.keySet().asList().get(i)
