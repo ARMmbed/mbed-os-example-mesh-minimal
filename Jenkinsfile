@@ -36,7 +36,7 @@ def targets = [
   //"NCS36510": ["NCS36510"],
   "UBLOX_EVK_ODIN_W2": ["ATMEL"]
   ]
-  
+
 // Map toolchains to compilers
 def toolchains = [
   ARM: "armcc",
@@ -56,7 +56,7 @@ def meshinterfaces = [
   "6lp",
   "thd"
   ]
-  
+
 def stepsForParallel = [:]
 
 // Jenkins pipeline does not support map.each, we need to use oldschool for loop
@@ -88,7 +88,7 @@ for (int i = 0; i < targets.size(); i++) {
 def parallelRunSmoke = [:]
 
 // Need to compare boolean against string value
-if ( params.smoke_test == "true" ) {
+if ( params.smoke_test == true ) {
   // Generate smoke tests based on suite amount
   for(int i = 0; i < raas.size(); i++) {
     def suite_to_run = raas.keySet().asList().get(i)
