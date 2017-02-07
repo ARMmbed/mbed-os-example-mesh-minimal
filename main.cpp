@@ -14,7 +14,7 @@
 #include "mbed-trace/mbed_trace.h"
 
 void trace_printer(const char* str) {
-    printf("%s\r\n", str);
+    printf("%s\n", str);
 }
 #endif // MBED_CONF_APP_TRACE
 
@@ -38,8 +38,6 @@ LoWPANNDInterface mesh;
 ThreadInterface mesh;
 #endif //MBED_CONF_APP_MESH_TYPE
 
-Serial output(USBTX, USBRX);
-
 int main()
 {
 
@@ -47,17 +45,16 @@ int main()
 	mbed_trace_init();
     mbed_trace_print_function_set(trace_printer);
 #endif
-    output.baud(115200);
-    printf("\r\n\r\nConnecting...\r\n");
+    printf("\n\nConnecting...\n");
     mesh.initialize(&rf_phy);
 
     if (mesh.connect()) {
-        printf("Connection failed!\r\n");
+        printf("Connection failed!\n");
         return -1;
     }
 
     while (NULL == mesh.get_ip_address())
         Thread::wait(500);
 
-    printf("connected. IP = %s\r\n", mesh.get_ip_address());
+    printf("connected. IP = %s\n", mesh.get_ip_address());
 }
