@@ -140,8 +140,11 @@ def buildStep(target, compilerLabel, toolchain, radioShield, meshInterface) {
           }
 
           if ("${meshInterface}" == "6lp") {
-          // Use systest border router for testing
-            execute("sed -i 's/\"mbed-mesh-api.6lowpan-nd-channel\": 12/\"mbed-mesh-api.6lowpan-nd-channel\": 18/' mbed_app.json")
+            // Use systest border router for testing (CH=18, PANID=ABBA)
+            execute("sed -i 's/\"mbed-mesh-api.6lowpan-nd-channel\": 12/\"mbed-mesh-api.6lowpan-nd-channel\": 18/' mbed_app.json") 
+            execute("sed -i 's/\"mbed-mesh-api.6lowpan-nd-panid-filter\": \"0xffff\"/\"mbed-mesh-api.6lowpan-nd-panid-filter\": \"0xABBA\"/' mbed_app.json")            
+            // Activate traces
+            execute("sed -i 's/\"mbed-trace.enable\": false/\"mbed-trace.enable\": true/' mbed_app.json")            
           }
 
           // Set mbed-os to revision received as parameter

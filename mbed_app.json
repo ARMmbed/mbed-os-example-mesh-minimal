@@ -16,6 +16,7 @@
     "target_overrides": {
         "*": {
             "target.features_add": ["NANOSTACK", "LOWPAN_ROUTER", "COMMON_PAL"],
+            "mbed-mesh-api.6lowpan-nd-panid-filter": "0xffff",            
             "mbed-mesh-api.6lowpan-nd-channel-page": 0,
             "mbed-mesh-api.6lowpan-nd-channel": 12,
             "mbed-mesh-api.6lowpan-nd-channel-mask": "(1<<12)",
