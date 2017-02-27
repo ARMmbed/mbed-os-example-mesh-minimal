@@ -130,11 +130,11 @@ def buildStep(target, compilerLabel, toolchain, radioShield, meshInterface) {
             execute("sed -i 's/\"NANOSTACK\", \"LOWPAN_ROUTER\", \"COMMON_PAL\"/\"NANOSTACK\", \"THREAD_ROUTER\", \"COMMON_PAL\"/' mbed_app.json")
 
             // Increase HEAP size
-            execute("sed -i 's/\"mbed-mesh-api.heap-size\": 10000/\"mbed-mesh-api.heap-size\": 32000/' mbed_app.json")
+            execute("sed -i 's/\"mbed-mesh-api.heap-size\": 14000/\"mbed-mesh-api.heap-size\": 32000/' mbed_app.json")
 
             // Use systest Thread border router for testing (CH=18, PANID=BAAB)
-            execute("sed -i 's/\"mbed-mesh-api.thread-config-channel\": 12/\"mbed-mesh-api.thread-config-channel\": 18/' mbed_app.json")
-            execute("sed -i 's/\"mbed-mesh-api.thread-config-panid\": \"0xDEFA\"/\"mbed-mesh-api.thread-config-panid\": \"0xBAAB\"/' mbed_app.json")
+            execute("sed -i 's/\"mbed-mesh-api.thread-config-channel\": 22/\"mbed-mesh-api.thread-config-channel\": 18/' mbed_app.json")
+            execute("sed -i 's/\"mbed-mesh-api.thread-config-panid\": \"0x0700\"/\"mbed-mesh-api.thread-config-panid\": \"0xBAAB\"/' mbed_app.json")
             // Activate traces
             execute("sed -i 's/\"mbed-trace.enable\": false/\"mbed-trace.enable\": true/' mbed_app.json")
           }
