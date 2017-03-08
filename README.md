@@ -81,6 +81,8 @@ On devices where hardware entropy is not present, TLS is disabled by default. Th
 
 To learn why entropy is required, read the [TLS Porting guide](https://docs.mbed.com/docs/mbed-os-handbook/en/5.2/advanced/tls_porting/).
 
+See [Notes on different hardware](https://github.com/ARMmbed/mbed-os-example-mesh-minimal/blob/oob_test_mbed-os-5.4/Hardware.md) to see known combinations that work.
+
 ### Compile the application
 
 #### For 6LoWPAN
