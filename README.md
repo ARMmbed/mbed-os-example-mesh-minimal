@@ -81,10 +81,19 @@ On devices where hardware entropy is not present, TLS is disabled by default. Th
 
 To learn why entropy is required, read the [TLS Porting guide](https://docs.mbed.com/docs/mbed-os-handbook/en/5.2/advanced/tls_porting/).
 
+See [Notes on different hardware](https://github.com/ARMmbed/mbed-os-example-mesh-minimal/blob/master/Hardware.md) for known combinations of development boards and RF shields that have been tested.
+
 ### Compile the application
 
+#### For 6LoWPAN
 ```
-mbed compile -m K64F -t GCC_ARM
+mbed compile -m K64F -t GCC_ARM --app-config configs/mesh_6lowpan.json
+```
+
+#### For Thread
+
+```
+mbed compile -m K64F -t GCC_ARM --app-config configs/mesh_thread.json
 ```
 
 A binary is generated at the end of the build process.
@@ -101,7 +110,7 @@ Drag and drop the binary to the target to program the application.
 
 This example supports the following two border routers:
 
-- [k64f-border-router](https://github.com/ARMmbed/k64f-border-router), 6LoWPAN only
+- [Nanostack-border-router](https://github.com/ARMmbed/nanostack-border-router-private), 6LoWPAN only
 - [mbed gateway](https://firefly-iot.com/product/firefly-6lowpan-gateway-2-4ghz/)
  
 Read the instructions on updating the firmware of your mbed gateway working as 6LoWPAN [here](https://github.com/ARMmbed/mbed-os-example-client#mbed-gateway).
