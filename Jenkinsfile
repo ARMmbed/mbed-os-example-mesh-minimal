@@ -111,6 +111,7 @@ def buildStep(target, compilerLabel, toolchain, radioShield, meshInterface) {
         deleteDir()
         dir("mbed-os-example-mesh-minimal") {
           checkout scm
+          def config_file = "mbed_app.json"
 
           if ("${radioShield}" == "MCR20") {
             // Replace default rf shield
@@ -123,28 +124,16 @@ def buildStep(target, compilerLabel, toolchain, radioShield, meshInterface) {
           }
 
           if ("${meshInterface}" == "thd") {
-            // Change mesh interface to thread
-            execute("sed -i 's/\"value\": \"MESH_LOWPAN\"/\"value\": \"MESH_THREAD\"/' mbed_app.json")
 
-            // Change operation mode to Thread router
-            execute("sed -i 's/\"NANOSTACK\", \"LOWPAN_ROUTER\", \"COMMON_PAL\"/\"NANOSTACK\", \"THREAD_ROUTER\", \"COMMON_PAL\"/' mbed_app.json")
-
-            // Increase HEAP size
-            execute("sed -i 's/\"mbed-mesh-api.heap-size\": 14000/\"mbed-mesh-api.heap-size\": 32000/' mbed_app.json")
-
-            // Use systest Thread border router for testing (CH=18, PANID=BAAB)
-            execute("sed -i 's/\"mbed-mesh-api.thread-config-channel\": 22/\"mbed-mesh-api.thread-config-channel\": 18/' mbed_app.json")
-            execute("sed -i 's/\"mbed-mesh-api.thread-config-panid\": \"0x0700\"/\"mbed-mesh-api.thread-config-panid\": \"0xBAAB\"/' mbed_app.json")
+            config_file = "./configs/mesh_thread.json"
             // Activate traces
-            execute("sed -i 's/\"mbed-trace.enable\": false/\"mbed-trace.enable\": true/' mbed_app.json")
+            execute("sed -i 's/\"mbed-trace.enable\": false/\"mbed-trace.enable\": true/' ${config_file}")
           }
 
           if ("${meshInterface}" == "6lp") {
-            // Use systest border router for testing (CH=17, PANID=ABBA)
-            execute("sed -i 's/\"mbed-mesh-api.6lowpan-nd-channel\": 12/\"mbed-mesh-api.6lowpan-nd-channel\": 17/' mbed_app.json")
-            execute("sed -i 's/\"mbed-mesh-api.6lowpan-nd-panid-filter\": \"0xffff\"/\"mbed-mesh-api.6lowpan-nd-panid-filter\": \"0xABBA\"/' mbed_app.json")
+            config_file = "./configs/mesh_6lowpan.json"
             // Activate traces
-            execute("sed -i 's/\"mbed-trace.enable\": false/\"mbed-trace.enable\": true/' mbed_app.json")
+            execute("sed -i 's/\"mbed-trace.enable\": false/\"mbed-trace.enable\": true/' ${config_file}")
           }
 
           // Set mbed-os to revision received as parameter
@@ -153,7 +142,7 @@ def buildStep(target, compilerLabel, toolchain, radioShield, meshInterface) {
             execute ("git checkout ${env.MBED_OS_REVISION}")
           }
 
-          execute ("mbed compile --build out/${target}_${toolchain}_${radioShield}_${meshInterface}/ -m ${target} -t ${toolchain} -c")
+          execute ("mbed compile --build out/${target}_${toolchain}_${radioShield}_${meshInterface}/ -m ${target} -t ${toolchain} -c --app-config ${config_file}")
         }
         stash name: "${target}_${toolchain}_${radioShield}_${meshInterface}", includes: '**/mbed-os-example-mesh-minimal.bin'
         archive '**/mbed-os-example-mesh-minimal.bin'
