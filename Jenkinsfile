@@ -113,28 +113,32 @@ def buildStep(target, compilerLabel, toolchain, radioShield, meshInterface) {
           checkout scm
           def config_file = "mbed_app.json"
 
-          if ("${radioShield}" == "MCR20") {
-            // Replace default rf shield
-            execute("sed -i 's/\"value\": \"ATMEL\"/\"value\": \"MCR20\"/' mbed_app.json")
-          }
-
-          if ("${radioShield}" == "NCS36510") {
-            // Replace default rf shield
-            execute("sed -i 's/\"value\": \"ATMEL\"/\"value\": \"NCS36510\"/' mbed_app.json")
-          }
-
           if ("${meshInterface}" == "thd") {
-
             config_file = "./configs/mesh_thread.json"
-            // Activate traces
-            execute("sed -i 's/\"mbed-trace.enable\": false/\"mbed-trace.enable\": true/' ${config_file}")
+            // Use systest Thread Border Router for testing (CH=18, PANID=BAAB)
+            execute("sed -i '/mbed-mesh-api.thread-device-type\":/a \"mbed-mesh-api.thread-config-channel\": 18,' ${config_file}")
+            execute("sed -i '/mbed-mesh-api.thread-device-type\":/a \"mbed-mesh-api.thread-config-panid\": \"0xBAAB\",' ${config_file}")
           }
 
           if ("${meshInterface}" == "6lp") {
             config_file = "./configs/mesh_6lowpan.json"
-            // Activate traces
-            execute("sed -i 's/\"mbed-trace.enable\": false/\"mbed-trace.enable\": true/' ${config_file}")
+            // Use systest 6LoWPAN Border Router for testing (CH=17, PANID=ABBA)
+            execute("sed -i 's/\"mbed-mesh-api.6lowpan-nd-channel\": 12/\"mbed-mesh-api.6lowpan-nd-channel\": 17/' ${config_file}")
+            execute("sed -i 's/\"mbed-mesh-api.6lowpan-nd-panid-filter\": \"0xffff\"/\"mbed-mesh-api.6lowpan-nd-panid-filter\": \"0xABBA\"/' ${config_file}")
           }
+
+          if ("${radioShield}" == "MCR20") {
+            // Replace default rf shield
+            execute("sed -i 's/\"value\": \"ATMEL\"/\"value\": \"MCR20\"/' ${config_file}")
+          }
+
+          if ("${radioShield}" == "NCS36510") {
+            // Replace default rf shield
+            execute("sed -i 's/\"value\": \"ATMEL\"/\"value\": \"NCS36510\"/' ${config_file}")
+          }
+
+          // Activate traces
+          execute("sed -i 's/\"mbed-trace.enable\": false/\"mbed-trace.enable\": true/' ${config_file}")
 
           // Set mbed-os to revision received as parameter
           execute ("mbed deploy --protocol ssh")
