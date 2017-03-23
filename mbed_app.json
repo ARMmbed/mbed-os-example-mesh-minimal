@@ -12,8 +12,14 @@
     },
     "target_overrides": {
         "*": {
+<<<<<<< HEAD
             "target.features_add": ["NANOSTACK", "LOWPAN_ROUTER", "COMMON_PAL"],
             "mbed-mesh-api.6lowpan-nd-panid-filter": "0xffff",
+=======
+            "target.features_add": ["NANOSTACK", "THREAD_ROUTER", "COMMON_PAL"],
+            "mbed-mesh-api.thread-device-type": "MESH_DEVICE_TYPE_THREAD_ROUTER",
+            "mbed-mesh-api.6lowpan-nd-panid-filter": "0xffff",            
+>>>>>>> .json in the root directory updated
             "mbed-mesh-api.6lowpan-nd-channel-page": 0,
             "mbed-mesh-api.6lowpan-nd-channel": 12,
             "mbed-mesh-api.6lowpan-nd-channel-mask": "(1<<12)",
