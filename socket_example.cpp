@@ -113,10 +113,12 @@ static void udp_main()
         if (strcmp((char*)buffer, "on") == 0) {
             tr_debug("Turning led on\n");
             command_led = 0;
+            button_status=1;
         }
         if (strcmp((char*)buffer, "off") == 0) {
             tr_debug("Turning led off\n");
             command_led = 1;
+            button_status=0;
         }      
     }
 }
