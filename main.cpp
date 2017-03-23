@@ -17,12 +17,6 @@
 #include "rtos.h"
 #include "NanostackInterface.h"
 #include "socket_example.h"
-#include "mbed-trace/mbed_trace.h"
-
-
-void trace_printer(const char* str) {
-    printf("%s\n", str);
-}
 
 #define ATMEL   1
 #define MCR20   2
@@ -30,6 +24,16 @@ void trace_printer(const char* str) {
 
 #define MESH_LOWPAN     3
 #define MESH_THREAD     4
+
+
+#if MBED_CONF_APP_TRACE
+#include "mbed-trace/mbed_trace.h"
+
+void trace_printer(const char* str) {
+    printf("%s\n", str);
+}
+#endif // MBED_CONF_APP_TRACE
+
 
 #if MBED_CONF_APP_RADIO_TYPE == ATMEL
 #include "NanostackRfPhyAtmel.h"
@@ -52,9 +56,11 @@ ThreadInterface mesh;
 
 int main()
 {
+
+#if MBED_CONF_APP_TRACE
 	mbed_trace_init();
     mbed_trace_print_function_set(trace_printer);
-
+#endif
     printf("\n\nConnecting...\n");
     mesh.initialize(&rf_phy);
 
@@ -68,8 +74,6 @@ int main()
 
     printf("connected. IP = %s\n", mesh.get_ip_address());
 
-#if MBED_CONF_APP_ENABLE_SOCKET_EXAMPLE
     // Start socket example
-    start_socket_example((NetworkInterface *)&mesh);
-#endif
+    start_socket_example((NetworkInterface *)&mesh);        
 }
