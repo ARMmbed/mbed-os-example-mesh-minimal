@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 #include "mbed.h"
+#include "nanostack/socket_api.h"
 #include "socket_example.h"
 #include "common_functions.h"
 #include "ip6string.h"
@@ -88,7 +89,9 @@ static void udp_main()
     my_socket = new UDPSocket(network_interface);      
     my_socket->set_blocking(true);    
     my_socket->bind(UDP_PORT);
-    
+    int16_t hops = 10;
+    my_socket->setsockopt(SOCKET_IPPROTO_IPV6, SOCKET_IPV6_MULTICAST_HOPS, &hops, sizeof(hops));
+       
     // create own thread for queueu. Button call-back come from ISR.
     thread.start(callback(&queue, &queue_thread));
     my_button.fall(&my_button_isr);
