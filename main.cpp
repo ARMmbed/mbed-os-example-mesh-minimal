@@ -74,8 +74,8 @@ int main()
 
     printf("connected. IP = %s\n", mesh.get_ip_address());
 
-#if !defined(MESH_MINIMAL_SMALLEST_BUILD)
+#if MBED_CONF_APP_ENABLE_SOCKET_EXAMPLE
     // Start socket example
-    start_socket_example((NetworkInterface *)&mesh);    
+    start_socket_example((NetworkInterface *)&mesh);
 #endif
 }

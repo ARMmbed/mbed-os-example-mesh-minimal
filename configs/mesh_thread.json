@@ -11,7 +11,8 @@
         "mesh-type":{
             "help": "options are MESH_LOWPAN, MESH_THREAD",
             "value": "MESH_THREAD"
-        }
+        },
+        "enable-socket-example": true
     },
     "target_overrides": {
         "*": {

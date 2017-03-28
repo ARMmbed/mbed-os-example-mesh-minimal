@@ -16,6 +16,8 @@
 #include "mbed.h"
 #include "socket_example.h"
 
+#if MBED_CONF_APP_ENABLE_SOCKET_EXAMPLE
+
 DigitalOut command_led(LED1);
 NetworkInterface * network_interface;
 Thread udp_thread;
@@ -134,3 +136,5 @@ static void tcp_main(const void * sock)
 
     }
 }
+
+#endif // MBED_CONF_APP_ENABLE_SOCKET_EXAMPLE
