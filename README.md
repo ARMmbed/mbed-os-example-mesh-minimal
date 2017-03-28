@@ -58,12 +58,16 @@ The following tables show the values you should use in the `mbed_app.json` file 
 - For 6LoWPAN-ND based network use `mesh-type: MESH_LOWPAN`.
 - For Thread based network use `mesh-type: MESH_THREAD`.
 
+#### 6LoWPAN-ND
+
 **mesh-type: MESH_LOWPAN**
 
 |Device role|`target.features_add` value|`mbed-mesh-api.6lowpan-nd-device-type`|
 |-----------|-------------------------|------------------------------------|
 |Mesh router (default) | LOWPAN_ROUTER | NET_6LOWPAN_ROUTER |
 |Non routing device | LOWPAN_HOST | NET_6LOWPAN_HOST |
+
+#### Thread
 
 **mesh-type: MESH_THREAD**
 
@@ -72,7 +76,13 @@ The following tables show the values you should use in the `mbed_app.json` file 
 |Mesh router (default) | THREAD_ROUTER | MESH_DEVICE_TYPE_THREAD_ROUTER |
 |Non routing device | THREAD_END_DEVICE | MESH_DEVICE_TYPE_THREAD_SLEEPY_END_DEVICE |
 
-**Note:** You need to recompile your application after modifying the configurations by issuing the command `mbed compile -c`.
+##### Thread commissioning
+
+By default the Thread application uses the static network link configuration defined in the [mesh-api configuration file](https://github.com/ARMmbed/mbed-os/blob/master/features/nanostack/FEATURE_NANOSTACK/mbed-mesh-api/mbed_lib.json).
+If you want to use the Thread commissioning add the following lines to the [thread configuration file](https://github.com/ARMmbed/mbed-os-example-mesh-minimal/blob/master/configs/mesh_thread.json).
+
+* `"thread-use-static-link-config": false` 
+* `"macros": ["MBEDTLS_USER_CONFIG_FILE=\"mbedtls_config.h\""]` 
 
 ### Requirements for hardware
 
@@ -82,6 +92,8 @@ On devices where hardware entropy is not present, TLS is disabled by default. Th
 To learn why entropy is required, read the [TLS Porting guide](https://docs.mbed.com/docs/mbed-os-handbook/en/5.2/advanced/tls_porting/).
 
 See [Notes on different hardware](https://github.com/ARMmbed/mbed-os-example-mesh-minimal/blob/master/Hardware.md) for known combinations of development boards and RF shields that have been tested.
+
+The custom mbed TLS configuration can be set by adding `"macros": ["MBEDTLS_USER_CONFIG_FILE=\"mbedtls_config.h\""]` to the `.json` file. The [example mbed TLS config](https://github.com/ARMmbed/mbed-os-example-mesh-minimal/blob/master/mbedtls_config.h) minimizes the RAM and ROM usage of the application. The configuration works on K64F, but it is not guaranteed to work on every mbed enabled hardware.
 
 ### Compile the application
 
