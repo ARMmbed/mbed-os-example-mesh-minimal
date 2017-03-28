@@ -1,9 +1,5 @@
 {
     "config": {
-        "trace": {
-        	"help": "options are true, false",
-        	"value": true
-        },
         "radio-type":{
             "help": "options are ATMEL, MCR20, NCS36510",
             "value": "ATMEL"
