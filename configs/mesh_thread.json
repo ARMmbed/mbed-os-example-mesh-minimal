@@ -1,9 +1,5 @@
 {
     "config": {
-        "trace": {
-        	"help": "options are true, false",
-        	"value": true
-        },
         "radio-type":{
             "help": "options are ATMEL, MCR20, NCS36510",
             "value": "ATMEL"
@@ -11,7 +7,8 @@
         "mesh-type":{
             "help": "options are MESH_LOWPAN, MESH_THREAD",
             "value": "MESH_THREAD"
-        }
+        },
+        "enable-socket-example": true
     },
     "target_overrides": {
         "*": {

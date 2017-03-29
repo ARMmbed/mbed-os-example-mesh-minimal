@@ -81,8 +81,8 @@ The following tables show the values you should use in the `mbed_app.json` file 
 By default the Thread application uses the static network link configuration defined in the [mesh-api configuration file](https://github.com/ARMmbed/mbed-os/blob/master/features/nanostack/FEATURE_NANOSTACK/mbed-mesh-api/mbed_lib.json).
 If you want to use the Thread commissioning add the following lines to the [thread configuration file](https://github.com/ARMmbed/mbed-os-example-mesh-minimal/blob/master/configs/mesh_thread.json).
 
-* `"mbed-mesh-api.thread-use-static-link-config": false` 
-* `"macros": ["MBEDTLS_USER_CONFIG_FILE=\"mbedtls_config.h\""]` 
+* `"mbed-mesh-api.thread-use-static-link-config": false`
+* `"macros": ["MBEDTLS_USER_CONFIG_FILE=\"mbedtls_config.h\""]`
 
 ### Requirements for hardware
 
@@ -92,8 +92,6 @@ On devices where hardware entropy is not present, TLS is disabled by default. Th
 To learn why entropy is required, read the [TLS Porting guide](https://docs.mbed.com/docs/mbed-os-handbook/en/5.2/advanced/tls_porting/).
 
 See [Notes on different hardware](https://github.com/ARMmbed/mbed-os-example-mesh-minimal/blob/master/Hardware.md) for known combinations of development boards and RF shields that have been tested.
-
-The custom mbed TLS configuration can be set by adding `"macros": ["MBEDTLS_USER_CONFIG_FILE=\"mbedtls_config.h\""]` to the `.json` file. The [example mbed TLS config](https://github.com/ARMmbed/mbed-os-example-mesh-minimal/blob/master/mbedtls_config.h) minimizes the RAM and ROM usage of the application. The configuration works on K64F, but it is not guaranteed to work on every mbed enabled hardware.
 
 ### Compile the application
 
@@ -124,7 +122,7 @@ This example supports the following two border routers:
 
 - [Nanostack-border-router](https://github.com/ARMmbed/nanostack-border-router-private), 6LoWPAN only
 - [mbed gateway](https://firefly-iot.com/product/firefly-6lowpan-gateway-2-4ghz/)
- 
+
 Read the instructions on updating the firmware of your mbed gateway working as 6LoWPAN [here](https://github.com/ARMmbed/mbed-os-example-client#mbed-gateway).
 
 Both border routers support static and dynamic backhaul configuration. The static configuration is good for testing but the dynamic one works if your network infrastructure is supplying an IPv6 address. Make sure that you use the appropiate mode.
@@ -145,7 +143,7 @@ You can use this IP address to `ping` from your PC and verify that the connectio
 
 ### Changing the radio driver (optional)
 
-To run a 6LoWPAN-ND network, you need a working RF driver for Nanostack. This example uses the Atmel AT86RF233 by default. 
+To run a 6LoWPAN-ND network, you need a working RF driver for Nanostack. This example uses the Atmel AT86RF233 by default.
 
 To change the RF driver:
 
@@ -169,3 +167,9 @@ To change the RF driver:
             "value": "ATMEL"
         },
 ```
+
+## Memory optimizations
+
+The custom mbed TLS configuration can be set by adding `"macros": ["MBEDTLS_USER_CONFIG_FILE=\"mbedtls_config.h\""]` to the `.json` file. The [example mbed TLS config](https://github.com/ARMmbed/mbed-os-example-mesh-minimal/blob/master/mbedtls_config.h) minimizes the RAM and ROM usage of the application. The configuration works on K64F, but it is not guaranteed to work on every mbed enabled hardware.
+
+Socket examples can be disabled by specifying `"enable-socket-example": false` in the `mbed_app.json`
