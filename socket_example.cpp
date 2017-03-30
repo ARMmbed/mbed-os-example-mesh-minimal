@@ -33,17 +33,19 @@ static void udp_main();
 uint8_t multi_cast_addr[16] = {0};  
 static const char buffer_on[2] = {'o','n'};
 static const char buffer_off[3] = {'o','f','f'};
+uint8_t receive_buffer[5];    
 
 InterruptIn my_button(SW2);
 UDPSocket* my_socket;
-// thread and queue for sending messages from button press
-Thread thread;
-Queue<uint32_t, 10> queue;
+// queue for sending messages from button press.
+EventQueue queue;
+//EventQueue ev_queue;
+int blink_id=-1;
+int socket_id=-1;
 
-bool button_status = 1;
+volatile bool button_status = 1;
 
-void start_socket_example(NetworkInterface * interface)
-{
+void start_socket_example(NetworkInterface * interface){
     network_interface = interface;
     const char *ip = network_interface->get_ip_address();
     tr_debug("IP address: %s\n", ip ? ip : "None");
@@ -51,17 +53,19 @@ void start_socket_example(NetworkInterface * interface)
     udp_main();
 }
 
-// As this comes from isr, we cannot use printing or network functions directly from here.
-void my_button_isr() {
-    queue.put((uint32_t*)1);// dummy number 
+void cancel_blinking() {
+    queue.cancel(blink_id);
+    blink_id=-1;
 }
 
-void send_message() {   
-     
+void send_message() {
+    if (blink_id>-1) {
+        cancel_blinking();
+    }
     button_status = !button_status;
-    tr_debug("send msg %d", button_status);        
+    tr_debug("send msg %d", button_status);
     
-    SocketAddress send_sockAddr(multi_cast_addr, NSAPI_IPv6, UDP_PORT);  
+    SocketAddress send_sockAddr(multi_cast_addr, NSAPI_IPv6, UDP_PORT);
     if (button_status) {
         command_led = 0;
         my_socket->sendto(send_sockAddr, buffer_on, 2);
@@ -72,53 +76,70 @@ void send_message() {
     }
 }
 
-void queue_thread(void const *args) {
-    while (1) {
-        osEvent evt = queue.get();
-        if (evt.status != osEventMessage) {
-            tr_debug("queue->get() returned %02x status\n\r", evt.status);
-        } else {            
-            send_message();                
+// As this comes from isr, we cannot use printing or network functions directly from here.
+void my_button_isr() {
+    queue.call(send_message);
+}
+
+void blink() {
+    command_led = !command_led;
+}
+
+void receive() {
+    // Read data from the socket
+    SocketAddress source_addr;
+    memset(receive_buffer, 0, sizeof(receive_buffer));
+    bool something_in_socket=true;
+    // read all messages
+    while (something_in_socket) {
+        int length = my_socket->recvfrom(&source_addr, receive_buffer, sizeof(receive_buffer) - 1);
+        if (length > 0) {    
+            tr_debug("Packet from %s\n", source_addr.get_ip_address());
+             if (blink_id>-1) {
+                cancel_blinking();
+            }
+            // Handle command - "on", "off"
+            if (strcmp((char*)receive_buffer, "on") == 0) {
+                tr_debug("Turning led on\n");
+                command_led = 0;
+                button_status=1;
+            }
+            if (strcmp((char*)receive_buffer, "off") == 0) {
+                tr_debug("Turning led off\n");
+                command_led = 1;
+                button_status=0;
+            }    
         }
-    }
+        else if (length!=NSAPI_ERROR_WOULD_BLOCK) {
+            tr_error("Error happened when receiving %d\n", length);        
+            something_in_socket=false;
+        }
+        else {
+            // there was nothing to read.    
+            something_in_socket=false;
+        }
+    }    
+}
+
+void handle_socket() {
+    // call-back might come from ISR
+    queue.call(receive);
 }
 
 static void udp_main()
-{    
-    uint8_t buffer[5];    
-    my_socket = new UDPSocket(network_interface);      
-    my_socket->set_blocking(true);    
+{
+    my_socket = new UDPSocket(network_interface);
+    my_socket->set_blocking(false);
     my_socket->bind(UDP_PORT);
     int16_t hops = 10;
     my_socket->setsockopt(SOCKET_IPPROTO_IPV6, SOCKET_IPV6_MULTICAST_HOPS, &hops, sizeof(hops));
-       
-    // create own thread for queueu. Button call-back come from ISR.
-    thread.start(callback(&queue, &queue_thread));
-    my_button.fall(&my_button_isr);
     
-    tr_debug("start listening on port %u !!!!!", UDP_PORT);
-    while (true) {
-
-        // Read data from the socket
-        SocketAddress source_addr;
-        memset(buffer, 0, sizeof(buffer));
-        int length = my_socket->recvfrom(&source_addr, buffer, sizeof(buffer) - 1);
-        if (length <= 0) {
-            tr_debug("Error with socket recvfrom: %i\n", length);
-            continue;
-        }
-        tr_debug("Packet from %s\n", source_addr.get_ip_address());
-       
-        // Handle command - "on", "off"
-        if (strcmp((char*)buffer, "on") == 0) {
-            tr_debug("Turning led on\n");
-            command_led = 0;
-            button_status=1;
-        }
-        if (strcmp((char*)buffer, "off") == 0) {
-            tr_debug("Turning led off\n");
-            command_led = 1;
-            button_status=0;
-        }      
-    }
+    my_button.fall(&my_button_isr);
+    //Start blinking to show that the Thread network is set-up
+    blink_id = queue.call_every(1000, blink);
+    //let's register the call-back function.
+    //If something happens in socket (packets in or out), the call-back is called.
+    my_socket->sigio(callback(handle_socket));
+    // dispatch forever
+    queue.dispatch();
 }

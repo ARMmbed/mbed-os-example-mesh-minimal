@@ -58,15 +58,15 @@ int main()
 {
 
 #if MBED_CONF_APP_TRACE
-	mbed_trace_init();
+    mbed_trace_init();
     mbed_trace_print_function_set(trace_printer);
 #endif
     printf("\n\nConnecting...\n");
     mesh.initialize(&rf_phy);
-
-    if (mesh.connect()) {
-        printf("Connection failed!\n");
-        return -1;
+    int error=-1;
+    if ((error=mesh.connect())) {
+        printf("Connection failed! %d\n", error);
+        return error;
     }
 
     while (NULL == mesh.get_ip_address())
@@ -75,5 +75,5 @@ int main()
     printf("connected. IP = %s\n", mesh.get_ip_address());
 
     // Start socket example
-    start_socket_example((NetworkInterface *)&mesh);        
+    start_socket_example((NetworkInterface *)&mesh);
 }
