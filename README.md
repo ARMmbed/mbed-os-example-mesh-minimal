@@ -120,7 +120,7 @@ Drag and drop the binary to the target to program the application.
 
 This example supports the following two border routers:
 
-- [Nanostack-border-router](https://github.com/ARMmbed/nanostack-border-router-private), 6LoWPAN only
+- [Nanostack-border-router](https://github.com/ARMmbed/nanostack-border-router)
 - [mbed gateway](https://firefly-iot.com/product/firefly-6lowpan-gateway-2-4ghz/)
 
 Read the instructions on updating the firmware of your mbed gateway working as 6LoWPAN [here](https://github.com/ARMmbed/mbed-os-example-client#mbed-gateway).
