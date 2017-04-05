@@ -1,18 +1,15 @@
 properties ([[$class: 'ParametersDefinitionProperty', parameterDefinitions: [
-  [$class: 'StringParameterDefinition', name: 'mbed_os_revision', defaultValue: 'mbed-os-5.4', description: 'Revision of mbed-os to build'],
+  [$class: 'StringParameterDefinition', name: 'mbed_os_revision', defaultValue: '', description: 'Revision of mbed-os to build'],
   [$class: 'BooleanParameterDefinition', name: 'smoke_test', defaultValue: false, description: 'Enable to run HW smoke test after building']
   ]]])
 
+if (params.mbed_os_revision == '') {
+  echo 'Use mbed OS revision from mbed-os.lib'
+} else {
+  echo "Use mbed OS revisiong ${params.mbed_os_revision}"
+}
 echo "Run smoke tests: ${params.smoke_test}"
 
-try {
-  echo "Verifying build with mbed-os version ${mbed_os_revision}"
-  env.MBED_OS_REVISION = "${mbed_os_revision}"
-} catch (err) {
-  def mbed_os_revision = "master"
-  echo "Verifying build with mbed-os version ${mbed_os_revision}"
-  env.MBED_OS_REVISION = "${mbed_os_revision}"
-}
 
 // Map RaaS instances to corresponding test suites
 def raas = [
@@ -142,8 +139,10 @@ def buildStep(target, compilerLabel, toolchain, radioShield, meshInterface) {
 
           // Set mbed-os to revision received as parameter
           execute ("mbed deploy --protocol ssh")
-          dir ("mbed-os") {
-            execute ("git checkout ${env.MBED_OS_REVISION}")
+          if (params.mbed_os_revision != '') {
+            dir ("mbed-os") {
+              execute ("git checkout ${params.mbed_os_revision}")
+            }
           }
 
           execute ("mbed compile --build out/${target}_${toolchain}_${radioShield}_${meshInterface}/ -m ${target} -t ${toolchain} -c --app-config ${config_file}")
