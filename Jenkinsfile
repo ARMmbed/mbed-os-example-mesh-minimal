@@ -166,40 +166,40 @@ def run_smoke(targets, toolchains, radioshields, meshinterfaces, raasPort, suite
         dir("mbed-clitest") {
           git "git@github.com:ARMmbed/mbed-clitest.git"
           execute("git checkout ${env.LATEST_CLITEST_REL}")
-          execute("git submodule update --init --recursive testcases")
-
-          dir("testcases") {
+        }
+        dir("testcases") {
+          git "git@github.com:ARMmbed/mbed-clitest-suites.git"
+          execute("git checkout master")
+          execute("git submodule update --init 6lowpan")
+          dir("6lowpan") {
             execute("git checkout master")
-            dir("6lowpan") {
-              execute("git checkout master")
-            }
           }
+        }
 
-          for (int i = 0; i < targets.size(); i++) {
-            for(int j = 0; j < toolchains.size(); j++) {
-              for(int k = 0; k < radioshields.size(); k++) {
-                for(int l = 0; l < meshinterfaces.size(); l++) {
-                  def target = targets.keySet().asList().get(i)
-                  def allowed_shields = targets.get(target)
-                  def toolchain = toolchains.keySet().asList().get(j)
-                  def radioshield = radioshields.get(k)
-                  def meshInterface = meshinterfaces.get(l)
-                  // Skip unwanted combination
-                  if (target == "NUCLEO_F401RE" && toolchain == "IAR") {
-                    continue
-                  }
-                  if(allowed_shields.contains(radioshield)) {
-                    unstash "${target}_${toolchain}_${radioshield}_${meshInterface}"
-                  }
+        for (int i = 0; i < targets.size(); i++) {
+          for(int j = 0; j < toolchains.size(); j++) {
+            for(int k = 0; k < radioshields.size(); k++) {
+              for(int l = 0; l < meshinterfaces.size(); l++) {
+                def target = targets.keySet().asList().get(i)
+                def allowed_shields = targets.get(target)
+                def toolchain = toolchains.keySet().asList().get(j)
+                def radioshield = radioshields.get(k)
+                def meshInterface = meshinterfaces.get(l)
+                // Skip unwanted combination
+                if (target == "NUCLEO_F401RE" && toolchain == "IAR") {
+                  continue
+                }
+                if(allowed_shields.contains(radioshield)) {
+                  unstash "${target}_${toolchain}_${radioshield}_${meshInterface}"
                 }
               }
             }
           }
-          env.RAAS_USERNAME = "user"
-          env.RAAS_PASSWORD = "user"
-          execute("python clitest.py --suitedir testcases/suites/ --suite ${suite_to_run} --type hardware --reset --raas 193.208.80.31:${raasPort} --failure_return_value -vvv -w --log log_${raasPort}_${suiteName}")
-          archive "log_${raasPort}_${suiteName}/**/*"
         }
+        env.RAAS_USERNAME = "user"
+        env.RAAS_PASSWORD = "user"
+        execute("./mbed-clitest/clitest.py --tcdir testcases --suitedir testcases/suites/ --suite ${suite_to_run} --type hardware --reset --raas 62.44.193.186:${raasPort} --failure_return_value -vvv -w --log log_${raasPort}_${suiteName}")
+        archive "log_${raasPort}_${suiteName}/**/*"
       }
     }
   }
