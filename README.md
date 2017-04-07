@@ -1,6 +1,7 @@
 # Example mesh application for mbed OS
 
-This application is the simplest one to utilize our mesh networking stack. It just joins your device to the unsecure *6LoWPAN-ND* network.
+This application is the simplest one to utilize our mesh networking stack. By default the application demonstrates a simple light control application, where devices can control the LED status of all devices in the network.
+The application can be built for the unsecure 6LoWPAN-ND or Thread network.
 
 ## Setup
 
@@ -93,6 +94,8 @@ To learn why entropy is required, read the [TLS Porting guide](https://docs.mbed
 
 See [Notes on different hardware](https://github.com/ARMmbed/mbed-os-example-mesh-minimal/blob/master/Hardware.md) for known combinations of development boards and RF shields that have been tested.
 
+You also need to check how LEDs and buttons are configured for your hardware, and update .json accordingly.
+
 ### Compile the application
 
 #### For 6LoWPAN
@@ -106,7 +109,7 @@ mbed compile -m K64F -t GCC_ARM --app-config configs/mesh_6lowpan.json
 mbed compile -m K64F -t GCC_ARM --app-config configs/mesh_thread.json
 ```
 
-A binary is generated at the end of the build process.
+A binary is generated in the end of the build process.
 
 ### Connect the RF shield to the board
 
@@ -130,6 +133,8 @@ Both border routers support static and dynamic backhaul configuration. The stati
 Remember to connect the Ethernet cable between the border router and your home/office router. Then power up the board.
 
 ## Testing
+
+By default the application is built for the LED control demo, in which the device sends a multicast message to all devices in the network when the button is pressed. All devices that receive the multicast message will change the LED status (red LED on/off) to the state defined in the message. Note, that the Thread devices can form a network without the existance of the border router. The following applies only to the case when the border router is set-up.
 
 As soon as both the border router and the target are up and running you can verify the correct behaviour. Open a serial console and see the IP address obtained by the device.
 
@@ -172,4 +177,4 @@ To change the RF driver:
 
 The custom mbed TLS configuration can be set by adding `"macros": ["MBEDTLS_USER_CONFIG_FILE=\"mbedtls_config.h\""]` to the `.json` file. The [example mbed TLS config](https://github.com/ARMmbed/mbed-os-example-mesh-minimal/blob/master/mbedtls_config.h) minimizes the RAM and ROM usage of the application. The configuration works on K64F, but it is not guaranteed to work on every mbed enabled hardware.
 
-Socket examples can be disabled by specifying `"enable-socket-example": false` in the `mbed_app.json`
+The led control example can be disabled by specifying `enable-led-control-example": false` in the `mbed_app.json`

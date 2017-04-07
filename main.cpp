@@ -16,9 +16,11 @@
 #include "mbed.h"
 #include "rtos.h"
 #include "NanostackInterface.h"
-#include "socket_example.h"
 #include "mbed-trace/mbed_trace.h"
 
+#if MBED_CONF_APP_ENABLE_LED_CONTROL_EXAMPLE
+#include "mesh_led_control_example.h"
+#endif
 
 void trace_printer(const char* str) {
     printf("%s\n", str);
@@ -56,12 +58,15 @@ int main()
 	mbed_trace_init();
     mbed_trace_print_function_set(trace_printer);
 
+    #if MBED_CONF_APP_ENABLE_LED_CONTROL_EXAMPLE
+    start_blinking();
+    #endif
     printf("\n\nConnecting...\n");
     mesh.initialize(&rf_phy);
-
-    if (mesh.connect()) {
-        printf("Connection failed!\n");
-        return -1;
+    int error=-1;
+    if ((error=mesh.connect())) {
+        printf("Connection failed! %d\n", error);
+        return error;
     }
 
     while (NULL == mesh.get_ip_address())
@@ -69,8 +74,9 @@ int main()
 
     printf("connected. IP = %s\n", mesh.get_ip_address());
 
-#if MBED_CONF_APP_ENABLE_SOCKET_EXAMPLE
-    // Start socket example
-    start_socket_example((NetworkInterface *)&mesh);
-#endif
+    #if MBED_CONF_APP_ENABLE_LED_CONTROL_EXAMPLE
+    // Network found, start socket example
+    cancel_blinking();
+    start_mesh_led_control_example((NetworkInterface *)&mesh);    
+    #endif
 }
