@@ -1,7 +1,7 @@
 {
     "config": {
         "radio-type":{
-            "help": "options are ATMEL, MCR20, NCS36510",
+            "help": "options are ATMEL, MCR20, NCS36510, KW24D",
             "value": "ATMEL"
         },
         "mesh-type":{
