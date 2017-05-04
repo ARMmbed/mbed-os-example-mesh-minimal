@@ -169,8 +169,11 @@ def run_smoke(targets, toolchains, radioshields, meshinterfaces, raasPort, suite
         dir("testcases") {
           git "git@github.com:ARMmbed/mbed-clitest-suites.git"
           execute("git checkout master")
-          execute("git submodule update --init 6lowpan")
+          execute("git submodule update --init --recursive")
           dir("6lowpan") {
+            execute("git checkout master")
+          }
+          dir("thread-tests") {
             execute("git checkout master")
           }
         }
