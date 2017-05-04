@@ -12,17 +12,21 @@ echo "Run smoke tests: ${params.smoke_test}"
 
 
 // Map RaaS instances to corresponding test suites
+// Run only selected set of tests.
+// Board: K64F
+// Radios: Atmel & MCR20A
+// configurations: 6LP + Thread
 def raas = [
   "lowpan_mesh_minimal_smoke_k64f_atmel.json": "8001",
   "lowpan_mesh_minimal_smoke_k64f_mcr20.json": "8034",
-  "lowpan_mesh_minimal_smoke_429zi_atmel.json": "8030",
-  "lowpan_mesh_minimal_smoke_429zi_mcr20.json": "8033",
-  "lowpan_mesh_minimal_smoke_ublox_atmel.json": "8031",
-  "thread_mesh_minimal_smoke_k64f_atmel.json": "8007",
-  "thread_mesh_minimal_smoke_k64f_mcr20.json": "8034",
-  "thread_mesh_minimal_smoke_429zi_atmel.json": "8030",
-  "thread_mesh_minimal_smoke_429zi_mcr20.json": "8033",
-  "thread_mesh_minimal_smoke_ublox_atmel.json": "8031"
+//  "lowpan_mesh_minimal_smoke_429zi_atmel.json": "8030",
+//  "lowpan_mesh_minimal_smoke_429zi_mcr20.json": "8033",
+//  "lowpan_mesh_minimal_smoke_ublox_atmel.json": "8031",
+  "thread_mesh_minimal_smoke_k64f_atmel.json": "8007"
+//  "thread_mesh_minimal_smoke_k64f_mcr20.json": "8034",
+//  "thread_mesh_minimal_smoke_429zi_atmel.json": "8030",
+//  "thread_mesh_minimal_smoke_429zi_mcr20.json": "8033",
+//  "thread_mesh_minimal_smoke_ublox_atmel.json": "8031"
   ]
 
 // List of targets with supported RF shields to compile
