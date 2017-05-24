@@ -35,7 +35,8 @@ def targets = [
   "NUCLEO_F401RE": ["ATMEL", "MCR20"],
   "NUCLEO_F429ZI": ["ATMEL", "MCR20"],
   //"NCS36510": ["NCS36510"],
-  "UBLOX_EVK_ODIN_W2": ["ATMEL"]
+  "UBLOX_EVK_ODIN_W2": ["ATMEL"],
+  "KW24D": ["MCR20"]
   ]
 
 // Map toolchains to compilers
@@ -136,6 +137,16 @@ def buildStep(target, compilerLabel, toolchain, radioShield, meshInterface) {
           if ("${radioShield}" == "NCS36510") {
             // Replace default rf shield
             execute("sed -i 's/\"value\": \"ATMEL\"/\"value\": \"NCS36510\"/' ${config_file}")
+          }
+
+          // For KW24D, we need to optimize for low memory
+          if ("${target}" == "KW24D") {
+            // Use optimal mbed TLS config file
+            execute("sed -i '/\"target_overrides\"/ i \"macros\": [\"MBEDTLS_USER_CONFIG_FILE=\\\"mbedtls_config.h\\\""],' ${config_file}")
+            // Limit mesh heap size to 12kB
+            execute("sed -i 's/mbed-mesh-api.heap-size\": .*,/mbed-mesh-api.heap-size\": 12000,/' ${config_file}")
+            // Limit event loop heap size
+            execute("sed -i '/target.features_add/ i \"nanostack-hal.event_loop_thread_stack_size\": 2048,'")
           }
 
           // Activate traces
