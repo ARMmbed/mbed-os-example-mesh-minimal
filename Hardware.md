@@ -24,6 +24,7 @@ Following table shows which development boards have been tested. It does not pre
 | NUCLEO_F401RE | <span style='background-color: #5f5;'>Yes</span> | | |
 | UBLOX_EVK_ODIN_W2 | <span style='background-color: #5f5;'>Yes</span> | <span style='background-color: #f00;'>No. **(2)**</span> | |
 | Onsemi NCS36510 <span style='background-color: #5f5;'>(internal RF)</span> | | | |
+| NXP KW24D <span style='background-color: #5f5;'>(internal RF)</span> | | <span style='background-color: #f00;'>No. **(4)**</span> | |
 
 
 **Notes:**
@@ -31,3 +32,5 @@ Following table shows which development boards have been tested. It does not pre
 1. If ethernet driver is enabled, requires HW modifications if RF shield uses SPI1. See [Driver notes](https://github.com/ARMmbed/sal-nanostack-driver-stm32-eth) and [nanostack-borderrouter-private Issue #17](https://github.com/ARMmbed/nanostack-border-router-private/issues/17)
 2. Pin collision, see [mesh-minimal Issue 55](https://github.com/ARMmbed/mbed-os-example-mesh-minimal/issues/55)
 3. X-NUCLEO-IDS01A4 expansion board required modifications to be used in mbed OS. See [Driver readme](https://github.com/ARMmbed/stm-spirit1-rf-driver)
+4. KW24D have MCR20A chip integrated. Use same driver.
+
