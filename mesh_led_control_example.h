@@ -18,6 +18,8 @@
 
 #include "NetworkInterface.h"
 
-void start_socket_example(NetworkInterface * interface);
-
+void start_mesh_led_control_example(NetworkInterface * interface);
+void start_blinking();
+void cancel_blinking();   
+   
 #endif

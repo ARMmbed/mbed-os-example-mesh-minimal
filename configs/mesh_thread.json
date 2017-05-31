@@ -8,8 +8,10 @@
             "help": "options are MESH_LOWPAN, MESH_THREAD",
             "value": "MESH_THREAD"
         },
-        "enable-socket-example": true
-    },
+        "enable-led-control-example": true,
+        "LED": "NC",
+        "BUTTON": "NC"
+    },  
     "target_overrides": {
         "*": {
             "target.features_add": ["NANOSTACK", "THREAD_ROUTER", "COMMON_PAL"],
@@ -18,6 +20,19 @@
             "mbed-mesh-api.thread-device-type": "MESH_DEVICE_TYPE_THREAD_ROUTER",
             "platform.stdio-convert-newlines": true,
             "platform.stdio-baud-rate": 115200
+        },
+        "K64F": {
+            "LED": "LED_RED",
+            "BUTTON": "SW2"
+        },
+        "K66F": {
+            "LED": "LED_RED",
+            "BUTTON": "SW2"
+		},
+        "NUCLEO_F401RE": {
+            "LED": "LED_RED",
+            "BUTTON": "USER_BUTTON"
         }
     }
+    
 }

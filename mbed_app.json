@@ -8,7 +8,7 @@
             "help": "options are MESH_LOWPAN, MESH_THREAD",
             "value": "MESH_LOWPAN"
         },
-        "enable-socket-example": true
+        "enable-led-control-example": true
     },
     "target_overrides": {
         "*": {
