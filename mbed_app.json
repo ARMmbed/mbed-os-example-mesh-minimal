@@ -8,7 +8,9 @@
             "help": "options are MESH_LOWPAN, MESH_THREAD",
             "value": "MESH_LOWPAN"
         },
-        "enable-led-control-example": true
+        "enable-led-control-example": true,
+        "LED": "NC",
+        "BUTTON": "NC"
     },
     "target_overrides": {
         "*": {
@@ -24,6 +26,18 @@
             "mbed-trace.enable": false,
             "platform.stdio-convert-newlines": true,
             "platform.stdio-baud-rate": 115200
+        },
+        "K64F": {
+            "LED": "LED_RED",
+            "BUTTON": "SW2"
+        },
+        "K66F": {
+            "LED": "LED_RED",
+            "BUTTON": "SW2"
+		},
+        "NUCLEO_F401RE": {
+            "LED": "LED_RED",
+            "BUTTON": "USER_BUTTON"
         }
     }
 }
