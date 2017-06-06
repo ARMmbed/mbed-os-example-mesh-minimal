@@ -59,7 +59,12 @@ int main()
     mbed_trace_print_function_set(trace_printer);
 
     #if MBED_CONF_APP_ENABLE_LED_CONTROL_EXAMPLE
-    start_blinking();
+    if (MBED_CONF_APP_BUTTON != NC && MBED_CONF_APP_LED != NC) {
+        start_blinking();
+    }
+    else {
+        printf("pins not configured correctly");
+    }
     #endif
     printf("\n\nConnecting...\n");
     mesh.initialize(&rf_phy);
@@ -76,7 +81,9 @@ int main()
 
     #if MBED_CONF_APP_ENABLE_LED_CONTROL_EXAMPLE
     // Network found, start socket example
-    cancel_blinking();
-    start_mesh_led_control_example((NetworkInterface *)&mesh);    
+    if (MBED_CONF_APP_BUTTON != NC && MBED_CONF_APP_LED != NC) {
+        cancel_blinking();
+        start_mesh_led_control_example((NetworkInterface *)&mesh);    
+    }
     #endif
 }
