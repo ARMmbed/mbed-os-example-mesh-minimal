@@ -11,7 +11,8 @@
         "enable-led-control-example": true,
         "LED": "NC",
         "BUTTON": "NC"
-    },  
+    },
+    "macros": ["MBEDTLS_USER_CONFIG_FILE=\"mbedtls_config.h\""],
     "target_overrides": {
         "*": {
             "target.features_add": ["NANOSTACK", "THREAD_ROUTER", "COMMON_PAL"],
@@ -32,7 +33,15 @@
         "NUCLEO_F401RE": {
             "LED": "LED_RED",
             "BUTTON": "USER_BUTTON"
+        },
+        "KW24D": {
+            "mbed-mesh-api.heap-size": 12000,
+            "nanostack-hal.event_loop_thread_stack_size": 2048
+        },
+        "NCS36510": {
+            "mbed-mesh-api.heap-size": 12000,
+            "nanostack-hal.event_loop_thread_stack_size": 2048
         }
     }
-    
+
 }
