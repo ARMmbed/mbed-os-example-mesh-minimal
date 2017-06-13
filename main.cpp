@@ -38,7 +38,7 @@ void trace_printer(const char* str) {
 #include "NanostackRfPhyAtmel.h"
 NanostackRfPhyAtmel rf_phy(ATMEL_SPI_MOSI, ATMEL_SPI_MISO, ATMEL_SPI_SCLK, ATMEL_SPI_CS,
                            ATMEL_SPI_RST, ATMEL_SPI_SLP, ATMEL_SPI_IRQ, ATMEL_I2C_SDA, ATMEL_I2C_SCL);
-#elif MBED_CONF_APP_RADIO_TYPE == MCR20 || MBED_CONF_APP_RADIO_TYPE == KW24D 
+#elif MBED_CONF_APP_RADIO_TYPE == MCR20 || MBED_CONF_APP_RADIO_TYPE == KW24D
 #include "NanostackRfPhyMcr20a.h"
 NanostackRfPhyMcr20a rf_phy(MCR20A_SPI_MOSI, MCR20A_SPI_MISO, MCR20A_SPI_SCLK, MCR20A_SPI_CS, MCR20A_SPI_RST, MCR20A_SPI_IRQ);
 
@@ -58,14 +58,14 @@ int main()
 	mbed_trace_init();
     mbed_trace_print_function_set(trace_printer);
 
-    #if MBED_CONF_APP_ENABLE_LED_CONTROL_EXAMPLE
+#if MBED_CONF_APP_ENABLE_LED_CONTROL_EXAMPLE
     if (MBED_CONF_APP_BUTTON != NC && MBED_CONF_APP_LED != NC) {
         start_blinking();
+    } else {
+        printf("pins not configured. Skipping the LED control.\n");
     }
-    else {
-        printf("pins not configured correctly");
-    }
-    #endif
+#endif
+
     printf("\n\nConnecting...\n");
     mesh.initialize(&rf_phy);
     int error=-1;
@@ -79,11 +79,11 @@ int main()
 
     printf("connected. IP = %s\n", mesh.get_ip_address());
 
-    #if MBED_CONF_APP_ENABLE_LED_CONTROL_EXAMPLE
+#if MBED_CONF_APP_ENABLE_LED_CONTROL_EXAMPLE
     // Network found, start socket example
     if (MBED_CONF_APP_BUTTON != NC && MBED_CONF_APP_LED != NC) {
         cancel_blinking();
-        start_mesh_led_control_example((NetworkInterface *)&mesh);    
+        start_mesh_led_control_example((NetworkInterface *)&mesh);
     }
-    #endif
+#endif
 }
