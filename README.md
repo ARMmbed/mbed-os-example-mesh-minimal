@@ -175,6 +175,27 @@ To change the RF driver:
 
 ## Memory optimizations
 
+On some limited platforms, for example NCS36510 or KW24D, building this application might run out of RAM or ROM.
+In those cases, you might try following these instructions to optimize the memory usage.
+
+### mbed TLS configuration
+
 The custom mbed TLS configuration can be set by adding `"macros": ["MBEDTLS_USER_CONFIG_FILE=\"mbedtls_config.h\""]` to the `.json` file. The [example mbed TLS config](https://github.com/ARMmbed/mbed-os-example-mesh-minimal/blob/master/mbedtls_config.h) minimizes the RAM and ROM usage of the application. The configuration works on K64F, but it is not guaranteed to work on every mbed enabled hardware.
 
+This configuration file saves you 8.7 kB of RAM but uses 6.8 kB of more flash.
+
+### Disabling the Led control example
+
 The led control example can be disabled by specifying `enable-led-control-example": false` in the `mbed_app.json`
+
+This will save you about 2.5 kB of flash.
+
+### Change network stack's event loop stack size
+
+Nanostack's internal event-loop is shared with mbed Client and is therefore
+requiring lots of stack to complete the security hanshakes using TLS protocols.
+In case client functionality is not used, following can be defined to use 2kB of stack
+
+`"nanostack-hal.event_loop_thread_stack_size": 2048`
+
+This will save you 4kB of RAM.
