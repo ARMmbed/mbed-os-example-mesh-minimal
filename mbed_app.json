@@ -38,6 +38,10 @@
         "NUCLEO_F401RE": {
             "LED": "LED_RED",
             "BUTTON": "USER_BUTTON"
+        },
+	 "NCS36510": {
+            "LED": "LED1",
+            "BUTTON": "SW2"
         }
     }
 }
