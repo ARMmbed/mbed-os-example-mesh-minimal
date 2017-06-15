@@ -53,10 +53,29 @@ LoWPANNDInterface mesh;
 ThreadInterface mesh;
 #endif //MBED_CONF_APP_MESH_TYPE
 
+extern "C" {
+    static void serial_out_mutex_wait();
+    static void serial_out_mutex_release();
+}
+
+static Mutex SerialOutMutex;
+
+void serial_out_mutex_wait()
+{
+    SerialOutMutex.lock();
+}
+
+void serial_out_mutex_release()
+{
+    SerialOutMutex.unlock();
+}
+
 int main()
 {
-	mbed_trace_init();
+    mbed_trace_init();
     mbed_trace_print_function_set(trace_printer);
+    mbed_trace_mutex_wait_function_set( serial_out_mutex_wait );
+    mbed_trace_mutex_release_function_set( serial_out_mutex_release );
 
 #if MBED_CONF_APP_ENABLE_LED_CONTROL_EXAMPLE
     if (MBED_CONF_APP_BUTTON != NC && MBED_CONF_APP_LED != NC) {
