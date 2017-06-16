@@ -155,7 +155,8 @@ static void init_socket()
     my_socket->bind(UDP_PORT);    
     my_socket->setsockopt(SOCKET_IPPROTO_IPV6, SOCKET_IPV6_MULTICAST_HOPS, &multicast_hops, sizeof(multicast_hops));
     if (MBED_CONF_APP_BUTTON != NC) {
-    	my_button.fall(&my_button_isr);
+        my_button.fall(&my_button_isr);
+        my_button.mode(PullUp);
     }
     //let's register the call-back function.
     //If something happens in socket (packets in or out), the call-back is called.
