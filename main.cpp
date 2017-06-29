@@ -53,11 +53,6 @@ LoWPANNDInterface mesh;
 ThreadInterface mesh;
 #endif //MBED_CONF_APP_MESH_TYPE
 
-extern "C" {
-    static void serial_out_mutex_wait();
-    static void serial_out_mutex_release();
-}
-
 static Mutex SerialOutMutex;
 
 void serial_out_mutex_wait()
@@ -87,8 +82,8 @@ int main()
 
     printf("\n\nConnecting...\n");
     mesh.initialize(&rf_phy);
-    int error=-1;
-    if ((error=mesh.connect())) {
+    int error = mesh.connect();
+    if (error) {
         printf("Connection failed! %d\n", error);
         return error;
     }
