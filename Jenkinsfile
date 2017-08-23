@@ -7,6 +7,9 @@ if (params.mbed_os_revision == '') {
   echo 'Use mbed OS revision from mbed-os.lib'
 } else {
   echo "Use mbed OS revisiong ${params.mbed_os_revision}"
+  if (params.mbed_os_revision.matches('pull/\\d+/head')) {
+    echo "Revision is a Pull Request"
+  }
 }
 echo "Run smoke tests: ${params.smoke_test}"
 
@@ -160,7 +163,12 @@ def buildStep(target, compilerLabel, toolchain, radioShield, meshInterface) {
           execute ("mbed deploy --protocol ssh")
           if (params.mbed_os_revision != '') {
             dir ("mbed-os") {
-              execute ("git checkout ${params.mbed_os_revision}")
+              if (params.mbed_os_revision.matches('pull/\\d+/head')) {
+                execute("git fetch origin ${params.mbed_os_revision}:PR")
+                execute("git checkout PR")
+              } else {
+                execute ("git checkout ${params.mbed_os_revision}")
+              }
             }
           }
 
