@@ -71,6 +71,9 @@ int main()
     mbed_trace_print_function_set(trace_printer);
     mbed_trace_mutex_wait_function_set( serial_out_mutex_wait );
     mbed_trace_mutex_release_function_set( serial_out_mutex_release );
+    
+    printf("Start mesh-minimal application\n");
+    printf("Build: %s %s\nMesh type: %d\n", __DATE__, __TIME__, MBED_CONF_APP_MESH_TYPE);
 
 #if MBED_CONF_APP_ENABLE_LED_CONTROL_EXAMPLE
     if (MBED_CONF_APP_BUTTON != NC && MBED_CONF_APP_LED != NC) {
