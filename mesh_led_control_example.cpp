@@ -89,8 +89,6 @@ static void send_message() {
     char buf[20];
     int length;
 
-    update_state(button_status);
-
     /**
     * Multicast control message is a NUL terminated string of semicolon separated
     * <field identifier>:<value> pairs.
@@ -98,13 +96,12 @@ static void send_message() {
     * Light control message format:
     * t:lights;g:<group_id>;s:<1|0>;\0
     */
-    // group=0 by default
-
     length = snprintf(buf, sizeof(buf), "t:lights;g:%03d;s:%s;", MY_GROUP, (button_status ? "1" : "0")) + 1;
     MBED_ASSERT(length > 0);
     tr_debug("Sending lightcontrol message, %d bytes: %s", length, buf);
     SocketAddress send_sockAddr(multi_cast_addr, NSAPI_IPv6, UDP_PORT);
     my_socket->sendto(send_sockAddr, buf, 20);
+    //After message is sent, it is received from the network
 }
 
 // As this comes from isr, we cannot use printing or network functions directly from here.
