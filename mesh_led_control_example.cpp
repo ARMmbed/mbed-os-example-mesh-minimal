@@ -165,7 +165,6 @@ static void receive() {
         if (length > 0) {
             int timeout_value = MESSAGE_WAIT_TIMEOUT;
             tr_debug("Packet from %s\n", source_addr.get_ip_address());
-            tr_debug("message %s", (char*)receive_buffer);
             timeout_value += rand() % 30;
             tr_debug("Advertisiment after %d seconds", timeout_value);
             messageTimeout.detach();
