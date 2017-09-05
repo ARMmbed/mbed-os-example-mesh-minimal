@@ -26,12 +26,16 @@ static void receive();
 static void my_button_isr();
 static void send_message();
 static void blink();
+static void update_state(uint8_t state);
+static void handle_message(char* msg);
 
 // mesh local multicast to all nodes
 #define multicast_addr_str "ff03::1"
 #define TRACE_GROUP "example"
 #define UDP_PORT 1234
 #define MESSAGE_WAIT_TIMEOUT (30.0)
+#define MASTER_GROUP 0
+#define MY_GROUP 1
 
 DigitalOut led_1(MBED_CONF_APP_LED, 1);
 InterruptIn my_button(MBED_CONF_APP_BUTTON);
@@ -46,9 +50,7 @@ EventQueue queue;
 Ticker ticker;
 
 uint8_t multi_cast_addr[16] = {0};
-uint8_t receive_buffer[5];
-static const char buffer_on[2] = {'o','n'};
-static const char buffer_off[3] = {'o','f','f'};
+uint8_t receive_buffer[20];
 // how many hops the multicast message can go
 static const int16_t multicast_hops = 10;
 bool button_status = 0;
@@ -83,24 +85,73 @@ void cancel_blinking() {
 
 static void send_message() {
     tr_debug("send msg %d", button_status);
-    
+
+    char buf[20];
+    int length;
+
+    /**
+    * Multicast control message is a NUL terminated string of semicolon separated
+    * <field identifier>:<value> pairs.
+    *
+    * Light control message format:
+    * t:lights;g:<group_id>;s:<1|0>;\0
+    */
+    length = snprintf(buf, sizeof(buf), "t:lights;g:%03d;s:%s;", MY_GROUP, (button_status ? "1" : "0")) + 1;
+    MBED_ASSERT(length > 0);
+    tr_debug("Sending lightcontrol message, %d bytes: %s", length, buf);
     SocketAddress send_sockAddr(multi_cast_addr, NSAPI_IPv6, UDP_PORT);
-    if (button_status) {
-        led_1 = 0;
-        output = 0;
-        my_socket->sendto(send_sockAddr, buffer_on, 2);
-    }
-    else {
-        led_1 = 1;
-        output = 1;
-        my_socket->sendto(send_sockAddr, buffer_off, 3);
-    }
+    my_socket->sendto(send_sockAddr, buf, 20);
+    //After message is sent, it is received from the network
 }
 
 // As this comes from isr, we cannot use printing or network functions directly from here.
 static void my_button_isr() {
     button_status = !button_status;
     queue.call(send_message);
+}
+
+static void update_state(uint8_t state) {
+    if (state == 1) {
+       tr_debug("Turning led on\n");
+       led_1 = 0;
+       button_status=1;
+       output = 0;
+       }
+    else {
+       tr_debug("Turning led off\n");
+       led_1 = 1;
+       button_status=0;
+       output = 1;
+   }
+}
+
+static void handle_message(char* msg) {
+    // Check if this is lights message
+    uint8_t state=button_status;
+    uint16_t group=0xffff;
+
+    if (strstr(msg, "t:lights;") == NULL) {
+       return;
+    }
+
+    if (strstr(msg, "s:1;") != NULL) {
+        state = 1;
+    }
+    else if (strstr(msg, "s:0;") != NULL) {
+        state = 0;
+    }
+
+    // 0==master, 1==default group
+    char *msg_ptr = strstr(msg, "g:");
+    if (msg_ptr) {
+        char *ptr;
+        group = strtol(msg_ptr, &ptr, 10);
+    }
+
+    // in this example we only use one group
+    if (group==MASTER_GROUP || group==MY_GROUP) {
+        update_state(state);
+    }
 }
 
 static void receive() {
@@ -119,18 +170,7 @@ static void receive() {
             messageTimeout.detach();
             messageTimeout.attach(&messageTimeoutCallback, timeout_value);
             // Handle command - "on", "off"
-            if (strcmp((char*)receive_buffer, "on") == 0) {
-                tr_debug("Turning led on\n");
-                led_1 = 0;
-                button_status=1;
-                output = 0;
-            }
-            if (strcmp((char*)receive_buffer, "off") == 0) {
-                tr_debug("Turning led off\n");
-                led_1 = 1;
-                button_status=0;
-                output = 1;
-            }
+            handle_message((char*)receive_buffer);
         }
         else if (length!=NSAPI_ERROR_WOULD_BLOCK) {
             tr_error("Error happened when receiving %d\n", length);
