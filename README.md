@@ -212,3 +212,27 @@ In `mbed_app.json` you will find following line:
 That specifies that 14kB to be used for Nanostack's heap.
 
 For 6LoWPAN, you can try 12kB. For smallest memory usage, you should configure node to be in non-routing mode. See https://github.com/ARMmbed/mbed-os/tree/master/features/nanostack/FEATURE_NANOSTACK/mbed-mesh-api#module-configuration
+
+### Move Nanostack's heap inside the system heap
+
+Nanostack's internal heap can be moved within the system heap.
+This helps on devices which have split RAM and compiler fails to fit statically allocated
+symbols into one section. For example NXP KW24D device.
+
+Mesh API has [use-malloc-for-heap](https://github.com/ARMmbed/mbed-os/blob/master/features/nanostack/FEATURE_NANOSTACK/mbed-mesh-api/README.md#configurable-parameters-in-section-mbed-mesh-api) option to help this.
+
+Add following line to `mbed_app.json` to test:
+```
+"mbed-mesh-api.use-malloc-for-heap": true,
+```
+
+### Use release profile
+
+For devices with small memory, we recommend using release profiles for building and exporting. Please see [mbed Handbook: Build profiles](https://docs.mbed.com/docs/mbed-os-handbook/en/latest/dev_tools/build_profiles/)
+
+Examples:
+```
+$ mbed export -m KW24D -i make_iar --profile release
+OR
+$ mbed compile -m KW24D -t IAR --profile release
+```
