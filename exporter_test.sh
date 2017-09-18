@@ -18,7 +18,10 @@ pass() {
 
 for tool in ${EXPORTERS[*]};do
 	echo "Testing on $tool"
-	mbed export -m K64F -i $tool
+	if ! mbed export -m K64F -i $tool; then
+		fail $tool
+		continue
+	fi
 	# Makefile builds
 	if [[ $tool = make_* ]]; then
 		make && pass $tool || fail $tool
