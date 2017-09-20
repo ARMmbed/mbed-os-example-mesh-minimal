@@ -34,12 +34,16 @@
         "K66F": {
             "LED": "LED_RED",
             "BUTTON": "SW2"
-		    },
+        },
         "NUCLEO_F401RE": {
-            "LED": "LED_RED",
+            "LED": "NC",
             "BUTTON": "USER_BUTTON"
         },
-	      "NCS36510": {
+        "NUCLEO_F411RE": {
+            "LED": "NC",
+            "BUTTON": "USER_BUTTON"
+        },
+        "NCS36510": {
             "LED": "LED1",
             "BUTTON": "SW2"
         },
