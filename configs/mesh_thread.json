@@ -32,6 +32,10 @@
         "NUCLEO_F401RE": {
             "LED": "LED_RED",
             "BUTTON": "USER_BUTTON"
+        },
+        "KW24D": {
+            "LED": "LED1",
+            "BUTTON": "SW1"
         }
     }
     
