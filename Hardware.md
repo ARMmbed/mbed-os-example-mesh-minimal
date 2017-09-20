@@ -33,4 +33,5 @@ Following table shows which development boards have been tested. It does not pre
 2. Pin collision, see [mesh-minimal Issue 55](https://github.com/ARMmbed/mbed-os-example-mesh-minimal/issues/55)
 3. X-NUCLEO-IDS01A4 expansion board required modifications to be used in mbed OS. See [Driver readme](https://github.com/ARMmbed/stm-spirit1-rf-driver)
 4. KW24D have MCR20A chip integrated. Use same driver.
+5. KW24D has limited amount of memory (two banks of 32 RAM). For example, for the Thread end device use ARM or GCC_ARM. And for GCC_ARM use [this heap configuration](https://github.com/ARMmbed/mbed-os-example-mesh-minimal/#move-nanostacks-heap-inside-the-system-heap).
 
