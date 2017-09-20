@@ -210,7 +210,7 @@ In `mbed_app.json` you will find the following line:
 ```
 That specifies 16kB for the Nanostack's own heap.
 
-For 6LoWPAN, you can try 12kB. For smallest memory usage, you should configure node to be in non-routing mode. See https://github.com/ARMmbed/mbed-os/tree/master/features/nanostack/FEATURE_NANOSTACK/mbed-mesh-api#module-configuration
+For 6LoWPAN, you can try 12kB. For smallest memory usage, you should configure node to be in non-routing mode. See [module-configuration](https://github.com/ARMmbed/mbed-os/tree/master/features/nanostack/FEATURE_NANOSTACK/mbed-mesh-api#module-configuration)
 
 ### Move Nanostack's heap inside the system heap
 
