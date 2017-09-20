@@ -121,14 +121,11 @@ Drag and drop the binary to the target to program the application.
 
 ### Update the firmware of the border router
 
-This example supports the following two border routers:
+This example supports the following border router:
 
 - [Nanostack-border-router](https://github.com/ARMmbed/nanostack-border-router)
-- [mbed gateway](https://firefly-iot.com/product/firefly-6lowpan-gateway-2-4ghz/)
 
-Read the instructions on updating the firmware of your mbed gateway working as 6LoWPAN [here](https://github.com/ARMmbed/mbed-os-example-client#mbed-gateway).
-
-Both border routers support static and dynamic backhaul configuration. The static configuration is good for testing but the dynamic one works if your network infrastructure is supplying an IPv6 address. Make sure that you use the appropiate mode.
+The border router supports static and dynamic backhaul configuration. The static configuration is good for testing but the dynamic one works if your network infrastructure is supplying an IPv6 address. Make sure that you use the appropiate mode.
 
 Remember to connect the Ethernet cable between the border router and your home/office router. Then power up the board.
 
