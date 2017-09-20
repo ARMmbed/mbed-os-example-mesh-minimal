@@ -203,9 +203,6 @@ This will save you 4kB of RAM.
 ### Change Nanostack's heap size
 
 Nanostack uses internal heap and requires minimum of 16kB in order to run a Thread end device with comissioning enabled.
-Not all mbed enabled devices can be configured as routers. 
-It depends on the device's physical ROM/RAM configuration and size what mesh device type can be configured and run succesfully.
-There are some usefull tips here what can be done:
 
 In `mbed_app.json` you will find the following line:
 ```
