@@ -149,8 +149,8 @@ def buildStep(target, compilerLabel, toolchain, radioShield, meshInterface) {
             // Use optimal mbed TLS config file, need double escaping of '\' characters, first ones to escape Grooy, second ones to escape shell
             // Need to use SH shells
             sh("sed -i '/\"target_overrides\"/ i \"macros\": [\"MBEDTLS_USER_CONFIG_FILE=\\\\\"mbedtls_config.h\\\\\"\"],' ${config_file}")
-            // Limit mesh heap size to 16kB
-            execute("sed -i 's/mbed-mesh-api.heap-size\": .*,/mbed-mesh-api.heap-size\": 16000,/' ${config_file}")
+            // Limit mesh heap size to 15kB
+            execute("sed -i 's/mbed-mesh-api.heap-size\": .*,/mbed-mesh-api.heap-size\": 15000,/' ${config_file}")
             // Limit event loop heap size
             execute("sed -i '/target.features_add/ i \"nanostack-hal.event_loop_thread_stack_size\": 2048,' ${config_file}")
             if ("${toolchain}" == "GCC_ARM") {
