@@ -125,11 +125,7 @@ def buildStep(target, compilerLabel, toolchain, radioShield, meshInterface) {
             execute("sed -i '/mbed-mesh-api.thread-device-type\":/a \"mbed-mesh-api.thread-config-panid\": \"0xBAAB\",' ${config_file}")
             execute("sed -i 's/\"NANOSTACK\", \"THREAD_ROUTER\", \"COMMON_PAL\"/\"NANOSTACK\", \"THREAD_END_DEVICE\", \"COMMON_PAL\"/'  ${config_file}")
             execute("sed -i 's/\"mbed-mesh-api.thread-device-type\": \"MESH_DEVICE_TYPE_THREAD_ROUTER\"/\"mbed-mesh-api.thread-device-type\": \"MESH_DEVICE_TYPE_THREAD_MINIMAL_END_DEVICE\"/' ${config_file}")
-            if ("${toolchain}" == "GCC_ARM") {
-                execute("sed -i '/mbed-mesh-api.thread-device-type\":/a \"mbed-mesh-api.use-malloc-for-heap\": true,' ${config_file}")
             }
-
-          }
 
           if ("${meshInterface}" == "6lp") {
             config_file = "./configs/mesh_6lowpan.json"
@@ -157,6 +153,9 @@ def buildStep(target, compilerLabel, toolchain, radioShield, meshInterface) {
             execute("sed -i 's/mbed-mesh-api.heap-size\": .*,/mbed-mesh-api.heap-size\": 16000,/' ${config_file}")
             // Limit event loop heap size
             execute("sed -i '/target.features_add/ i \"nanostack-hal.event_loop_thread_stack_size\": 2048,' ${config_file}")
+            if ("${toolchain}" == "GCC_ARM") {
+                execute("sed -i '/mbed-mesh-api.thread-device-type\":/a \"mbed-mesh-api.use-malloc-for-heap\": true,' ${config_file}")
+            }
           }
 
           // Activate traces
