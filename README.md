@@ -202,11 +202,11 @@ This will save you 4kB of RAM.
 
 ### Change Nanostack's heap size
 
-Nanostack uses internal heap and requires minimum of 16kB in order to run a Thread end device with comissioning enabled.
+Nanostack uses internal heap and requires minimum of 15kB in order to run a Thread end device with comissioning enabled.
 
 In `mbed_app.json` you will find the following line:
 ```
-"mbed-mesh-api.heap-size": 16000,
+"mbed-mesh-api.heap-size": 15000,
 ```
 That specifies 16kB for the Nanostack's own heap.
 
