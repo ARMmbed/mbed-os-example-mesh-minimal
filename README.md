@@ -202,16 +202,13 @@ This will save you 4kB of RAM.
 
 ### Change Nanostack's heap size
 
-Nanostack uses internal heap and requires minimum of 14kB in order to run on Thread network where comissioning is enabled.
-When running on different mesh configurations, it might be able to operate on smaller heap.
+Nanostack uses internal heap, which can be configured .json. A thread end device with comissioning enabled requires atleast 15kB in order to run.
 
-In `mbed_app.json` you will find following line:
+In `mbed_app.json` you will find the following line:
 ```
-"mbed-mesh-api.heap-size": 14000,
+"mbed-mesh-api.heap-size": 15000,
 ```
-That specifies that 14kB to be used for Nanostack's heap.
-
-For 6LoWPAN, you can try 12kB. For smallest memory usage, you should configure node to be in non-routing mode. See https://github.com/ARMmbed/mbed-os/tree/master/features/nanostack/FEATURE_NANOSTACK/mbed-mesh-api#module-configuration
+For 6LoWPAN, you can try 12kB. For smallest memory usage, you should configure node to be in non-routing mode. See [module-configuration](https://github.com/ARMmbed/mbed-os/tree/master/features/nanostack/FEATURE_NANOSTACK/mbed-mesh-api#module-configuration)
 
 ### Move Nanostack's heap inside the system heap
 
