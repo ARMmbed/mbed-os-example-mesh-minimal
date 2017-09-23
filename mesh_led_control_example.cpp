@@ -30,7 +30,7 @@ static void update_state(uint8_t state);
 static void handle_message(char* msg);
 
 // mesh local multicast to all nodes
-#define multicast_addr_str "ff02::1"
+#define multicast_addr_str "ff03::1"
 #define TRACE_GROUP "example"
 #define UDP_PORT 1234
 #define MESSAGE_WAIT_TIMEOUT (30.0)
