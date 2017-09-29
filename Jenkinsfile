@@ -77,7 +77,8 @@ for (int i = 0; i < targets.size(); i++) {
         def meshInterface = meshinterfaces.get(l)
 
         // Skip unwanted combination
-        if (target == "NUCLEO_F401RE" && toolchain == "IAR") {
+        if ( toolchain == "IAR")
+            if (target == "NUCLEO_F401RE" || (target == "KW24D" && meshInterface=="thd")) {
           continue
         }
 
