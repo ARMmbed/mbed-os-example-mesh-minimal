@@ -24,7 +24,8 @@ Following table shows which development boards have been tested. It does not pre
 | NUCLEO_F401RE | <span style='background-color: #5f5;'>Yes</span> | | |
 | UBLOX_EVK_ODIN_W2 | <span style='background-color: #5f5;'>Yes</span> | <span style='background-color: #f00;'>No. **(2)**</span> | |
 | Onsemi NCS36510 <span style='background-color: #5f5;'>(internal RF)</span> | | | |
-| NXP KW24D <span style='background-color: #5f5;'>(internal RF)</span> | | <span style='background-color: #f00;'>Yes **(4)**</span> | |
+| NXP KW24D <span style='background-color: #5f5;'>(internal RF)</span> | | <span style='background-color: #5f5;'>Yes **(4)**</span> | |
+| <span style='background-color: #ff5;'>NUCLEO_L476RG **(6)**</span> | <span style='background-color: #5f5;'>Yes</span> | | |
 
 
 **Notes:**
@@ -32,6 +33,6 @@ Following table shows which development boards have been tested. It does not pre
 1. If ethernet driver is enabled, requires HW modifications if RF shield uses SPI1. See [Driver notes](https://github.com/ARMmbed/sal-nanostack-driver-stm32-eth) and [nanostack-borderrouter-private Issue #17](https://github.com/ARMmbed/nanostack-border-router-private/issues/17)
 2. Pin collision, see [mesh-minimal Issue 55](https://github.com/ARMmbed/mbed-os-example-mesh-minimal/issues/55)
 3. X-NUCLEO-IDS01A4 expansion board required modifications to be used in mbed OS. See [Driver readme](https://github.com/ARMmbed/stm-spirit1-rf-driver)
-4. KW24D have MCR20A chip integrated. Use same driver.
+4. KW24D have MCR20A chip integrated. Use the same driver.
 5. KW24D has limited amount of memory (two banks of 32 RAM). For example, for the Thread end device use ARM or GCC_ARM. And for GCC_ARM use [this heap configuration](https://github.com/ARMmbed/mbed-os-example-mesh-minimal/#move-nanostacks-heap-inside-the-system-heap).
-
+6. NUCLEO_L476RF have LEDs on same pins that are used by Atmel RF shield so those should not be used in Light control demo. (LED1 & SPI_SCK == PA_5)
