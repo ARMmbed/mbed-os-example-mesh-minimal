@@ -46,7 +46,7 @@ def targets = [
 def toolchains = [
   ARM: "armcc",
   GCC_ARM: "arm-none-eabi-gcc",
-  IAR: "iar_arm"
+  IAR: "IAR-linux"
   ]
 
 // Supported RF shields
