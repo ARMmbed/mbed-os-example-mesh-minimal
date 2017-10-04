@@ -29,8 +29,7 @@ static void blink();
 static void update_state(uint8_t state);
 static void handle_message(char* msg);
 
-// mesh local multicast to all nodes
-#define multicast_addr_str "ff02::1"
+#define multicast_addr_str "ff15::810a:64d1"
 #define TRACE_GROUP "example"
 #define UDP_PORT 1234
 #define MESSAGE_WAIT_TIMEOUT (30.0)
@@ -180,7 +179,7 @@ static void receive() {
             // there was nothing to read.
             something_in_socket=false;
         }
-    }    
+    }
 }
 
 static void handle_socket() {
@@ -192,8 +191,15 @@ static void init_socket()
 {
     my_socket = new UDPSocket(network_if);
     my_socket->set_blocking(false);
-    my_socket->bind(UDP_PORT);    
+    my_socket->bind(UDP_PORT);
     my_socket->setsockopt(SOCKET_IPPROTO_IPV6, SOCKET_IPV6_MULTICAST_HOPS, &multicast_hops, sizeof(multicast_hops));
+
+    ns_ipv6_mreq_t mreq;
+    memcpy(mreq.ipv6mr_multiaddr, multi_cast_addr, 16);
+    mreq.ipv6mr_interface = 0;
+
+    my_socket->setsockopt(SOCKET_IPPROTO_IPV6, SOCKET_IPV6_JOIN_GROUP, &mreq, sizeof mreq);
+
     if (MBED_CONF_APP_BUTTON != NC) {
         my_button.fall(&my_button_isr);
         my_button.mode(PullUp);
