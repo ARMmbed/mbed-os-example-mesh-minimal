@@ -194,7 +194,7 @@ def run_smoke(targets, toolchains, radioshields, meshinterfaces, raasPort, suite
         deleteDir()
         dir("mbed-clitest") {
           git "git@github.com:ARMmbed/mbed-clitest.git"
-          execute("git checkout ${env.LATEST_CLITEST_REL}")
+          execute("git checkout ${env.LATEST_CLITEST_STABLE_REL}")
         }
         dir("testcases") {
           git "git@github.com:ARMmbed/mbed-clitest-suites.git"
