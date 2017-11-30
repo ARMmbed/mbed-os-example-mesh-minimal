@@ -39,7 +39,6 @@ static void handle_message(char* msg);
 DigitalOut led_1(MBED_CONF_APP_LED, 1);
 InterruptIn my_button(MBED_CONF_APP_BUTTON);
 DigitalOut output(D3, 1);
-Timeout messageTimeout;
 
 NetworkInterface * network_if;
 UDPSocket* my_socket;
@@ -47,6 +46,8 @@ UDPSocket* my_socket;
 EventQueue queue;
 // for LED blinking
 Ticker ticker;
+// Handle for delayed message send
+int queue_handle = 0;
 
 uint8_t multi_cast_addr[16] = {0};
 uint8_t receive_buffer[20];
@@ -62,11 +63,6 @@ void start_mesh_led_control_example(NetworkInterface * interface){
     network_if = interface;
     stoip6(multicast_addr_str, strlen(multicast_addr_str), multi_cast_addr);
     init_socket();
-}
-
-static void messageTimeoutCallback()
-{
-    send_message();
 }
 
 static void blink() {
@@ -166,8 +162,8 @@ static void receive() {
             tr_debug("Packet from %s\n", source_addr.get_ip_address());
             timeout_value += rand() % 30;
             tr_debug("Advertisiment after %d seconds", timeout_value);
-            messageTimeout.detach();
-            messageTimeout.attach(&messageTimeoutCallback, timeout_value);
+            queue.cancel(queue_handle);
+            queue_handle = queue.call_in((timeout_value * 1000), send_message);
             // Handle command - "on", "off"
             handle_message((char*)receive_buffer);
         }
