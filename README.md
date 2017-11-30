@@ -20,7 +20,7 @@ See the file `mbed_app.json` for an example of defining an IEEE 802.15.4 channel
 
 If you want to optimize the flash usage, you need to select a proper configuration for Nanostack. The configuration depends mostly on the preferred use case.
 
-See [6LoWPAN overview](https://docs.mbed.com/docs/arm-ipv66lowpan-stack/en/latest/quick_start_intro/index.html) for the definition of star and mesh networks. These same principles apply also to Thread protocol.
+See [6LoWPAN overview](https://os.mbed.com/docs/v5.6/tutorials/6lowpan-mesh.html) for the definition of star and mesh networks. These same principles apply also to Thread protocol.
 
 Select the protocol the network is based on:
 
@@ -32,7 +32,7 @@ Select the device role:
 - Mesh network. A router. (default)
 - Star network. Non routing device. Also known as a host, or sleepy host.
 
-Modify your `mbed_app.json` file to tell which Nanostack build to choose and which configrations to use on [mbed Mesh API](https://github.com/ARMmbed/mbed-os/blob/master/features/nanostack/FEATURE_NANOSTACK/mbed-mesh-api/README.md).
+Modify your `mbed_app.json` file to tell which Nanostack configuration to use and which configrations to use on [mbed Mesh API](https://github.com/ARMmbed/mbed-os/blob/master/features/nanostack/FEATURE_NANOSTACK/mbed-mesh-api/README.md).
 
 An example of the `mbed_app.json` file:
 
@@ -45,7 +45,8 @@ An example of the `mbed_app.json` file:
     },
     "target_overrides": {
         "*": {
-            "target.features_add": ["NANOSTACK", "LOWPAN_ROUTER", "COMMON_PAL"],
+            "target.features_add": ["NANOSTACK", "COMMON_PAL"],
+            "nanostack.configuration": "lowpan_router",            
             "mbed-mesh-api.6lowpan-nd-device-type": "NET_6LOWPAN_ROUTER",
             "mbed-mesh-api.thread-device-type": "MESH_DEVICE_TYPE_THREAD_ROUTER",
             "mbed-mesh-api.heap-size": 32000,
@@ -63,19 +64,19 @@ The following tables show the values you should use in the `mbed_app.json` file 
 
 **mesh-type: MESH_LOWPAN**
 
-|Device role|`target.features_add` value|`mbed-mesh-api.6lowpan-nd-device-type`|
+|Device role|`nanostack.configuration` value|`mbed-mesh-api.6lowpan-nd-device-type`|
 |-----------|-------------------------|------------------------------------|
-|Mesh router (default) | LOWPAN_ROUTER | NET_6LOWPAN_ROUTER |
-|Non routing device | LOWPAN_HOST | NET_6LOWPAN_HOST |
+|Mesh router (default) | lowpan_router | NET_6LOWPAN_ROUTER |
+|Non routing device | lowpan_host | NET_6LOWPAN_HOST |
 
 #### Thread
 
 **mesh-type: MESH_THREAD**
 
-|Device role|`target.features_add` value|`mbed-mesh-api.thread-device-type`|
+|Device role|`nanostack.configuration` value|`mbed-mesh-api.thread-device-type`|
 |-----------|-------------------------|------------------------------------|
-|Mesh router (default) | THREAD_ROUTER | MESH_DEVICE_TYPE_THREAD_ROUTER |
-|Non routing device | THREAD_END_DEVICE | MESH_DEVICE_TYPE_THREAD_SLEEPY_END_DEVICE |
+|Mesh router (default) | thread_router | MESH_DEVICE_TYPE_THREAD_ROUTER |
+|Non routing device | thread_end_device | MESH_DEVICE_TYPE_THREAD_SLEEPY_END_DEVICE |
 
 ##### Thread commissioning
 
