@@ -1,7 +1,11 @@
-# Example mesh application for mbed OS
+# Example mesh application for Mbed OS
 
-This application is the simplest one to utilize our mesh networking stack. By default the application demonstrates a simple light control application, where devices can control the LED status of all devices in the network.
+This application is the simplest one to utilize the [mesh networking API](https://os.mbed.com/docs/latest/reference/mesh.html) that that [Mbed OS](https://github.com/ARMmbed/mbed-os) provides.
+
+By default the application demonstrates a simple light control application, where devices can control the LED status of all devices in the network.
 The application can be built for the unsecure 6LoWPAN-ND or Thread network.
+
+See [6LoWPAN overview](https://os.mbed.com/docs/latest/tutorials/mesh.html) for the definition of star and mesh networks. These same principles apply also to Thread protocol.
 
 ## Setup
 
@@ -20,8 +24,6 @@ See the file `mbed_app.json` for an example of defining an IEEE 802.15.4 channel
 
 If you want to optimize the flash usage, you need to select a proper configuration for Nanostack. The configuration depends mostly on the preferred use case.
 
-See [6LoWPAN overview](https://os.mbed.com/docs/v5.6/tutorials/6lowpan-mesh.html) for the definition of star and mesh networks. These same principles apply also to Thread protocol.
-
 Select the protocol the network is based on:
 
 - 6LoWPAN-ND
@@ -32,7 +34,7 @@ Select the device role:
 - Mesh network. A router. (default)
 - Star network. Non routing device. Also known as a host, or sleepy host.
 
-Modify your `mbed_app.json` file to tell which Nanostack configuration to use and which configrations to use on [mbed Mesh API](https://github.com/ARMmbed/mbed-os/blob/master/features/nanostack/FEATURE_NANOSTACK/mbed-mesh-api/README.md).
+Modify your `mbed_app.json` file to tell which Nanostack and [Mbed Mesh API](https://github.com/ARMmbed/mbed-os/blob/master/features/nanostack/FEATURE_NANOSTACK/mbed-mesh-api/README.md) configuration should be used.
 
 An example of the `mbed_app.json` file:
 
@@ -176,9 +178,9 @@ To change the RF driver:
 On some limited platforms, for example NCS36510 or KW24D, building this application might run out of RAM or ROM.
 In those cases, you might try following these instructions to optimize the memory usage.
 
-### mbed TLS configuration
+### Mbed TLS configuration
 
-The custom mbed TLS configuration can be set by adding `"macros": ["MBEDTLS_USER_CONFIG_FILE=\"mbedtls_config.h\""]` to the `.json` file. The [example mbed TLS config](https://github.com/ARMmbed/mbed-os-example-mesh-minimal/blob/master/mbedtls_config.h) minimizes the RAM and ROM usage of the application. The configuration works on K64F, but it is not guaranteed to work on every mbed enabled hardware.
+The custom Mbed TLS configuration can be set by adding `"macros": ["MBEDTLS_USER_CONFIG_FILE=\"mbedtls_config.h\""]` to the `.json` file. The [example Mbed TLS config](https://github.com/ARMmbed/mbed-os-example-mesh-minimal/blob/master/mbedtls_config.h) minimizes the RAM and ROM usage of the application. The configuration works on K64F, but it is not guaranteed to work on every Mbed Enabled platform.
 
 This configuration file saves you 8.7 kB of RAM but uses 6.8 kB of more flash.
 
@@ -190,7 +192,7 @@ This will save you about 2.5 kB of flash.
 
 ### Change network stack's event loop stack size
 
-Nanostack's internal event-loop is shared with mbed Client and is therefore
+Nanostack's internal event-loop is shared with Mbed Client and is therefore
 requiring lots of stack to complete the security hanshakes using TLS protocols.
 In case client functionality is not used, following can be defined to use 2kB of stack
 
@@ -223,7 +225,7 @@ Add following line to `mbed_app.json` to test:
 
 ### Use release profile
 
-For devices with small memory, we recommend using release profiles for building and exporting. Please see [mbed Handbook: Build profiles](https://docs.mbed.com/docs/mbed-os-handbook/en/latest/dev_tools/build_profiles/)
+For devices with small memory, we recommend using release profiles for building and exporting. Please see the documentation about [Build profiles](https://os.mbed.com/docs/latest/tools/build-profiles.html)
 
 Examples:
 ```
@@ -231,3 +233,7 @@ $ mbed export -m KW24D -i make_iar --profile release
 OR
 $ mbed compile -m KW24D -t IAR --profile release
 ```
+
+## Troubleshooting
+
+If you have problems, you can review the [documentation](https://os.mbed.com/docs/latest/tutorials/debugging.html) for suggestions on what could be wrong and how to fix it.
