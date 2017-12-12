@@ -34,7 +34,7 @@
             "BUTTON": "SW2"
 		},
         "NUCLEO_F401RE": {
-            "LED": "LED_RED",
+            "LED": "NC",
             "BUTTON": "USER_BUTTON"
         }
     }
