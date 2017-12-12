@@ -76,11 +76,6 @@ for (int i = 0; i < targets.size(); i++) {
         def radioshield = radioshields.get(k)
         def meshInterface = meshinterfaces.get(l)
 
-        // Skip unwanted combination
-        if (target == "NUCLEO_F401RE" && toolchain == "IAR") {
-          continue
-        }
-
         def stepName = "${target} ${toolchain} ${radioshield} ${meshInterface}"
         if(allowed_shields.contains(radioshield)) {
           stepsForParallel[stepName] = buildStep(target, compilerLabel, toolchain, radioshield, meshInterface)
