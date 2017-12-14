@@ -36,6 +36,13 @@ Select the device role:
 
 Modify your `mbed_app.json` file to see which Nanostack and [Mbed Mesh API](https://github.com/ARMmbed/mbed-os/blob/master/features/nanostack/FEATURE_NANOSTACK/mbed-mesh-api/README.md) configuration to use.
 
+Example configuration files are provide under `configs/` directory. You may override the `mbed_app.json` with either of these.
+
+|configuration file|Use for|
+|------------------|-------|
+|`configs/mesh_6lowpan.json` | 6LoWPAN-ND based mesh network. |
+|`configs/mesh_thread.json` | Thread based mesh network. |
+
 An example of the `mbed_app.json` file:
 
 ```
@@ -48,7 +55,7 @@ An example of the `mbed_app.json` file:
     "target_overrides": {
         "*": {
             "target.features_add": ["NANOSTACK", "COMMON_PAL"],
-            "nanostack.configuration": "lowpan_router",            
+            "nanostack.configuration": "lowpan_router",
             "mbed-mesh-api.6lowpan-nd-device-type": "NET_6LOWPAN_ROUTER",
             "mbed-mesh-api.thread-device-type": "MESH_DEVICE_TYPE_THREAD_ROUTER",
             "mbed-mesh-api.heap-size": 32000,
@@ -99,18 +106,23 @@ See [Notes on different hardware](https://github.com/ARMmbed/mbed-os-example-mes
 
 You also need to check how LEDs and buttons are configured for your hardware, and update .json accordingly.
 
+### Changing the radio driver
+
+To run a 6LoWPAN-ND network, you need a working RF driver for Nanostack. This example uses the Atmel AT86RF233 by default.
+
+To change the RF driver modify the `mbed_app.json` file. For example,
+
+```json
+    "radio-type":{
+        "help": "options are ATMEL, MCR20, NCS36510, KW24D",
+        "value": "ATMEL"
+    },
+```
+
 ### Compile the application
 
-#### For 6LoWPAN
-
 ```
-mbed compile -m K64F -t GCC_ARM --app-config configs/mesh_6lowpan.json
-```
-
-#### For Thread
-
-```
-mbed compile -m K64F -t GCC_ARM --app-config configs/mesh_thread.json
+mbed compile -m K64F -t GCC_ARM
 ```
 
 A binary is generated in the end of the build process.
@@ -147,32 +159,6 @@ connected. IP = 2001:db8:a0b:12f0::1
 
 You can use this IP address to `ping` from your PC and verify that the connection is working correctly.
 
-### Changing the radio driver (optional)
-
-To run a 6LoWPAN-ND network, you need a working RF driver for Nanostack. This example uses the Atmel AT86RF233 by default.
-
-To change the RF driver:
-
-1. Uninstall the Atmel RF driver.
-
-        mbed remove atmel-rf-driver
-
-2. Install the new driver. (For example, for the FRDM-CR20A radio shield based on the MCR20A device.)
-
-        mbed add mcr20a-rf-driver
-
-3. Recompile your application.
-
-        mbed compile -m K64F -t GCC_ARM
-
-**Note:** Make sure that the `mbed_app.json` file is also updated to reflect the usage of a particular RF driver. For example,
-
-```json
-      "radio-type":{
-            "help": "options are ATMEL, MCR20",
-            "value": "ATMEL"
-        },
-```
 
 ## Memory optimizations
 
