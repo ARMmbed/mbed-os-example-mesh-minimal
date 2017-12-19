@@ -90,10 +90,7 @@ The following tables show the values to use in the `mbed_app.json` file for your
 ##### Thread commissioning
 
 By default, the Thread application uses the static network link configuration defined in the [mesh API configuration file](https://github.com/ARMmbed/mbed-os/blob/master/features/nanostack/FEATURE_NANOSTACK/mbed-mesh-api/mbed_lib.json).
-If you want to use the Thread commissioning, add the following lines to the [thread configuration file](https://github.com/ARMmbed/mbed-os-example-mesh-minimal/blob/master/configs/mesh_thread.json).
-
-* `"mbed-mesh-api.thread-use-static-link-config": false`
-* `"macros": ["MBEDTLS_USER_CONFIG_FILE=\"mbedtls_config.h\""]`
+If you want to use the Thread commissioning, see [how to commission a Thread device in practice](https://os.mbed.com/docs/latest/tutorials/mesh.html#how-to-commission-a-thread-device-in-practice)
 
 ### Requirements for hardware
 
