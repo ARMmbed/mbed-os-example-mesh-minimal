@@ -14,7 +14,7 @@
     },  
     "target_overrides": {
         "*": {
-            "target.features_add": ["NANOSTACK", "THREAD_ROUTER", "COMMON_PAL"],
+            "target.features_add": ["NANOSTACK", "COMMON_PAL"],
             "nanostack.configuration": "thread_router",
             "mbed-trace.enable": false,
             "mbed-mesh-api.heap-size": 30000,
@@ -31,7 +31,7 @@
             "BUTTON": "SW2"
 		},
         "NUCLEO_F401RE": {
-            "LED": "LED_RED",
+            "LED": "NC",
             "BUTTON": "USER_BUTTON"
         },
         "KW24D": {

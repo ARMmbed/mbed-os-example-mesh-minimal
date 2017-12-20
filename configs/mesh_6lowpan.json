@@ -14,7 +14,7 @@
     },
     "target_overrides": {
         "*": {
-            "target.features_add": ["NANOSTACK", "LOWPAN_ROUTER", "COMMON_PAL"],
+            "target.features_add": ["NANOSTACK", "COMMON_PAL"],
             "nanostack.configuration": "lowpan_router",
             "mbed-mesh-api.6lowpan-nd-panid-filter": "0xffff",
             "mbed-mesh-api.6lowpan-nd-channel-page": 0,
@@ -34,7 +34,7 @@
             "BUTTON": "SW2"
 		},
         "NUCLEO_F401RE": {
-            "LED": "LED_RED",
+            "LED": "NC",
             "BUTTON": "USER_BUTTON"
         }
     }
