@@ -17,6 +17,7 @@
 #include "rtos.h"
 #include "NanostackInterface.h"
 #include "mbed-trace/mbed_trace.h"
+#include "mesh_nvm.h"
 
 #if MBED_CONF_APP_ENABLE_LED_CONTROL_EXAMPLE
 #include "mesh_led_control_example.h"
@@ -82,9 +83,9 @@ int main()
         printf("pins not configured. Skipping the LED control.\n");
     }
 #endif
-
     printf("\n\nConnecting...\n");
     mesh.initialize(&rf_phy);
+    mesh_nvm_initialize();
     int error = mesh.connect();
     if (error) {
         printf("Connection failed! %d\n", error);
