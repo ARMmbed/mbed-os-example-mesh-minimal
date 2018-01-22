@@ -16,6 +16,8 @@
 
 #include "mbed.h"
 
+#define MESH_LOWPAN     1
+#define MESH_THREAD     2
 /* At the moment, Thread builds using K64F support NVM */
 #if MBED_CONF_APP_MESH_TYPE == MESH_THREAD && defined(TARGET_K64F)
 
