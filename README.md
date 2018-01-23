@@ -34,7 +34,7 @@ Select the device role:
 - Mesh network. A router. (default)
 - Star network. Nonrouting device. Also known as a host or sleepy host.
 
-Modify your `mbed_app.json` file to see which Nanostack and [Mbed Mesh API](https://github.com/ARMmbed/mbed-os/blob/master/features/nanostack/FEATURE_NANOSTACK/mbed-mesh-api/README.md) configuration to use.
+Modify your `mbed_app.json` file to see which Nanostack and [Mbed Mesh API](https://docs.mbed.com/docs/mbed-os-api-reference/en/latest/APIs/communication/mesh/#mbed-mesh-api) configuration to use.
 
 Example configuration files are provide under `configs/` directory. You may override the `mbed_app.json` with either of these.
 
@@ -193,14 +193,14 @@ In `mbed_app.json`, you find the following line:
 "mbed-mesh-api.heap-size": 15000,
 ```
 
-For 6LoWPAN, you can try 12kB. For the smallest memory usage, configure the node to be in nonrouting mode. See [module-configuration](https://github.com/ARMmbed/mbed-os/tree/master/features/nanostack/FEATURE_NANOSTACK/mbed-mesh-api#module-configuration) for more detail.
+For 6LoWPAN, you can try 12kB. For the smallest memory usage, configure the node to be in nonrouting mode. See [module-configuration](https://docs.mbed.com/docs/mbed-os-api-reference/en/latest/APIs/communication/mesh/#module-configuration) for more detail.
 
 ### Move Nanostack's heap inside the system heap
 
 Nanostack's internal heap can be moved within the system heap.
 This helps on devices that have split RAM and compiler fails to fit statically allocated symbols into one section, for example, the NXP KW24D device.
 
-Mesh API has the [use-malloc-for-heap](https://github.com/ARMmbed/mbed-os/blob/master/features/nanostack/FEATURE_NANOSTACK/mbed-mesh-api/README.md#configurable-parameters-in-section-mbed-mesh-api) option to help this.
+Mesh API has the [use-malloc-for-heap](https://docs.mbed.com/docs/mbed-os-api-reference/en/latest/APIs/communication/mesh/#module-configuration) option to help this.
 
 Add the following line to `mbed_app.json` to test:
 
