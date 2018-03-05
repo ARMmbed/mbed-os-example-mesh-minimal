@@ -18,6 +18,7 @@
 #include "NanostackInterface.h"
 #include "mbed-trace/mbed_trace.h"
 #include "mesh_nvm.h"
+#include "nanostack/net_thread_test.h"
 
 #if MBED_CONF_APP_ENABLE_LED_CONTROL_EXAMPLE
 #include "mesh_led_control_example.h"
@@ -86,6 +87,8 @@ int main()
     printf("\n\nConnecting...\n");
     mesh.initialize(&rf_phy);
     mesh_nvm_initialize();
+    // v1.1
+    thread_test_version_set(mesh.get_interface_id(), 2);
     int error = mesh.connect();
     if (error) {
         printf("Connection failed! %d\n", error);

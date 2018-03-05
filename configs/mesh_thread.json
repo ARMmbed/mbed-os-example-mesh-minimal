@@ -16,7 +16,12 @@
         "*": {
             "target.features_add": ["NANOSTACK", "COMMON_PAL"],
             "nanostack.configuration": "thread_router",
-            "mbed-trace.enable": false,
+            "mbed-mesh-api.thread-config-channel-page": 0,
+            "mbed-mesh-api.thread-config-channel": 18,
+            "mbed-mesh-api.thread-config-panid": "0xff11",
+            "mbed-mesh-api.thread-master-key": "{0xff, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0x99, 0xaa, 0xbb, 0xcc, 0xdd, 0xee, 0xff}",
+            "mbed-mesh-api.thread-config-network-name": "\"Thread Network\"",
+            "mbed-trace.enable": 1,
             "mbed-mesh-api.heap-size": 30000,
             "mbed-mesh-api.thread-device-type": "MESH_DEVICE_TYPE_THREAD_ROUTER",
             "platform.stdio-convert-newlines": true,

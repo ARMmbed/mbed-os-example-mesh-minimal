@@ -18,6 +18,7 @@
 #include "mesh_led_control_example.h"
 #include "common_functions.h"
 #include "ip6string.h"
+#include "nanostack/multicast_api.h"
 #include "mbed-trace/mbed_trace.h"
 
 static void init_socket();
@@ -59,7 +60,6 @@ void start_mesh_led_control_example(NetworkInterface * interface){
     tr_debug("start_mesh_led_control_example()");
     MBED_ASSERT(MBED_CONF_APP_LED != NC);
     MBED_ASSERT(MBED_CONF_APP_BUTTON != NC);
-
     network_if = interface;
     stoip6(multicast_addr_str, strlen(multicast_addr_str), multi_cast_addr);
     init_socket();
@@ -195,6 +195,7 @@ static void init_socket()
     mreq.ipv6mr_interface = 0;
 
     my_socket->setsockopt(SOCKET_IPPROTO_IPV6, SOCKET_IPV6_JOIN_GROUP, &mreq, sizeof mreq);
+    multicast_add_address(multi_cast_addr, true);
 
     if (MBED_CONF_APP_BUTTON != NC) {
         my_button.fall(&my_button_isr);
