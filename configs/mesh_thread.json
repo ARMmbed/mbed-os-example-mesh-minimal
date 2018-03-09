@@ -8,10 +8,14 @@
             "help": "options are MESH_LOWPAN, MESH_THREAD",
             "value": "MESH_THREAD"
         },
+        "storage-device":{
+            "help": "Values for storage (Thread) devices are: MESH_SD_CARD and MESH_HEAP",
+            "value": "MESH_HEAP"
+        },
         "enable-led-control-example": true,
         "LED": "NC",
         "BUTTON": "NC"
-    },  
+    },
     "target_overrides": {
         "*": {
             "target.features_add": ["NANOSTACK", "COMMON_PAL"],
