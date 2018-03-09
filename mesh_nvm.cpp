@@ -16,8 +16,12 @@
 
 #include "mbed.h"
 
+/* Application configuration values from json */
 #define MESH_LOWPAN     1
 #define MESH_THREAD     2
+#define MESH_HEAP       3
+#define MESH_SD_CARD    4
+
 /* At the moment, Thread builds using K64F support NVM */
 #if MBED_CONF_APP_MESH_TYPE == MESH_THREAD && defined(TARGET_K64F)
 
@@ -30,7 +34,16 @@
 #define TRACE_GROUP "mnvm"
 
 /* By default use HEAP as NVM storage, comment macro in order to use SD card */
+#ifdef MBED_CONF_APP_STORAGE_DEVICE
+
+#if MBED_CONF_APP_STORAGE_DEVICE == MESH_HEAP
+// Use Heap block device
 #define USE_HEAP_BLOCK_DEVICE
+#elif  MBED_CONF_APP_STORAGE_DEVICE == MESH_SD_CARD
+// Use SD CARD - lack of USE_HEAP_BLOCK_DEVICE selects SD_CARD
+#endif
+
+#endif /* MBED_CONF_APP_STORAGE_OPTION */
 
 LittleFileSystem *fs;
 BlockDevice *bd;
