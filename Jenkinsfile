@@ -225,7 +225,7 @@ def run_smoke(targets, toolchains, radioshields, meshinterfaces, raasPort, suite
         }
         env.RAAS_USERNAME = "user"
         env.RAAS_PASSWORD = "user"
-        execute("./mbed-clitest/clitest.py --tcdir testcases --suitedir testcases/suites/ --suite ${suite_to_run} --type hardware --reset --raas 62.44.193.186:${raasPort} --raas_share_allocs --failure_return_value -vvv -w --log log_${raasPort}_${suiteName}")
+        execute("./mbed-clitest/clitest.py --tcdir testcases --suitedir testcases/suites/ --suite ${suite_to_run} --type hardware --reset --raas http://rauni.mbedcloudtesting.com/ --raas_share_allocs --failure_return_value -vvv -w --log log_${raasPort}_${suiteName}")
         archive "log_${raasPort}_${suiteName}/**/*"
       }
     }
