@@ -1,11 +1,11 @@
 # Example mesh application for Mbed OS
 
-With this application, you can use the [mesh networking API](https://os.mbed.com/docs/latest/reference/mesh.html) that [Mbed OS](https://github.com/ARMmbed/mbed-os) provides.
+With this application, you can use the [mesh networking API](https://os.mbed.com/docs/latest/reference/mesh-api.html) that [Mbed OS](https://github.com/ARMmbed/mbed-os) provides.
 
 The application demonstrates a light control application, where devices can control the LED status of all devices in the network.
 The application can be built for the unsecure 6LoWPAN-ND or Thread network.
 
-See the [6LoWPAN overview](https://os.mbed.com/docs/latest/tutorials/mesh.html) for the definition of star and mesh networks. These same principles apply also to Thread protocol.
+See the [6LoWPAN overview](https://os.mbed.com/docs/latest/reference/mesh-tech.html) for the definition of star and mesh networks. These same principles apply also to Thread protocol.
 
 ## Setup
 
@@ -90,7 +90,7 @@ The following tables show the values to use in the `mbed_app.json` file for your
 ##### Thread commissioning
 
 By default, the Thread application uses the static network link configuration defined in the [mesh API configuration file](https://github.com/ARMmbed/mbed-os/blob/master/features/nanostack/FEATURE_NANOSTACK/mbed-mesh-api/mbed_lib.json).
-If you want to commission a Thread device, see [how to commission a Thread device in practice](https://os.mbed.com/docs/latest/tutorials/mesh.html#how-to-commission-a-thread-device-in-practice).
+If you want to commission a Thread device, see [how to commission a Thread device in practice](https://os.mbed.com/docs/latest/reference/mesh-tech.html#thread-commissioning).
 
 The Thread stack learns the network settings from the commissioning process and saves them to RAM memory. Therefore, the learned network settings are lost when you restart the device next time. To prevent re-commissioning, you can save the Thread configuration settings to an SD card as follows (only in `K64F`):
 
@@ -106,7 +106,7 @@ The Thread stack learns the network settings from the commissioning process and 
 The networking stack used in this example requires TLS functionality to be enabled on Mbed TLS.
 On devices where hardware entropy is not present, TLS is disabled by default. This results in compile time failures or linking failures.
 
-To learn why entropy is required, read the [TLS Porting guide](https://docs.mbed.com/docs/mbed-os-handbook/en/5.2/advanced/tls_porting/).
+To learn why entropy is required, read the [TLS Porting guide](https://os.mbed.com/docs/latest/reference/mbed-tls-entropy.html).
 
 See [Notes on different hardware](https://github.com/ARMmbed/mbed-os-example-mesh-minimal/blob/master/Hardware.md) for known combinations of development boards and RF shields that have been tested.
 
