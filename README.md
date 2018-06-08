@@ -235,10 +235,16 @@ If you have problems, you can review the [documentation](https://os.mbed.com/doc
 
 ## Known issues
 
-The mesh interface function `mesh.get_mac_address()` has inadvertedly been changed in Mbed OS 5.9 to return the actual MAC address and not the EUI64 address. In order to print the actual EUI64 address for Thread commissioning, use the following code snippet after `printf("connected. IP = %s\n", mesh.get_ip_address());`:
-```
-uint8_t eui64[8] = {0,0,0,0,0,0,0,0};
-mesh.device_eui64_get(eui64);
-printf("EUI64 address = %02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x\n", eui64[0], eui64[1], eui64[2], eui64[3], eui64[4], eui64[5], eui64[6], eui64[7]);
-```
-The issue will be fixed in Mbed OS 5.9.1 and printing the EUI64 separately will become unnecessary.
+1. https://github.com/ARMmbed/mbed-os-example-mesh-minimal/issues/188
+
+   The mesh interface function `mesh.get_mac_address()` has inadvertedly been changed in Mbed OS 5.9 to return the actual MAC address and not the EUI64 address. In order to print the actual EUI64 address for Thread commissioning, use the following code snippet after `printf("connected. IP = %s\n", mesh.get_ip_address());`:
+   ```
+   uint8_t eui64[8] = {0,0,0,0,0,0,0,0};
+   mesh.device_eui64_get(eui64);
+   printf("EUI64 address = %02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x\n", eui64[0], eui64[1], eui64[2], eui64[3], eui64[4], eui64[5], eui64[6], eui64[7]);
+   ```
+   The issue will be fixed in Mbed OS 5.9.1 and printing the EUI64 separately will become unnecessary.
+
+1. https://github.com/ARMmbed/mbed-os-example-mesh-minimal/issues/190
+
+   Thread is not able to use filesystem at the moment. Saving configuration to NVM is unavailable.
