@@ -34,7 +34,7 @@ Select the device role:
 - Mesh network. A router. (default)
 - Star network. Nonrouting device. Also known as a host or sleepy host.
 
-Modify your `mbed_app.json` file to see which Nanostack and [Mbed Mesh API](https://github.com/ARMmbed/mbed-os/blob/master/features/nanostack/FEATURE_NANOSTACK/mbed-mesh-api/README.md) configuration to use.
+Modify your `mbed_app.json` file to see which Nanostack and [Mbed Mesh API](https://os.mbed.com/docs/latest/reference/mesh-api.html) configuration to use.
 
 Example configuration files are provide under `configs/` directory. You may override the `mbed_app.json` with either of these.
 
@@ -89,8 +89,8 @@ The following tables show the values to use in the `mbed_app.json` file for your
 
 ##### Thread commissioning
 
-By default, the Thread application uses the static network link configuration defined in the [mesh API configuration file](https://github.com/ARMmbed/mbed-os/blob/master/features/nanostack/FEATURE_NANOSTACK/mbed-mesh-api/mbed_lib.json).
-If you want to commission a Thread device, see [how to commission a Thread device in practice](https://os.mbed.com/docs/latest/tutorials/mesh.html#how-to-commission-a-thread-device-in-practice).
+By default, the Thread application uses the static network link configuration defined in the [mesh API configuration file](https://github.com/ARMmbed/mbed-os/blob/master/features/nanostack/mbed-mesh-api/mbed_lib.json).
+If you want to commission a Thread device, see [how to commission a Thread device in practice](https://os.mbed.com/docs/latest/reference/mesh-tech.html#thread-commissioning).
 
 The Thread stack learns the network settings from the commissioning process and saves them to RAM memory. Therefore, the learned network settings are lost when you restart the device next time. To prevent re-commissioning, you can save the Thread configuration settings to an SD card as follows (only in `K64F`):
 
@@ -232,3 +232,19 @@ $ mbed compile -m KW24D -t IAR --profile release
 ## Troubleshooting
 
 If you have problems, you can review the [documentation](https://os.mbed.com/docs/latest/tutorials/debugging.html) for suggestions on what could be wrong and how to fix it.
+
+## Known issues
+
+1. https://github.com/ARMmbed/mbed-os-example-mesh-minimal/issues/188
+
+   The mesh interface function `mesh.get_mac_address()` has inadvertedly been changed in Mbed OS 5.9 to return the actual MAC address and not the EUI64 address. In order to print the actual EUI64 address for Thread commissioning, use the following code snippet after `printf("connected. IP = %s\n", mesh.get_ip_address());`:
+   ```
+   uint8_t eui64[8] = {0,0,0,0,0,0,0,0};
+   mesh.device_eui64_get(eui64);
+   printf("EUI64 address = %02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x\n", eui64[0], eui64[1], eui64[2], eui64[3], eui64[4], eui64[5], eui64[6], eui64[7]);
+   ```
+   The issue will be fixed in Mbed OS 5.9.1 and printing the EUI64 separately will become unnecessary.
+
+1. https://github.com/ARMmbed/mbed-os-example-mesh-minimal/issues/190
+
+   Thread is not able to use filesystem at the moment. Saving configuration to NVM is unavailable.
