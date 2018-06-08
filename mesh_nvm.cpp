@@ -15,6 +15,7 @@
  */
 
 #include "mbed.h"
+#include "Nanostack.h"
 
 /* Application configuration values from json */
 #define MESH_LOWPAN     1
@@ -68,7 +69,9 @@ void mesh_nvm_initialize()
     }
 
     if (!mount_status) {
+        Nanostack::get_instance(); // ensure Nanostack is initialised
         ns_file_system_set_root_path("/fs/");
+        // Should be like: Nanostack::get_instance().file_system_set_root_path("/fs/");
     }
 }
 
