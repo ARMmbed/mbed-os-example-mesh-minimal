@@ -97,7 +97,7 @@ The Thread stack learns the network settings from the commissioning process and 
 - Change `storage-device` to `MESH_SD_CARD` in the `./configs/mesh_thread.json` file.
 - Enable commissioning as descibed in the referred instructions.
 - Compile and program the application.
-- Insert the SD card to the `K64F` memory card slot.
+- Insert an erased or FAT-formatted SD card to the `K64F` memory card slot. The application will initialize the SD card with the appropriate file system on first use.
 - Commission the device to the Thread network.
 - When you restart the device next time, the device reads the Thread configuration settings from the SD card and tries to attach to an existing network.
 
