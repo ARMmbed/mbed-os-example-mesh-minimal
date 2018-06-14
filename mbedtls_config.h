@@ -14,6 +14,10 @@
 #define MBEDTLS_SSL_EXPORT_KEYS
 #define MBEDTLS_SSL_ALL_ALERT_MESSAGES
 
+#define MBEDTLS_ENTROPY_MAX_SOURCES 4   // save 320 bytes of RAM (default is 20 entropy source)
+#define MBEDTLS_SSL_MAX_CONTENT_LEN 4096 // Use 4kB buffers for input and output instead of 16kB
+
+
 #define MBEDTLS_SHA256_SMALLER //reduce ROM usage ~1,4kB, perf hit 30%
 
 /* mbed TLS modules */
