@@ -245,6 +245,3 @@ If you have problems, you can review the [documentation](https://os.mbed.com/doc
    ```
    The issue will be fixed in Mbed OS 5.9.1 and printing the EUI64 separately will become unnecessary.
 
-1. https://github.com/ARMmbed/mbed-os-example-mesh-minimal/issues/190
-
-   Thread is not able to use filesystem at the moment. Saving configuration to NVM is unavailable.
