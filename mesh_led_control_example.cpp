@@ -198,7 +198,7 @@ static void init_socket()
 
     if (MBED_CONF_APP_BUTTON != NC) {
         my_button.fall(&my_button_isr);
-        my_button.mode(PullUp);
+        my_button.mode(MBED_CONF_APP_BUTTON_MODE);
     }
     //let's register the call-back function.
     //If something happens in socket (packets in or out), the call-back is called.
