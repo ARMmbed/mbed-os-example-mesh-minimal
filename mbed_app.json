@@ -10,7 +10,8 @@
         },
         "enable-led-control-example": true,
         "LED": "NC",
-        "BUTTON": "NC"
+        "BUTTON": "NC",
+        "BUTTON_MODE": "PullUp"
     },
     "target_overrides": {
         "*": {
@@ -51,6 +52,11 @@
         "KW24D": {
             "LED": "LED1",
             "BUTTON": "SW1"
+        },
+        "NUCLEO_F429ZI":  {
+            "LED": "LED_RED",
+            "BUTTON": "USER_BUTTON",
+            "BUTTON_MODE": "PullDown"
         }
     }
 }
