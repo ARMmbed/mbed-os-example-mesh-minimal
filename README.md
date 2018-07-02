@@ -243,5 +243,5 @@ If you have problems, you can review the [documentation](https://os.mbed.com/doc
    mesh.device_eui64_get(eui64);
    printf("EUI64 address = %02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x\n", eui64[0], eui64[1], eui64[2], eui64[3], eui64[4], eui64[5], eui64[6], eui64[7]);
    ```
-   The issue will be fixed in Mbed OS 5.9.1 and printing the EUI64 separately will become unnecessary.
+   The new API for `device_eui64_get` was introduced in PR [7158](https://github.com/ARMmbed/mbed-os/pull/7158) and it will be available in Mbed OS 5.9.2.
 
