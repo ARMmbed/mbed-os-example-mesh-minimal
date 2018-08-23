@@ -25,7 +25,8 @@
             "mbed-mesh-api.heap-size": 30000,
             "mbed-mesh-api.thread-device-type": "MESH_DEVICE_TYPE_THREAD_ROUTER",
             "platform.stdio-convert-newlines": true,
-            "platform.stdio-baud-rate": 115200
+            "platform.stdio-baud-rate": 115200,
+            "mbed-mesh-api.thread-use-static-link-config": true
         },
         "K64F": {
             "LED": "LED_RED",

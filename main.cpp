@@ -56,6 +56,15 @@ ThreadInterface mesh;
 
 static Mutex SerialOutMutex;
 
+void thread_eui64_trace()
+{
+#if MBED_CONF_APP_MESH_TYPE == MESH_THREAD
+   uint8_t eui64[8] = {0};
+   mesh.device_eui64_get(eui64);
+   printf("Device EUI64 address = %02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x\n", eui64[0], eui64[1], eui64[2], eui64[3], eui64[4], eui64[5], eui64[6], eui64[7]);
+#endif
+}
+
 void serial_out_mutex_wait()
 {
     SerialOutMutex.lock();
@@ -75,6 +84,9 @@ int main()
     
     printf("Start mesh-minimal application\n");
     printf("Build: %s %s\nMesh type: %d\n", __DATE__, __TIME__, MBED_CONF_APP_MESH_TYPE);
+#ifdef MBED_MAJOR_VERSION
+    printf("Mbed OS version: %d.%d.%d\n", MBED_MAJOR_VERSION, MBED_MINOR_VERSION, MBED_PATCH_VERSION);
+#endif
 
 #if MBED_CONF_APP_ENABLE_LED_CONTROL_EXAMPLE
     if (MBED_CONF_APP_BUTTON != NC && MBED_CONF_APP_LED != NC) {
@@ -83,9 +95,10 @@ int main()
         printf("pins not configured. Skipping the LED control.\n");
     }
 #endif
-    printf("\n\nConnecting...\n");
     mesh.initialize(&rf_phy);
+    thread_eui64_trace();
     mesh_nvm_initialize();
+    printf("Connecting...\n");
     int error = mesh.connect();
     if (error) {
         printf("Connection failed! %d\n", error);
@@ -95,7 +108,7 @@ int main()
     while (NULL == mesh.get_ip_address())
         Thread::wait(500);
 
-    printf("connected. IP = %s\n", mesh.get_ip_address());
+    printf("Connected. IP = %s\n", mesh.get_ip_address());
 
 #if MBED_CONF_APP_ENABLE_LED_CONTROL_EXAMPLE
     // Network found, start socket example
