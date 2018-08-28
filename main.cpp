@@ -58,7 +58,7 @@ static Mutex SerialOutMutex;
 
 void thread_eui64_trace()
 {
-#if MBED_CONF_APP_MESH_TYPE == MESH_THREAD
+#if MBED_CONF_APP_MESH_TYPE == MESH_THREAD && (MBED_VERSION >= MBED_ENCODE_VERSION(5,10,0))
    uint8_t eui64[8] = {0};
    mesh.device_eui64_get(eui64);
    printf("Device EUI64 address = %02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x\n", eui64[0], eui64[1], eui64[2], eui64[3], eui64[4], eui64[5], eui64[6], eui64[7]);
