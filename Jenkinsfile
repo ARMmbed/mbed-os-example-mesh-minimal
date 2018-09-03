@@ -34,12 +34,12 @@ def raas = [
 
 // List of targets with supported RF shields to compile
 def targets = [
-  "K64F": ["ATMEL", "MCR20"],
-  "NUCLEO_F401RE": ["ATMEL", "MCR20"],
-  "NUCLEO_F429ZI": ["ATMEL", "MCR20"],
-  //"NCS36510": ["NCS36510"],
+  "K64F": ["ATMEL", "MCR20A"],
+  "NUCLEO_F401RE": ["ATMEL", "MCR20A"],
+  "NUCLEO_F429ZI": ["ATMEL", "MCR20A"],
+  //"NCS36510": ["internal"],
   "UBLOX_EVK_ODIN_W2": ["ATMEL"],
-  "KW24D": ["MCR20"]
+  "KW24D": ["internal"]
   ]
 
 // Map toolchains to compilers
@@ -52,8 +52,8 @@ def toolchains = [
 // Supported RF shields
 def radioshields = [
   "ATMEL",
-  "MCR20",
-  "NCS36510"
+  "MCR20A",
+  "internal"
   ]
 
 // Mesh interfaces: 6LoWPAN and Thread
@@ -112,9 +112,14 @@ def buildStep(target, compilerLabel, toolchain, radioShield, meshInterface) {
         dir("mbed-os-example-mesh-minimal") {
           checkout scm
           def config_file = "mbed_app.json"
+          def config_suffix = ""
+
+          if ("${radioShield}" != "internal") {
+            config_suffix = "_${radioShield}"
+          }
 
           if ("${meshInterface}" == "thd") {
-            config_file = "./configs/mesh_thread.json"
+            config_file = "./configs/mesh_thread${config_suffix}.json"
             // Use systest Thread Border Router for testing (CH=18, PANID=BAAB)
             execute("sed -i '/mbed-mesh-api.thread-device-type\":/a \"mbed-mesh-api.thread-config-channel\": 18,' ${config_file}")
             execute("sed -i '/mbed-mesh-api.thread-device-type\":/a \"mbed-mesh-api.thread-config-panid\": \"0xBAAB\",' ${config_file}")
@@ -123,20 +128,10 @@ def buildStep(target, compilerLabel, toolchain, radioShield, meshInterface) {
             }
 
           if ("${meshInterface}" == "6lp") {
-            config_file = "./configs/mesh_6lowpan.json"
+            config_file = "./configs/mesh_6lowpan${config_suffix}.json"
             // Use systest 6LoWPAN Border Router for testing (CH=17, PANID=ABBA)
             execute("sed -i 's/\"mbed-mesh-api.6lowpan-nd-channel\": 12/\"mbed-mesh-api.6lowpan-nd-channel\": 17/' ${config_file}")
             execute("sed -i 's/\"mbed-mesh-api.6lowpan-nd-panid-filter\": \"0xffff\"/\"mbed-mesh-api.6lowpan-nd-panid-filter\": \"0xABBA\"/' ${config_file}")
-          }
-
-          if ("${radioShield}" == "MCR20") {
-            // Replace default rf shield
-            execute("sed -i 's/\"value\": \"ATMEL\"/\"value\": \"MCR20\"/' ${config_file}")
-          }
-
-          if ("${radioShield}" == "NCS36510") {
-            // Replace default rf shield
-            execute("sed -i 's/\"value\": \"ATMEL\"/\"value\": \"NCS36510\"/' ${config_file}")
           }
 
           // For KW24D, we need to optimize for low memory

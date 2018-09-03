@@ -27,40 +27,17 @@ void trace_printer(const char* str) {
     printf("%s\n", str);
 }
 
-#define ATMEL   1
-#define MCR20   2
-#define NCS36510 3
-#define KW24D   4
-
-#define MESH_LOWPAN     3
-#define MESH_THREAD     4
-
-#if MBED_CONF_APP_RADIO_TYPE == ATMEL
-#include "NanostackRfPhyAtmel.h"
-NanostackRfPhyAtmel rf_phy(ATMEL_SPI_MOSI, ATMEL_SPI_MISO, ATMEL_SPI_SCLK, ATMEL_SPI_CS,
-                           ATMEL_SPI_RST, ATMEL_SPI_SLP, ATMEL_SPI_IRQ, ATMEL_I2C_SDA, ATMEL_I2C_SCL);
-#elif MBED_CONF_APP_RADIO_TYPE == MCR20 || MBED_CONF_APP_RADIO_TYPE == KW24D
-#include "NanostackRfPhyMcr20a.h"
-NanostackRfPhyMcr20a rf_phy(MCR20A_SPI_MOSI, MCR20A_SPI_MISO, MCR20A_SPI_SCLK, MCR20A_SPI_CS, MCR20A_SPI_RST, MCR20A_SPI_IRQ);
-
-#elif MBED_CONF_APP_RADIO_TYPE == NCS36510
-#include "NanostackRfPhyNcs36510.h"
-NanostackRfPhyNcs36510 rf_phy;
-#endif //MBED_CONF_APP_RADIO_TYPE
-
-#if MBED_CONF_APP_MESH_TYPE == MESH_LOWPAN
-LoWPANNDInterface mesh;
-#elif MBED_CONF_APP_MESH_TYPE == MESH_THREAD
-ThreadInterface mesh;
-#endif //MBED_CONF_APP_MESH_TYPE
+MeshInterface *mesh;
 
 static Mutex SerialOutMutex;
 
 void thread_eui64_trace()
 {
-#if MBED_CONF_APP_MESH_TYPE == MESH_THREAD && (MBED_VERSION >= MBED_ENCODE_VERSION(5,10,0))
+#define LOWPAN 1
+#define THREAD 2
+#if MBED_CONF_NSAPI_DEFAULT_MESH_TYPE == THREAD && (MBED_VERSION >= MBED_ENCODE_VERSION(5,10,0))
    uint8_t eui64[8] = {0};
-   mesh.device_eui64_get(eui64);
+   static_cast<ThreadInterface*>(mesh)->device_eui64_get(eui64);
    printf("Device EUI64 address = %02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x\n", eui64[0], eui64[1], eui64[2], eui64[3], eui64[4], eui64[5], eui64[6], eui64[7]);
 #endif
 }
@@ -81,9 +58,11 @@ int main()
     mbed_trace_print_function_set(trace_printer);
     mbed_trace_mutex_wait_function_set( serial_out_mutex_wait );
     mbed_trace_mutex_release_function_set( serial_out_mutex_release );
-    
+
     printf("Start mesh-minimal application\n");
-    printf("Build: %s %s\nMesh type: %d\n", __DATE__, __TIME__, MBED_CONF_APP_MESH_TYPE);
+
+#define STR(s) #s
+    printf("Build: %s %s\nMesh type: %s\n", __DATE__, __TIME__, STR(MBED_CONF_NSAPI_DEFAULT_MESH_TYPE));
 #ifdef MBED_MAJOR_VERSION
     printf("Mbed OS version: %d.%d.%d\n", MBED_MAJOR_VERSION, MBED_MINOR_VERSION, MBED_PATCH_VERSION);
 #endif
@@ -95,26 +74,31 @@ int main()
         printf("pins not configured. Skipping the LED control.\n");
     }
 #endif
-    mesh.initialize(&rf_phy);
+    mesh = MeshInterface::get_default_instance();
+    if (!mesh) {
+        printf("Error! MeshInterface not found!\n");
+        return -1;
+    }
+
     thread_eui64_trace();
     mesh_nvm_initialize();
     printf("Connecting...\n");
-    int error = mesh.connect();
+    int error = mesh->connect();
     if (error) {
         printf("Connection failed! %d\n", error);
         return error;
     }
 
-    while (NULL == mesh.get_ip_address())
+    while (NULL == mesh->get_ip_address())
         Thread::wait(500);
 
-    printf("Connected. IP = %s\n", mesh.get_ip_address());
+    printf("Connected. IP = %s\n", mesh->get_ip_address());
 
 #if MBED_CONF_APP_ENABLE_LED_CONTROL_EXAMPLE
     // Network found, start socket example
     if (MBED_CONF_APP_BUTTON != NC && MBED_CONF_APP_LED != NC) {
         cancel_blinking();
-        start_mesh_led_control_example((NetworkInterface *)&mesh);
+        start_mesh_led_control_example((NetworkInterface *)mesh);
     }
 #endif
 }

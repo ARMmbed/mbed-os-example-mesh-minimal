@@ -18,18 +18,18 @@
             "platform.stdio-convert-newlines": true,
             "platform.stdio-baud-rate": 115200,
             "atmel-rf.provide-default": false,
-            "mcr20a.provide-default": false,
+            "mcr20a.provide-default": true,
             "target.device_has_add": ["802_15_4_PHY"],
             "target.network-default-interface-type": "MESH"
         },
-        "K64F": {
+      	"K64F": {
             "LED": "LED_RED",
             "BUTTON": "SW2"
         },
         "K66F": {
             "LED": "LED_RED",
             "BUTTON": "SW2"
-        },
+		},
         "KW24D": {
             "LED": "LED1",
             "BUTTON": "SW1"
