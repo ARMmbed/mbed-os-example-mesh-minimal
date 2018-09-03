@@ -1,5 +1,9 @@
 {
     "config": {
+        "storage-device":{
+            "help": "Values for storage (Thread) devices are: MESH_SD_CARD and MESH_HEAP",
+            "value": "MESH_HEAP"
+        },
         "enable-led-control-example": true,
         "LED": "NC",
         "BUTTON": "NC",
@@ -7,18 +11,16 @@
     },
     "target_overrides": {
         "*": {
-            "nanostack.configuration": "lowpan_router",
-            "nsapi.default-mesh-type": "LOWPAN",
-            "mbed-mesh-api.6lowpan-nd-panid-filter": "0xffff",
-            "mbed-mesh-api.6lowpan-nd-channel-page": 0,
-            "mbed-mesh-api.6lowpan-nd-channel": 12,
-            "mbed-mesh-api.6lowpan-nd-channel-mask": "(1<<12)",
-            "mbed-mesh-api.heap-size": 14000,
+            "nanostack.configuration": "thread_router",
+            "nsapi.default-mesh-type": "THREAD",
             "mbed-trace.enable": false,
+            "mbed-mesh-api.heap-size": 30000,
+            "mbed-mesh-api.thread-device-type": "MESH_DEVICE_TYPE_THREAD_ROUTER",
             "platform.stdio-convert-newlines": true,
             "platform.stdio-baud-rate": 115200,
+            "mbed-mesh-api.thread-use-static-link-config": true,
             "atmel-rf.provide-default": false,
-            "mcr20a.provide-default": false,
+            "mcr20a.provide-default": true,
             "target.device_has_add": ["802_15_4_PHY"],
             "target.network-default-interface-type": "MESH"
         },
@@ -52,4 +54,5 @@
             "BUTTON": "SW2"
         }
     }
+
 }
