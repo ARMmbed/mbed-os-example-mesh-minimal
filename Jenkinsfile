@@ -171,6 +171,7 @@ def buildStep(target, compilerLabel, toolchain, radioShield, meshInterface) {
           }
           execute ("mbed add mcr20a-rf-driver")
           execute ("mbed add atmel-rf-driver")
+          execute ("mbed add sd-driver")
           execute ("mbed compile --build out/${target}_${toolchain}_${radioShield}_${meshInterface}/ -m ${target} -t ${toolchain} -c --app-config ${config_file}")
         }
         stash name: "${target}_${toolchain}_${radioShield}_${meshInterface}", includes: '**/mbed-os-example-mesh-minimal.bin'
