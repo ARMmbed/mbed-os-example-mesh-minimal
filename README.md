@@ -16,20 +16,6 @@ mbed import mbed-os-example-mesh-minimal
 cd mbed-os-example-mesh-minimal
 ```
 
-### Adding connectivity driver
-
-This application requires 802.15.4 RF driver to be provided for the networking stack. Driver can be either external, or provided by the Mbed OS.
-
-External driver can be added by calling
-
-```
-mbed add <driver>
-```
-
-For example MCR20A RF driver is added by calling `mbed add mcr20a-rf-driver`
-
-Atmel AT86RF driver is added by calling `mbed add atmel-rf-driver`
-
 ### Change the channel settings (optional)
 
 See the file `mbed_app.json` for an example of defining an IEEE 802.15.4 channel to use.
