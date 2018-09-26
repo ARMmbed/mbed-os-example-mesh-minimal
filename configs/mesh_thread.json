@@ -1,13 +1,5 @@
 {
     "config": {
-        "radio-type":{
-            "help": "options are ATMEL, MCR20, NCS36510, KW24D",
-            "value": "ATMEL"
-        },
-        "mesh-type":{
-            "help": "options are MESH_LOWPAN, MESH_THREAD",
-            "value": "MESH_THREAD"
-        },
         "storage-device":{
             "help": "Values for storage (Thread) devices are: MESH_SD_CARD and MESH_HEAP",
             "value": "MESH_HEAP"
@@ -19,14 +11,18 @@
     },
     "target_overrides": {
         "*": {
-            "target.features_add": ["NANOSTACK", "COMMON_PAL"],
             "nanostack.configuration": "thread_router",
+            "nsapi.default-mesh-type": "THREAD",
             "mbed-trace.enable": false,
             "mbed-mesh-api.heap-size": 30000,
             "mbed-mesh-api.thread-device-type": "MESH_DEVICE_TYPE_THREAD_ROUTER",
             "platform.stdio-convert-newlines": true,
             "platform.stdio-baud-rate": 115200,
-            "mbed-mesh-api.thread-use-static-link-config": true
+            "mbed-mesh-api.thread-use-static-link-config": true,
+            "atmel-rf.provide-default": false,
+            "mcr20a.provide-default": false,
+            "target.device_has_add": ["802_15_4_PHY"],
+            "target.network-default-interface-type": "MESH"
         },
         "K64F": {
             "LED": "LED_RED",
@@ -35,20 +31,28 @@
         "K66F": {
             "LED": "LED_RED",
             "BUTTON": "SW2"
-		},
-        "NUCLEO_F401RE": {
-            "LED": "NC",
-            "BUTTON": "USER_BUTTON"
         },
         "KW24D": {
             "LED": "LED1",
             "BUTTON": "SW1"
         },
+        "NUCLEO_F401RE": {
+            "LED": "NC",
+            "BUTTON": "USER_BUTTON"
+        },
         "NUCLEO_F429ZI":  {
             "LED": "LED_RED",
             "BUTTON": "USER_BUTTON",
             "BUTTON_MODE": "PullDown"
+        },
+        "NUCLEO_F411RE": {
+            "LED": "NC",
+            "BUTTON": "USER_BUTTON"
+        },
+        "NCS36510": {
+            "LED": "LED1",
+            "BUTTON": "SW2"
         }
     }
-    
+
 }

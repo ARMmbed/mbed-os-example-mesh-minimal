@@ -16,6 +16,22 @@ mbed import mbed-os-example-mesh-minimal
 cd mbed-os-example-mesh-minimal
 ```
 
+### Adding connectivity driver
+
+This application requires 802.15.4 RF driver to be provided for the networking stack. Driver can be either external, or provided by the Mbed OS.
+
+External driver can be added by calling
+
+```
+mbed add <driver>
+```
+
+For example MCR20A RF driver is added by calling `mbed add mcr20a-rf-driver`
+
+Atmel AT86RF driver is added by calling `mbed add atmel-rf-driver`
+
+SD driver is added by calling `mbed add sd-driver`
+
 ### Change the channel settings (optional)
 
 See the file `mbed_app.json` for an example of defining an IEEE 802.15.4 channel to use.
@@ -232,16 +248,4 @@ $ mbed compile -m KW24D -t IAR --profile release
 ## Troubleshooting
 
 If you have problems, you can review the [documentation](https://os.mbed.com/docs/latest/tutorials/debugging.html) for suggestions on what could be wrong and how to fix it.
-
-## Known issues
-
-1. https://github.com/ARMmbed/mbed-os-example-mesh-minimal/issues/188
-
-   The mesh interface function `mesh.get_mac_address()` has inadvertedly been changed in Mbed OS 5.9 to return the actual MAC address and not the EUI64 address. In order to print the actual EUI64 address for Thread commissioning, use the following code snippet after `printf("connected. IP = %s\n", mesh.get_ip_address());`:
-   ```
-   uint8_t eui64[8] = {0,0,0,0,0,0,0,0};
-   mesh.device_eui64_get(eui64);
-   printf("EUI64 address = %02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x\n", eui64[0], eui64[1], eui64[2], eui64[3], eui64[4], eui64[5], eui64[6], eui64[7]);
-   ```
-   The new API for `device_eui64_get` was introduced in PR [7158](https://github.com/ARMmbed/mbed-os/pull/7158) and it will be available in Mbed OS 5.9.2.
 
