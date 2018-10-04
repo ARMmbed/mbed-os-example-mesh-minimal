@@ -1,6 +1,6 @@
 # Example mesh application for Mbed OS
 
-With this application, you can use the [mesh networking API](https://os.mbed.com/docs/latest/reference/mesh-api.html) that [Mbed OS](https://github.com/ARMmbed/mbed-os) provides.
+With this application, you can use the [mesh networking API](https://os.mbed.com/docs/latest/apis/mesh-api.html) that [Mbed OS](https://github.com/ARMmbed/mbed-os) provides.
 
 The application demonstrates a light control application, where devices can control the LED status of all devices in the network.
 The application can be built for the unsecure 6LoWPAN-ND or Thread network.
@@ -50,7 +50,7 @@ Select the device role:
 - Mesh network. A router. (default)
 - Star network. Nonrouting device. Also known as a host or sleepy host.
 
-Modify your `mbed_app.json` file to see which Nanostack and [Mbed Mesh API](https://os.mbed.com/docs/latest/reference/mesh-api.html) configuration to use.
+Modify your `mbed_app.json` file to see which Nanostack and [Mbed Mesh API](https://os.mbed.com/docs/latest/apis/mesh-api.html) configuration to use.
 
 Example configuration files are provide under `configs/` directory. You may override the `mbed_app.json` with either of these.
 
