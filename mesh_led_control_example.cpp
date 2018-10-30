@@ -38,7 +38,7 @@ static void handle_message(char* msg);
 
 DigitalOut led_1(MBED_CONF_APP_LED, 1);
 InterruptIn my_button(MBED_CONF_APP_BUTTON);
-DigitalOut output(D3, 1);
+DigitalOut output(MBED_CONF_APP_RELAY_CONTROL, 1);
 
 NetworkInterface * network_if;
 UDPSocket* my_socket;
