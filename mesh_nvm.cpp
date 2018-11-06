@@ -18,13 +18,12 @@
 #include "Nanostack.h"
 
 /* Application configuration values from json */
-#define MESH_LOWPAN     1
-#define MESH_THREAD     2
-#define MESH_HEAP       3
-#define MESH_SD_CARD    4
+#define MESH_NVM_HEAP       1
+#define MESH_NVM_SD_CARD    2
+#define MESH_NVM_NONE       3
 
 /* At the moment, Thread builds using K64F support NVM */
-#if MBED_CONF_APP_MESH_TYPE == MESH_THREAD && defined(TARGET_K64F)
+#if defined MBED_CONF_APP_STORAGE_DEVICE && MBED_CONF_APP_STORAGE_DEVICE != MESH_NVM_NONE && defined(TARGET_K64F)
 
 #include "LittleFileSystem.h"
 #include "SDBlockDevice.h"
@@ -34,25 +33,13 @@
 
 #define TRACE_GROUP "mnvm"
 
-/* By default use HEAP as NVM storage, comment macro in order to use SD card */
-#ifdef MBED_CONF_APP_STORAGE_DEVICE
-
-#if MBED_CONF_APP_STORAGE_DEVICE == MESH_HEAP
-// Use Heap block device
-#define USE_HEAP_BLOCK_DEVICE
-#elif  MBED_CONF_APP_STORAGE_DEVICE == MESH_SD_CARD
-// Use SD CARD - lack of USE_HEAP_BLOCK_DEVICE selects SD_CARD
-#endif
-
-#endif /* MBED_CONF_APP_STORAGE_OPTION */
-
 LittleFileSystem *fs;
 BlockDevice *bd;
 
 void mesh_nvm_initialize()
 {
     fs = new LittleFileSystem("fs");
-#ifdef USE_HEAP_BLOCK_DEVICE
+#if MBED_CONF_APP_STORAGE_DEVICE == MESH_NVM_HEAP
     const char *bd_info = "NVM: Heap";
     bd = new HeapBlockDevice(16 * 512, 512);
 #else
@@ -60,7 +47,7 @@ void mesh_nvm_initialize()
     bd = new SDBlockDevice(MBED_CONF_SD_SPI_MOSI, MBED_CONF_SD_SPI_MISO, MBED_CONF_SD_SPI_CLK, MBED_CONF_SD_SPI_CS);
 #endif
 
-     tr_debug("%s", bd_info);
+    tr_debug("%s", bd_info);
     int mount_status = fs->mount(bd);
     if (mount_status) {
         tr_warning("mount error: %d, trying format...", mount_status);
@@ -75,10 +62,12 @@ void mesh_nvm_initialize()
     }
 }
 
-#else /* MBED_CONF_APP_MESH_TYPE == MESH_THREAD && defined(TARGET_K64F) */
+#else /* #if defined MBED_CONF_APP_STORAGE_DEVICE && MBED_CONF_APP_STORAGE_DEVICE != MESH_NVM_NONE && defined(TARGET_K64F) */
+
 void mesh_nvm_initialize()
 {
     /* NVM not supported */
 }
-#endif  /* MBED_CONF_APP_MESH_TYPE == MESH_THREAD && defined(TARGET_K64F) */
+
+#endif  /* #if defined MBED_CONF_APP_STORAGE_DEVICE && MBED_CONF_APP_STORAGE_DEVICE != MESH_NVM_NONE && defined(TARGET_K64F) */
 

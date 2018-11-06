@@ -1,8 +1,8 @@
 {
     "config": {
         "storage-device":{
-            "help": "Values for storage (Thread) devices are: MESH_SD_CARD and MESH_HEAP",
-            "value": "MESH_HEAP"
+            "help": "Values for storage (Thread) devices are: MESH_NVM_HEAP, MESH_NVM_SD_CARD and MESH_NVM_NONE",
+            "value": "MESH_NVM_NONE"
         },
         "enable-led-control-example": true,
         "LED": "NC",
