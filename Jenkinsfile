@@ -120,8 +120,8 @@ def buildStep(target, compilerLabel, toolchain, radioShield, meshInterface) {
 
           if ("${meshInterface}" == "thd") {
             config_file = "./configs/mesh_thread${config_suffix}.json"
-            // Use systest Thread Border Router for testing (CH=18, PANID=BAAB)
-            execute("sed -i '/mbed-mesh-api.thread-device-type\":/a \"mbed-mesh-api.thread-config-channel\": 18,' ${config_file}")
+            // Use systest Thread Border Router for testing (CH=26, PANID=BAAB)
+            execute("sed -i '/mbed-mesh-api.thread-device-type\":/a \"mbed-mesh-api.thread-config-channel\": 26,' ${config_file}")
             execute("sed -i '/mbed-mesh-api.thread-device-type\":/a \"mbed-mesh-api.thread-config-panid\": \"0xBAAB\",' ${config_file}")
             execute("sed -i 's/\"nanostack.configuration\": \"thread_router\"/\"nanostack.configuration\": \"thread_end_device\"/'  ${config_file}")
             execute("sed -i 's/\"mbed-mesh-api.thread-device-type\": \"MESH_DEVICE_TYPE_THREAD_ROUTER\"/\"mbed-mesh-api.thread-device-type\": \"MESH_DEVICE_TYPE_THREAD_MINIMAL_END_DEVICE\"/' ${config_file}")
