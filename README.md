@@ -16,22 +16,6 @@ mbed import mbed-os-example-mesh-minimal
 cd mbed-os-example-mesh-minimal
 ```
 
-### Adding connectivity driver
-
-This application requires 802.15.4 RF driver to be provided for the networking stack. Driver can be either external, or provided by the Mbed OS.
-
-External driver can be added by calling
-
-```
-mbed add <driver>
-```
-
-For example MCR20A RF driver is added by calling `mbed add mcr20a-rf-driver`
-
-Atmel AT86RF driver is added by calling `mbed add atmel-rf-driver`
-
-SD driver is added by calling `mbed add sd-driver`
-
 ### Change the channel settings (optional)
 
 See the file `mbed_app.json` for an example of defining an IEEE 802.15.4 channel to use.
@@ -63,42 +47,44 @@ An example of the `mbed_app.json` file:
 
 ```
 ...
-        "mesh-type":{
-            "help": "options are MESH_LOWPAN, MESH_THREAD",
-            "value": "MESH_LOWPAN"
-        }
-    },
     "target_overrides": {
         "*": {
-            "target.features_add": ["NANOSTACK", "COMMON_PAL"],
             "nanostack.configuration": "lowpan_router",
-            "mbed-mesh-api.6lowpan-nd-device-type": "NET_6LOWPAN_ROUTER",
-            "mbed-mesh-api.thread-device-type": "MESH_DEVICE_TYPE_THREAD_ROUTER",
-            "mbed-mesh-api.heap-size": 32000,
-            "mbed-trace.enable": false
-        }
-    }
+            "nsapi.default-mesh-type": "LOWPAN",
+            "mbed-mesh-api.6lowpan-nd-panid-filter": "0xffff",
+            "mbed-mesh-api.6lowpan-nd-channel-page": 0,
+            "mbed-mesh-api.6lowpan-nd-channel": 12,
+            "mbed-mesh-api.6lowpan-nd-channel-mask": "(1<<12)",
+            "mbed-mesh-api.heap-size": 14000,
+            "mbed-trace.enable": false,
+            "platform.stdio-convert-newlines": true,
+            "platform.stdio-baud-rate": 115200,
+            "atmel-rf.provide-default": true,
+            "mcr20a.provide-default": false,
+            "target.device_has_add": ["802_15_4_PHY"],
+            "target.network-default-interface-type": "MESH"
+        },
 ```
 
 The following tables show the values to use in the `mbed_app.json` file for your devices in different networks.
 
-- For a 6LoWPAN-ND based network, use `mesh-type: MESH_LOWPAN`.
-- For a Thread-based network, use `mesh-type: MESH_THREAD`.
+- For a 6LoWPAN-ND based network, use `nsapi.default-mesh-type: LOWPAN`.
+- For a Thread-based network, use `nsapi.default-mesh-type: THREAD`.
 
 #### 6LoWPAN-ND
 
-**mesh-type: MESH_LOWPAN**
+**nsapi.default-mesh-type: LOWPAN**
 
-|Device role|`nanostack.configuration` value|`mbed-mesh-api.6lowpan-nd-device-type`|
+|Device role|`nanostack.configuration` value|`mbed-mesh-api.6lowpan-nd-device-type` value|
 |-----------|-------------------------|------------------------------------|
 |Mesh router (default) | lowpan_router | NET_6LOWPAN_ROUTER |
 |Nonrouting device | lowpan_host | NET_6LOWPAN_HOST |
 
 #### Thread
 
-**mesh-type: MESH_THREAD**
+**nsapi.default-mesh-type: THREAD**
 
-|Device role|`nanostack.configuration` value|`mbed-mesh-api.thread-device-type`|
+|Device role|`nanostack.configuration` value|`mbed-mesh-api.thread-device-type` value|
 |-----------|-------------------------|------------------------------------|
 |Mesh router (default) | thread_router | MESH_DEVICE_TYPE_THREAD_ROUTER |
 |Nonrouting device | thread_end_device | MESH_DEVICE_TYPE_THREAD_SLEEPY_END_DEVICE |
@@ -110,7 +96,7 @@ If you want to commission a Thread device, see [how to commission a Thread devic
 
 The Thread stack learns the network settings from the commissioning process and saves them to RAM memory. Therefore, the learned network settings are lost when you restart the device next time. To prevent re-commissioning, you can save the Thread configuration settings to an SD card as follows (only in `K64F`):
 
-- Change `storage-device` to `MESH_SD_CARD` in the `./configs/mesh_thread.json` file.
+- Change `storage-device` to `MESH_NVM_SD_CARD` in the `./configs/mesh_thread.json` file.
 - Enable commissioning as descibed in the referred instructions.
 - Compile and program the application.
 - Insert an erased or FAT-formatted SD card to the `K64F` memory card slot. The application will initialize the SD card with the appropriate file system on first use.
@@ -132,13 +118,11 @@ You also need to check how LEDs and buttons are configured for your hardware, an
 
 To run a 6LoWPAN-ND network, you need a working RF driver for Nanostack. This example uses the Atmel AT86RF233 by default.
 
-To change the RF driver modify the `mbed_app.json` file. For example,
+To change the RF driver modify the `mbed_app.json` file by setting preferred RF driver `provide_default` value to true, For example, to use MCR20a RF driver: 
 
 ```json
-    "radio-type":{
-        "help": "options are ATMEL, MCR20, NCS36510, KW24D",
-        "value": "ATMEL"
-    },
+"atmel-rf.provide-default": false,
+"mcr20a.provide-default": true,
 ```
 
 ### Compile the application
