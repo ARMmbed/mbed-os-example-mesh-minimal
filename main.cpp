@@ -90,7 +90,7 @@ int main()
     }
 
     while (NULL == mesh->get_ip_address())
-        Thread::wait(500);
+        ThisThread::sleep_for(500);
 
     printf("Connected. IP = %s\n", mesh->get_ip_address());
 
