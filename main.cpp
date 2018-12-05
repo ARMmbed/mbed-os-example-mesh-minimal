@@ -80,7 +80,6 @@ int main()
         return -1;
     }
 
-    thread_eui64_trace();
     mesh_nvm_initialize();
     printf("Connecting...\n");
     int error = mesh->connect();
@@ -88,6 +87,7 @@ int main()
         printf("Connection failed! %d\n", error);
         return error;
     }
+    thread_eui64_trace();
 
     while (NULL == mesh->get_ip_address())
         Thread::wait(500);
