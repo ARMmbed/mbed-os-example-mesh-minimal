@@ -185,7 +185,8 @@ static void handle_socket() {
 
 static void init_socket()
 {
-    my_socket = new UDPSocket(network_if);
+    my_socket = new UDPSocket();
+    my_socket->open(network_if);
     my_socket->set_blocking(false);
     my_socket->bind(UDP_PORT);
     my_socket->setsockopt(SOCKET_IPPROTO_IPV6, SOCKET_IPV6_MULTICAST_HOPS, &multicast_hops, sizeof(multicast_hops));
