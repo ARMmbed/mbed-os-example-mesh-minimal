@@ -39,7 +39,8 @@ def targets = [
   "NUCLEO_F429ZI": ["ATMEL", "MCR20A"],
   //"NCS36510": ["internal"],
   "UBLOX_EVK_ODIN_W2": ["ATMEL"],
-  "KW24D": ["internal"]
+  "KW24D": ["internal"],
+  "KW41Z": ["internal"]
   ]
 
 // Map toolchains to compilers
