@@ -25,6 +25,7 @@ Following table shows which development boards have been tested. It does not pre
 | UBLOX_EVK_ODIN_W2 | <span style='background-color: #5f5;'>Yes</span> | <span style='background-color: #f00;'>No. **(2)**</span> | |
 | Onsemi NCS36510 <span style='background-color: #5f5;'>(internal RF)</span> | | | |
 | NXP KW24D <span style='background-color: #5f5;'>(internal RF)</span> | | <span style='background-color: #5f5;'>Yes **(4)**</span> | |
+| NXP KW41Z <span style='background-color: #5f5;'>(internal RF)</span> | | | |
 | <span style='background-color: #ff5;'>NUCLEO_L476RG **(6)**</span> | <span style='background-color: #5f5;'>Yes</span> | | |
 
 

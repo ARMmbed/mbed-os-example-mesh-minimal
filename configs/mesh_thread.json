@@ -36,6 +36,10 @@
             "LED": "LED1",
             "BUTTON": "SW1"
         },
+        "KW41Z": {
+            "LED": "LED1",
+            "BUTTON": "SW3"
+        },
         "NUCLEO_F401RE": {
             "LED": "NC",
             "BUTTON": "USER_BUTTON"
