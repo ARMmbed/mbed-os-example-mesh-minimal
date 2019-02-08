@@ -3,6 +3,7 @@
         "enable-led-control-example": true,
         "LED": "NC",
         "BUTTON": "NC",
+        "RELAY_CONTROL": "NC",
         "BUTTON_MODE": "PullUp"
     },
     "target_overrides": {
@@ -24,12 +25,13 @@
         },
       	"K64F": {
             "LED": "LED_RED",
-            "BUTTON": "SW2"
+            "BUTTON": "SW2",
+            "RELAY_CONTROL": "D3"
         },
         "K66F": {
             "LED": "LED_RED",
             "BUTTON": "SW2"
-		},
+        },
         "KW24D": {
             "LED": "LED1",
             "BUTTON": "SW1"

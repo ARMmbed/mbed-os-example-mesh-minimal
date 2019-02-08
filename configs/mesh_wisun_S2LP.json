@@ -1,0 +1,33 @@
+{
+    "config": {
+        "enable-led-control-example": false,
+        "LED": "NC",
+        "BUTTON": "NC",
+        "RELAY_CONTROL": "NC",
+        "BUTTON_MODE": "PullUp"
+    },
+    "target_overrides": {
+        "*": {
+            "nsapi.default-mesh-type": "WISUN",
+            "mbed-mesh-api.wisun-network-name": "\"WS-TEST\"",
+            "mbed-trace.enable": false,
+            "platform.stdio-convert-newlines": true,
+            "platform.stdio-baud-rate": 115200,
+            "s2lp.provide-default": true,
+            "target.device_has_add": ["802_15_4_PHY"]
+        },
+        "K64F": {
+            "LED": "LED_RED",
+            "BUTTON": "SW2"
+        },
+        "K66F": {
+            "LED": "LED_RED",
+            "BUTTON": "SW2"
+        },
+        "NUCLEO_F429ZI":  {
+            "LED": "LED_RED",
+            "BUTTON": "USER_BUTTON",
+            "BUTTON_MODE": "PullDown"
+        }
+    }
+}
