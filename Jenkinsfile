@@ -34,9 +34,9 @@ def raas = [
 
 // List of targets with supported RF shields to compile
 def targets = [
-  "K64F": ["ATMEL", "MCR20A"],
+  "K64F": ["ATMEL", "MCR20A", "S2LP"],
   "NUCLEO_F401RE": ["ATMEL", "MCR20A"],
-  "NUCLEO_F429ZI": ["ATMEL", "MCR20A"],
+  "NUCLEO_F429ZI": ["ATMEL", "MCR20A", "S2LP"],
   //"NCS36510": ["internal"],
   "UBLOX_EVK_ODIN_W2": ["ATMEL"],
   "KW24D": ["internal"],
@@ -54,13 +54,15 @@ def toolchains = [
 def radioshields = [
   "ATMEL",
   "MCR20A",
-  "internal"
+  "internal",
+  "S2LP"
   ]
 
 // Mesh interfaces: 6LoWPAN and Thread
 def meshinterfaces = [
   "6lp",
-  "thd"
+  "thd",
+  "ws"
   ]
 
 def stepsForParallel = [:]
@@ -77,9 +79,12 @@ for (int i = 0; i < targets.size(); i++) {
         def radioshield = radioshields.get(k)
         def meshInterface = meshinterfaces.get(l)
 
-        def stepName = "${target} ${toolchain} ${radioshield} ${meshInterface}"
-        if(allowed_shields.contains(radioshield)) {
-          stepsForParallel[stepName] = buildStep(target, compilerLabel, toolchain, radioshield, meshInterface)
+        // Build Wi-SUN only with S2LP and use S2LP only with Wi-SUN
+        if (("${meshInterface}" == "ws" && "${radioshield}" == "S2LP") || ("${meshInterface}" != "ws" && "${radioshield}" != "S2LP")) {
+          def stepName = "${target} ${toolchain} ${radioshield} ${meshInterface}"
+          if(allowed_shields.contains(radioshield)) {
+            stepsForParallel[stepName] = buildStep(target, compilerLabel, toolchain, radioshield, meshInterface)
+          }
         }
       }
     }
@@ -133,6 +138,12 @@ def buildStep(target, compilerLabel, toolchain, radioShield, meshInterface) {
             // Use systest 6LoWPAN Border Router for testing (CH=17, PANID=ABBA)
             execute("sed -i 's/\"mbed-mesh-api.6lowpan-nd-channel\": 12/\"mbed-mesh-api.6lowpan-nd-channel\": 17/' ${config_file}")
             execute("sed -i 's/\"mbed-mesh-api.6lowpan-nd-panid-filter\": \"0xffff\"/\"mbed-mesh-api.6lowpan-nd-panid-filter\": \"0xABBA\"/' ${config_file}")
+          }
+
+          if ("${meshInterface}" == "ws") {
+            config_file = "./configs/mesh_wisun${config_suffix}.json"
+            // Possibly in future use systest Wi-SUN Border Router for testing (Network name = "ARM-WS-TESTING")
+            execute("sed -i 's/\"mbed-mesh-api.wisun-network-name\": \"\\\"Wi-SUN Network\\\"\"/\"mbed-mesh-api.wisun-network-name\": \"\\\"ARM-WS-LAB-NWK\\\"\"/' ${config_file}")
           }
 
           // For KW24D, we need to optimize for low memory

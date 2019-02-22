@@ -9,10 +9,12 @@
     "target_overrides": {
         "*": {
             "nsapi.default-mesh-type": "WISUN",
-            "mbed-mesh-api.wisun-network-name": "\"WS-TEST\"",
+            "mbed-mesh-api.wisun-network-name": "\"Wi-SUN Network\"",
+            "nanostack.configuration": "ws_router",
             "mbed-trace.enable": false,
             "platform.stdio-convert-newlines": true,
             "platform.stdio-baud-rate": 115200,
+            "platform.stdio-buffered-serial": true,
             "s2lp.provide-default": true,
             "target.device_has_add": ["802_15_4_PHY"]
         },
