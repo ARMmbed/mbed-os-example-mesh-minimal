@@ -3,9 +3,9 @@
 With this application, you can use the [mesh networking API](https://os.mbed.com/docs/latest/apis/mesh-api.html) that [Mbed OS](https://github.com/ARMmbed/mbed-os) provides.
 
 The application demonstrates a light control application, where devices can control the LED status of all devices in the network.
-The application can be built for the unsecure 6LoWPAN-ND or Thread network.
+The application can be built for the unsecure 6LoWPAN-ND, Thread or Wi-SUN network.
 
-See the [6LoWPAN overview](https://os.mbed.com/docs/latest/reference/mesh-tech.html) for the definition of star and mesh networks. These same principles apply also to Thread protocol.
+See the [6LoWPAN overview](https://os.mbed.com/docs/latest/reference/mesh-tech.html) for the definition of star and mesh networks. These same principles apply also to Thread and Wi-SUN protocols.
 
 ## Setup
 
@@ -28,6 +28,7 @@ Select the protocol the network is based on:
 
 - 6LoWPAN-ND.
 - Thread.
+- Wi-SUN
 
 Select the device role:
 
@@ -42,6 +43,7 @@ Example configuration files are provide under `configs/` directory. You may over
 |------------------|-------|
 |`configs/mesh_6lowpan.json` | 6LoWPAN-ND based mesh network. |
 |`configs/mesh_thread.json` | Thread based mesh network. |
+|`configs/mesh_wisun_S2LP.json` | Wi-SUN based mesh network. |
 
 An example of the `mbed_app.json` file:
 
@@ -70,6 +72,7 @@ The following tables show the values to use in the `mbed_app.json` file for your
 
 - For a 6LoWPAN-ND based network, use `nsapi.default-mesh-type: LOWPAN`.
 - For a Thread-based network, use `nsapi.default-mesh-type: THREAD`.
+- For a Wi-SUN-based network, use `nsapi.default-mesh-type: WISUN`.
 
 #### 6LoWPAN-ND
 
@@ -103,6 +106,15 @@ The Thread stack learns the network settings from the commissioning process and 
 - Commission the device to the Thread network.
 - When you restart the device next time, the device reads the Thread configuration settings from the SD card and tries to attach to an existing network.
 
+#### Wi-SUN
+
+**nsapi.default-mesh-type: WISUN**
+
+|Device role|`nanostack.configuration` value|
+|-----------|-------------------------|
+|Mesh router (default) | ws_router |
+
+
 ### Requirements for hardware
 
 The networking stack used in this example requires TLS functionality to be enabled on Mbed TLS.
@@ -118,12 +130,22 @@ You also need to check how LEDs and buttons are configured for your hardware, an
 
 To run a 6LoWPAN-ND network, you need a working RF driver for Nanostack. This example uses the Atmel AT86RF233 by default.
 
-To change the RF driver modify the `mbed_app.json` file by setting preferred RF driver `provide_default` value to true, For example, to use MCR20a RF driver: 
+To change the RF driver modify the `mbed_app.json` file by setting preferred RF driver `provide_default` value to true, For example, to use MCR20a RF driver:
 
 ```json
 "atmel-rf.provide-default": false,
 "mcr20a.provide-default": true,
 ```
+
+To run a Wi-SUN network, there is currently only one supported Radio, STM S2LP.
+
+To use the S2LP, modify the `mbed_app.json` file by setting:
+
+```json
+"s2lp.provide-default": true,
+```
+
+Note that the provide-default for each radio driver defaults to false, so there is no need to list all the possible drivers in the `mbed_app.json`.
 
 ### Compile the application
 
