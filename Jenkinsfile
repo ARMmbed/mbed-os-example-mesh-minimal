@@ -142,8 +142,8 @@ def buildStep(target, compilerLabel, toolchain, radioShield, meshInterface) {
 
           if ("${meshInterface}" == "ws") {
             config_file = "./configs/mesh_wisun${config_suffix}.json"
-            // Possibly in future use systest Wi-SUN Border Router for testing (Network name = "ARM-WS-TESTING")
-            execute("sed -i 's/\"mbed-mesh-api.wisun-network-name\": \"\\\"Wi-SUN Network\\\"\"/\"mbed-mesh-api.wisun-network-name\": \"\\\"ARM-WS-LAB-NWK\\\"\"/' ${config_file}")
+            // Possibly in future use systest Wi-SUN Border Router for testing (Network name = "ARM-WS-LAB-NWK")
+            execute("sed -i 's/Wi-SUN Network/ARM-WS-LAB-NWK/' ${config_file}")
           }
 
           // For KW24D, we need to optimize for low memory
@@ -160,6 +160,8 @@ def buildStep(target, compilerLabel, toolchain, radioShield, meshInterface) {
 
           // Activate traces
           execute("sed -i 's/\"mbed-trace.enable\": false/\"mbed-trace.enable\": true/' ${config_file}")
+
+          execute("cat ${config_file}")
 
           // Set mbed-os to revision received as parameter
           execute ("mbed deploy --protocol ssh")
