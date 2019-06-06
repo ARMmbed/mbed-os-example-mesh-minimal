@@ -70,9 +70,9 @@ An example of the `mbed_app.json` file:
 
 The following tables show the values to use in the `mbed_app.json` file for your devices in different networks.
 
-- For a 6LoWPAN-ND based network, use `nsapi.default-mesh-type: LOWPAN`.
-- For a Thread-based network, use `nsapi.default-mesh-type: THREAD`.
-- For a Wi-SUN-based network, use `nsapi.default-mesh-type: WISUN`.
+- For a 6LoWPAN-ND based network, use `"nsapi.default-mesh-type": "LOWPAN"`.
+- For a Thread-based network, use `"nsapi.default-mesh-type": "THREAD"`.
+- For a Wi-SUN-based network, use `"nsapi.default-mesh-type": "WISUN"`.
 
 #### 6LoWPAN-ND
 
