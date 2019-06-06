@@ -70,27 +70,19 @@ An example of the `mbed_app.json` file:
 
 The following tables show the values to use in the `mbed_app.json` file for your devices in different networks.
 
-- For a 6LoWPAN-ND based network, use `"nsapi.default-mesh-type": "LOWPAN"`.
-- For a Thread-based network, use `"nsapi.default-mesh-type": "THREAD"`.
-- For a Wi-SUN-based network, use `"nsapi.default-mesh-type": "WISUN"`.
-
 #### 6LoWPAN-ND
 
-**nsapi.default-mesh-type: LOWPAN**
-
-|Device role|`nanostack.configuration` value|`mbed-mesh-api.6lowpan-nd-device-type` value|
-|-----------|-------------------------|------------------------------------|
-|Mesh router (default) | lowpan_router | NET_6LOWPAN_ROUTER |
-|Nonrouting device | lowpan_host | NET_6LOWPAN_HOST |
+| Device role           | `"nsapi.default-mesh-type"` | `"nanostack.configuration"` | `"mbed-mesh-api.6lowpan-nd-device-type"` |
+|:----------------------|:----------------------------|:----------------------------|:-----------------------------------------|
+| Mesh router (default) | `"LOWPAN"`                  | `"lowpan_router"`           | `"NET_6LOWPAN_ROUTER"`                   |
+| Nonrouting device     | `"LOWPAN"`                  | `"lowpan_host"`             | `"NET_6LOWPAN_HOST"`                     |
 
 #### Thread
 
-**nsapi.default-mesh-type: THREAD**
-
-|Device role|`nanostack.configuration` value|`mbed-mesh-api.thread-device-type` value|
-|-----------|-------------------------|------------------------------------|
-|Mesh router (default) | thread_router | MESH_DEVICE_TYPE_THREAD_ROUTER |
-|Nonrouting device | thread_end_device | MESH_DEVICE_TYPE_THREAD_SLEEPY_END_DEVICE |
+| Device role           | `"nsapi.default-mesh-type"` | `"nanostack.configuration"` | `"mbed-mesh-api.thread-device-type"`          |
+|:----------------------|:----------------------------|:----------------------------|:----------------------------------------------|
+| Mesh router (default) | `"THREAD"`                  | `"thread_router"`           | `"MESH_DEVICE_TYPE_THREAD_ROUTER"`            |
+| Nonrouting device     | `"THREAD"`                  | `"thread_end_device"`       | `"MESH_DEVICE_TYPE_THREAD_SLEEPY_END_DEVICE"` |
 
 ##### Thread commissioning
 
@@ -108,11 +100,9 @@ The Thread stack learns the network settings from the commissioning process and 
 
 #### Wi-SUN
 
-**nsapi.default-mesh-type: WISUN**
-
-|Device role|`nanostack.configuration` value|
-|-----------|-------------------------|
-|Mesh router (default) | ws_router |
+| Device role           | `"nsapi.default-mesh-type"` | `"nanostack.configuration"` |
+|:----------------------|:----------------------------|:----------------------------|
+| Mesh router (default) | `"WISUN"`                   | `"ws_router"`               |
 
 
 ### Requirements for hardware
