@@ -139,6 +139,8 @@ To change the RF driver modify the `mbed_app.json` file by setting preferred RF 
 
 To run a Wi-SUN network, there is currently only one supported Radio, STM S2LP.
 
+Note that in order for [STM S2LP arduino development kits](https://www.st.com/resource/en/user_manual/dm00346440.pdf) to work, a jumper wire is required to connect pin 4 of port `CN2` to pin 6 of port `CN1`.
+
 To use the S2LP, modify the `mbed_app.json` file by setting:
 
 ```json
@@ -157,7 +159,7 @@ A binary is generated in the end of the build process.
 
 ### Connect the RF shield to the board
 
-We are using the Atmel AT86RF233, which you can [purchase](https://firefly-iot.com/product/firefly-arduino-shield-2-4ghz/). Place the shield on top of your board, and power it up.
+We are using the Atmel AT86RF233, which you can [purchase](https://l-tek.si/web-shop/l-tek-6lowpan-arduino-shield-2-4ghz/). Place the shield on top of your board, and power it up.
 
 ### Program the target
 
@@ -169,7 +171,7 @@ This example supports the following border router:
 
 - [Nanostack-border-router](https://github.com/ARMmbed/nanostack-border-router).
 
-The border router supports static and dynamic backhaul configuration. The static configuration is good for testing, but the dynamic one works if your network infrastructure is supplying an IPv6 address. Make sure that you use the appropiate mode.
+The border router supports [static and dynamic backhaul configuration](https://github.com/ARMmbed/nanostack-border-router#the-backhaul-configuration-options). The static configuration is good for testing, but the dynamic one works if your network infrastructure is supplying an IPv6 address. Make sure that you use the appropiate mode.
 
 Remember to connect the Ethernet cable between the border router and your home/office router. Then power on the board.
 
@@ -195,7 +197,7 @@ In those cases, you might try following these instructions to optimize the memor
 
 ### Mbed TLS configuration
 
-The custom Mbed TLS configuration can be set by adding `"macros": ["MBEDTLS_USER_CONFIG_FILE=\"mbedtls_config.h\""]` to the `.json` file. The [example Mbed TLS config](https://github.com/ARMmbed/mbed-os-example-mesh-minimal/blob/master/mbedtls_config.h) minimizes the RAM and ROM usage of the application. The configuration works on K64F, but it is not guaranteed to work on every Mbed Enabled platform.
+The custom Mbed TLS configuration can be set by adding `"macros": ["MBEDTLS_USER_CONFIG_FILE=\"mbedtls_config.h\""]` to the `mbed_app.json` file. The example Mbed TLS config `mbedtls_config.h` minimizes the RAM and ROM usage of the application. The configuration works on K64F, but it is not guaranteed to work on every Mbed Enabled platform.
 
 This configuration file saves you 8.7 kB of RAM but uses 6.8 kB of more flash.
 
