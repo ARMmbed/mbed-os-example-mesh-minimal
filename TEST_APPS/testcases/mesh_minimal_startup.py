@@ -63,7 +63,7 @@ class Testcase(Bench):
         # 2. Verify 6LoWPAN bootstrap (fails to timeout or bootstrap failure trace)
         bootstrap_complete = "Connected. IP ="
         bootstrap_fail = "Connection failed!"
-        loops = 80 # Connection can take up a long time (~800 seconds in case of Wi-SUN).
+        loops = 105 # Connection can take up a long time (>1020 seconds in case of Wi-SUN).
         for i in range (1, loops + 1):
             self.logger.info("Waiting for connection " + str(i) + "/" + str(loops))
             self.delay(10)
