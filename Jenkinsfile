@@ -1,6 +1,6 @@
 properties ([[$class: 'ParametersDefinitionProperty', parameterDefinitions: [
   [$class: 'StringParameterDefinition', name: 'mbed_os_revision', defaultValue: '', description: 'Revision of mbed-os to build. Use format "pull/PR-NUMBER/head" to access mbed-os PR'],
-  [$class: 'BooleanParameterDefinition', name: 'smoke_test', defaultValue: false, description: 'Enable to run HW smoke test after building']
+  [$class: 'BooleanParameterDefinition', name: 'smoke_test', defaultValue: true, description: 'Enable to run HW smoke test after building']
   ]]])
 
 if (params.mbed_os_revision == '') {
@@ -20,16 +20,8 @@ echo "Run smoke tests: ${params.smoke_test}"
 // Radios: Atmel & MCR20A
 // configurations: 6LP + Thread
 def raas = [
-  "lowpan_mesh_minimal_smoke_k64f_atmel.json": "8001",
-//  "lowpan_mesh_minimal_smoke_k64f_mcr20.json": "8034",
-//  "lowpan_mesh_minimal_smoke_429zi_atmel.json": "8030",
-//  "lowpan_mesh_minimal_smoke_429zi_mcr20.json": "8033",
-//  "lowpan_mesh_minimal_smoke_ublox_atmel.json": "8031",
-//  "thread_mesh_minimal_smoke_k64f_atmel.json": "8007"
-  "thread_mesh_minimal_smoke_k64f_mcr20.json": "8034",
-//  "thread_mesh_minimal_smoke_429zi_atmel.json": "8030",
-//  "thread_mesh_minimal_smoke_429zi_mcr20.json": "8033",
-//  "thread_mesh_minimal_smoke_ublox_atmel.json": "8031"
+  "lowpan_mesh_minimal_smoke_k64f_atmel.json": "rauni",
+  "thread_mesh_minimal_smoke_k64f_mcr20.json": "rauni"
   ]
 
 // List of targets with supported RF shields to compile
@@ -98,10 +90,10 @@ if ( params.smoke_test == true ) {
   // Generate smoke tests based on suite amount
   for(int i = 0; i < raas.size(); i++) {
     def suite_to_run = raas.keySet().asList().get(i)
-    def raasPort = raas.get(suite_to_run)
+    def raasName = raas.get(suite_to_run)
     // Parallel execution needs unique step names. Remove .json file ending.
-    def smokeStep = "${raasPort} ${suite_to_run.substring(0, suite_to_run.indexOf('.'))}"
-    parallelRunSmoke[smokeStep] = run_smoke(targets, toolchains, radioshields, meshinterfaces, raasPort, suite_to_run)
+    def smokeStep = "${raasName} ${suite_to_run.substring(0, suite_to_run.indexOf('.'))}"
+    parallelRunSmoke[smokeStep] = run_smoke(targets, toolchains, radioshields, meshinterfaces, raasName, suite_to_run)
   }
 }
 
@@ -186,11 +178,11 @@ def buildStep(target, compilerLabel, toolchain, radioShield, meshInterface) {
   }
 }
 
-def run_smoke(targets, toolchains, radioshields, meshinterfaces, raasPort, suite_to_run) {
+def run_smoke(targets, toolchains, radioshields, meshinterfaces, raasName, suite_to_run) {
   return {
     // Remove .json from suite name
     def suiteName = suite_to_run.substring(0, suite_to_run.indexOf('.'))
-    stage ("smoke_${raasPort}_${suiteName}") {
+    stage ("smoke_${raasName}_${suiteName}") {
       node ("mesh-test") {
         deleteDir()
         dir("mbed-clitest") {
@@ -218,8 +210,9 @@ def run_smoke(targets, toolchains, radioshields, meshinterfaces, raasPort, suite
                 def toolchain = toolchains.keySet().asList().get(j)
                 def radioshield = radioshields.get(k)
                 def meshInterface = meshinterfaces.get(l)
-                // Skip unwanted combination
-                if (target == "NUCLEO_F401RE" && toolchain == "IAR") {
+                // Skip unwanted combination & Wi-SUN compiled only with SL2P shield and vice versa
+                if ((target == "NUCLEO_F401RE" && toolchain == "IAR") || ("${meshInterface}" == "ws" && "${radioshield}" != "S2LP")
+                    || ("${meshInterface}" != "ws" && "${radioshield}" == "S2LP")) {
                   continue
                 }
                 if(allowed_shields.contains(radioshield)) {
@@ -229,10 +222,12 @@ def run_smoke(targets, toolchains, radioshields, meshinterfaces, raasPort, suite
             }
           }
         }
-        env.RAAS_USERNAME = "user"
-        env.RAAS_PASSWORD = "user"
-        execute("./mbed-clitest/clitest.py --tcdir testcases --suitedir testcases/suites/ --suite ${suite_to_run} --type hardware --reset --raas http://rauni.mbedcloudtesting.com/ --raas_share_allocs --failure_return_value -vvv -w --log log_${raasPort}_${suiteName}")
-        archive "log_${raasPort}_${suiteName}/**/*"
+        env.RAAS_USERNAME = "ci"
+        env.RAAS_PASSWORD = "ci"
+        execute("./mbed-clitest/clitest.py --tcdir testcases --suitedir testcases/suites/ --suite ${suite_to_run} --type hardware --reset \
+                --raas https://${raasName}.mbedcloudtesting.com:443 --raas_share_allocs --raas_queue --raas_queue_timeout 1800 --failure_return_value \
+                -v -w --log log_${raasName}_${suiteName}")
+        archive "log_${raasName}_${suiteName}/**/*"
       }
     }
   }
