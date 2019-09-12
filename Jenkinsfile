@@ -21,7 +21,8 @@ echo "Run smoke tests: ${params.smoke_test}"
 // configurations: 6LP + Thread
 def raas = [
   "lowpan_mesh_minimal_smoke_k64f_atmel.json": "rauni",
-  "thread_mesh_minimal_smoke_k64f_mcr20.json": "rauni"
+  "thread_mesh_minimal_smoke_k64f_mcr20.json": "rauni",
+  "wisun_mesh_minimal_smoke_k64f_s2lp.json"  : "rauni"
   ]
 
 // List of targets with supported RF shields to compile
