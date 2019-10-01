@@ -181,6 +181,8 @@ As soon as both the border router and the target are up and running you can veri
 connected. IP = 2001:db8:a0b:12f0::1
 ```
 
+<span class="notes">**Note:** Connection can take up to 15 minutes.</span>
+
 You can use this IP address to `ping` from your PC and verify that the connection is working correctly.
 
 
