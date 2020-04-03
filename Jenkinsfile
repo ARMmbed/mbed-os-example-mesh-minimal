@@ -38,8 +38,7 @@ def targets = [
 // Map toolchains to compilers
 def toolchains = [
   ARM: "armcc",
-  GCC_ARM: "arm-none-eabi-gcc",
-  IAR: "IAR-linux"
+  GCC_ARM: "arm-none-eabi-gcc"
   ]
 
 // Supported RF shields
