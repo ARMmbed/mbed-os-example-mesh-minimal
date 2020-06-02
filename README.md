@@ -3,9 +3,9 @@
 With this application, you can use the [mesh networking API](https://os.mbed.com/docs/latest/apis/mesh-api.html) that [Mbed OS](https://github.com/ARMmbed/mbed-os) provides.
 
 The application demonstrates a light control application, where devices can control the LED status of all devices in the network.
-The application can be built for the unsecure 6LoWPAN-ND, Thread or Wi-SUN network.
+The application can be built for the unsecure 6LoWPAN-ND or Wi-SUN network.
 
-See the [6LoWPAN overview](https://os.mbed.com/docs/latest/reference/mesh-tech.html) for the definition of star and mesh networks. These same principles apply also to Thread and Wi-SUN protocols.
+See the [6LoWPAN overview](https://os.mbed.com/docs/latest/reference/mesh-tech.html) for the definition of star and mesh networks. These same principles apply also to Wi-SUN protocol.
 
 ## Setup
 
@@ -27,8 +27,7 @@ To optimize the flash usage, select a proper configuration for Nanostack. The co
 Select the protocol the network is based on:
 
 - 6LoWPAN-ND.
-- Thread.
-- Wi-SUN
+- Wi-SUN.
 
 Select the device role:
 
@@ -42,7 +41,6 @@ Example configuration files are provide under `configs/` directory. You may over
 |configuration file|Use for|
 |------------------|-------|
 |`configs/mesh_6lowpan.json` | 6LoWPAN-ND based mesh network. |
-|`configs/mesh_thread.json` | Thread based mesh network. |
 |`configs/mesh_wisun_S2LP.json` | Wi-SUN based mesh network. |
 
 An example of the `mbed_app.json` file:
@@ -76,29 +74,6 @@ An example of the `mbed_app.json` file:
 |:----------------------|:----------------------------|:----------------------------|:-----------------------------------------|
 | Mesh router (default) | `"LOWPAN"`                  | `"lowpan_router"`           | `"NET_6LOWPAN_ROUTER"`                   |
 | Nonrouting device     | `"LOWPAN"`                  | `"lowpan_host"`             | `"NET_6LOWPAN_HOST"`                     |
-
-#### Thread
-
-**nsapi.default-mesh-type: THREAD**
-
-| Device role           | `"nsapi.default-mesh-type"` | `"nanostack.configuration"` | `"mbed-mesh-api.thread-device-type"`          |
-|:----------------------|:----------------------------|:----------------------------|:----------------------------------------------|
-| Mesh router (default) | `"THREAD"`                  | `"thread_router"`           | `"MESH_DEVICE_TYPE_THREAD_ROUTER"`            |
-| Nonrouting device     | `"THREAD"`                  | `"thread_end_device"`       | `"MESH_DEVICE_TYPE_THREAD_SLEEPY_END_DEVICE"` |
-
-##### Thread commissioning
-
-By default, the Thread application uses the static network link configuration defined in the [mesh API configuration file](https://github.com/ARMmbed/mbed-os/blob/master/features/nanostack/mbed-mesh-api/mbed_lib.json).
-If you want to commission a Thread device, see [how to commission a Thread device in practice](https://os.mbed.com/docs/mbed-os/latest/reference/thread-tech.html#thread-commissioning).
-
-The Thread stack learns the network settings from the commissioning process and saves them to RAM memory. Therefore, the learned network settings are lost when you restart the device next time. To prevent re-commissioning, you can save the Thread configuration settings to an SD card as follows (only in `K64F`):
-
-- Change `storage-device` to `MESH_NVM_SD_CARD` in the `./configs/mesh_thread.json` file.
-- Enable commissioning as descibed in the referred instructions.
-- Compile and program the application.
-- Insert an erased or FAT-formatted SD card to the `K64F` memory card slot. The application will initialize the SD card with the appropriate file system on first use.
-- Commission the device to the Thread network.
-- When you restart the device next time, the device reads the Thread configuration settings from the SD card and tries to attach to an existing network.
 
 #### Wi-SUN
 
@@ -171,7 +146,7 @@ Remember to connect the Ethernet cable between the border router and your home/o
 
 ## Testing
 
-By default the application is built for the LED control demo, in which the device sends a multicast message to all devices in the network when the button is pressed. All devices that receive the multicast message will change the LED status (red LED on/off) to the state defined in the message. Note, that the Thread devices can form a network without the existance of the border router. The following applies only to the case when the border router is set-up.
+By default the application is built for the LED control demo, in which the device sends a multicast message to all devices in the network when the button is pressed. All devices that receive the multicast message will change the LED status (red LED on/off) to the state defined in the message. The following applies only to the case when the border router is set-up.
 
 As soon as both the border router and the target are up and running you can verify the correct behaviour. Open a serial console and see the IP address obtained by the device.
 
@@ -205,7 +180,7 @@ This saves you about 2.5 kB of flash.
 
 ### Change network stack's event loop stack size
 
-Nanostack's internal event-loop is shared with Mbed Client and therefore requires lots of stack to complete the security hanshakes using TLS protocols.
+Nanostack's internal event-loop is shared with Pelion Device Management Client and therefore requires lots of stack to complete the security handshakes using TLS protocols.
 In case client functionality is not used, you can define the following to use 2kB of stack
 
 `"nanostack-hal.event_loop_thread_stack_size": 2048`
@@ -214,7 +189,7 @@ This saves you 4kB of RAM.
 
 ### Change Nanostack's heap size
 
-Nanostack uses internal heap, which you can configure in the .json. A thread end device with comissioning enabled requires at least 15kB to run.
+Nanostack uses internal heap, which you can configure in the .json.
 
 In `mbed_app.json`, you find the following line:
 
