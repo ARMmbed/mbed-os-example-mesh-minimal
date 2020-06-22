@@ -1,3 +1,4 @@
+![](./resources/official_armmbed_example_badge.png)
 # Example mesh application for Mbed OS
 
 With this application, you can use the [mesh networking API](https://os.mbed.com/docs/latest/apis/mesh-api.html) that [Mbed OS](https://github.com/ARMmbed/mbed-os) provides.
