@@ -8,14 +8,22 @@ The application can be built for the unsecure 6LoWPAN-ND or Wi-SUN network.
 
 See the [6LoWPAN overview](https://os.mbed.com/docs/latest/reference/mesh-tech.html) for the definition of star and mesh networks. These same principles apply also to Wi-SUN protocol.
 
+
+## Mbed OS build tools
+
+### Mbed CLI 2
+Starting with version 6.5, Mbed OS uses Mbed CLI 2. It uses Ninja as a build system, and CMake to generate the build environment and manage the build process in a compiler-independent manner. If you are working with Mbed OS version prior to 6.5 then check the section [Mbed CLI 1](#mbed-cli-1).
+1. [Install Mbed CLI 2](https://os.mbed.com/docs/mbed-os/latest/build-tools/install-or-upgrade.html).
+1. From the command-line, import the example: `mbed-tools import mbed-os-example-mesh-minimal`
+1. Change the current directory to where the project was imported.
+
+### Mbed CLI 1
+1. [Install Mbed CLI 1](https://os.mbed.com/docs/mbed-os/latest/quick-start/offline-with-mbed-cli.html).
+1. From the command-line, import the example: `mbed import mbed-os-example-mesh-minimal`
+1. Change the current directory to where the project was imported.
+
+
 ## Setup
-
-### Download the application
-
-```
-mbed import mbed-os-example-mesh-minimal
-cd mbed-os-example-mesh-minimal
-```
 
 ### Change the channel settings (optional)
 
@@ -119,21 +127,9 @@ To use the S2LP, modify the `mbed_app.json` file by setting:
 
 Note that the provide-default for each radio driver defaults to false, so there is no need to list all the possible drivers in the `mbed_app.json`.
 
-### Compile the application
-
-```
-mbed compile -m K64F -t GCC_ARM
-```
-
-A binary is generated in the end of the build process.
-
 ### Connect the RF shield to the board
 
 We are using the Atmel AT86RF233, which you can [purchase](https://l-tek.si/web-shop/l-tek-6lowpan-arduino-shield-2-4ghz/). Place the shield on top of your board, and power it up.
-
-### Program the target
-
-Drag and drop the binary to the target to program the application.
 
 ### Update the firmware of the border router
 
@@ -144,6 +140,25 @@ This example supports the following border router:
 The border router supports [static and dynamic backhaul configuration](https://github.com/ARMmbed/nanostack-border-router#the-backhaul-configuration-options). The static configuration is good for testing, but the dynamic one works if your network infrastructure is supplying an IPv6 address. Make sure that you use the appropiate mode.
 
 Remember to connect the Ethernet cable between the border router and your home/office router. Then power on the board.
+
+## Building and running
+
+1. Connect a USB cable between the USB port on the board and the host computer.
+1. Run the following command to build the example project and program the microcontroller flash memory:
+
+    * Mbed CLI 2
+
+    ```bash
+    $ mbed-tools compile -m <TARGET> -t <TOOLCHAIN> --flash
+    ```
+
+    * Mbed CLI 1
+
+    ```bash
+    $ mbed compile -m <TARGET> -t <TOOLCHAIN> --flash
+    ```
+
+Your PC may take a few minutes to compile your code.
 
 ## Testing
 
@@ -219,10 +234,17 @@ For devices with small memory, we recommend using release profiles for building 
 
 Examples:
 
+
+* Mbed CLI 2
+
+```bash
+$ mbed-tools compile -m <TARGET> -t <TOOLCHAIN> --profile release
 ```
-$ mbed export -m KW24D -i make_iar --profile release
-OR
-$ mbed compile -m KW24D -t IAR --profile release
+
+* Mbed CLI 1
+
+```bash
+$ mbed compile -m <TARGET> -t <TOOLCHAIN> --profile release
 ```
 
 ## Troubleshooting
