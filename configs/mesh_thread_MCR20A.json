@@ -28,7 +28,7 @@
         "K64F": {
             "LED": "LED_RED",
             "BUTTON": "SW2",
-            "RELAY_CONTROL": "D3"
+            "RELAY_CONTROL": "ARDUINO_UNO_D3"
         },
         "K66F": {
             "LED": "LED_RED",
