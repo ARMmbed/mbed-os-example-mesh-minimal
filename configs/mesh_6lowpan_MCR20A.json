@@ -24,12 +24,12 @@
             "target.network-default-interface-type": "MESH"
         },
       	"K64F": {
-            "LED": "LED_RED",
+            "LED": "LED1",
             "BUTTON": "SW2",
             "RELAY_CONTROL": "ARDUINO_UNO_D3"
         },
         "K66F": {
-            "LED": "LED_RED",
+            "LED": "LED1",
             "BUTTON": "SW2"
         },
         "KW24D": {
@@ -38,16 +38,16 @@
         },
         "NUCLEO_F401RE": {
             "LED": "NC",
-            "BUTTON": "USER_BUTTON"
+            "BUTTON": "BUTTON1"
         },
         "NUCLEO_F429ZI":  {
-            "LED": "LED_RED",
-            "BUTTON": "USER_BUTTON",
+            "LED": "LED1",
+            "BUTTON": "BUTTON1",
             "BUTTON_MODE": "PullDown"
         },
         "NUCLEO_F411RE": {
             "LED": "NC",
-            "BUTTON": "USER_BUTTON"
+            "BUTTON": "BUTTON1"
         },
         "NCS36510": {
             "LED": "LED1",
