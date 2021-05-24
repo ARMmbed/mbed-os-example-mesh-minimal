@@ -24,16 +24,16 @@
             "target.device_has_add": ["802_15_4_PHY"]
         },
         "K64F": {
-            "LED": "LED_RED",
+            "LED": "LED1",
             "BUTTON": "SW2"
         },
         "K66F": {
-            "LED": "LED_RED",
+            "LED": "LED1",
             "BUTTON": "SW2"
         },
         "NUCLEO_F429ZI":  {
-            "LED": "LED_RED",
-            "BUTTON": "USER_BUTTON",
+            "LED": "LED1",
+            "BUTTON": "BUTTON1",
             "BUTTON_MODE": "PullDown"
         }
     }
